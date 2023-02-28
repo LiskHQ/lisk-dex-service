@@ -1,0 +1,47 @@
+{
+    "name": {
+        "name": "name",
+        "in": "query",
+        "description": "Blockchain application name.",
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 20
+    },
+    "chainID": {
+        "name": "chainID",
+        "in": "query",
+        "description": "Chain ID to query.",
+        "type": "string",
+        "format": "id",
+        "minLength": 8,
+        "maxLength": 8
+    },
+    "chainIDCSV": {
+        "name": "chainID",
+        "in": "query",
+        "description": "Chain ID to query (can be expressed as CSV).",
+        "type": "string",
+        "format": "id",
+        "minLength": 8
+    },
+    "blockchainAppStatus": {
+        "name": "status",
+        "in": "query",
+        "description": "Status of the blockchain application. Can be expressed as CSV.\nAccepted values: 'registered', 'active', 'terminated'.",
+        "type": "string"
+    },
+    "network": {
+        "name": "network",
+        "in": "query",
+        "description": "Network for which the application metadata is to be queried (can be expressed as CSV).\n\nAvailable values: mainnet, testnet, betanet, alphanet, devnet.",
+        "type": "string",
+        "minLength": 1
+    },
+    "chainName": {
+        "name": "chainName",
+        "in": "query",
+        "description": "Chain name to query.",
+        "type": "string",
+        "minLength": 1
+    }
+}

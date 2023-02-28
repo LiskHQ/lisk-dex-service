@@ -1,0 +1,259 @@
+version: "3"
+services:
+
+  nats:
+    image: nats:2.6-alpine
+    networks:
+      - services_network
+    restart: always
+
+  redis_persistent:
+    image: redis:5-alpine
+    volumes:
+      - ./docker/redis.persistent.conf:/etc/redis/redis.conf:ro
+      - redis-data:/data
+    networks:
+      - services_network
+    restart: always
+    command: redis-server /etc/redis/redis.conf
+    healthcheck:
+      test: redis-cli ping
+
+  redis_volatile:
+    image: redis:5-alpine
+    volumes:
+      - ./docker/redis.volatile.conf:/etc/redis/redis.conf:ro
+    networks:
+      - services_network
+    restart: always
+    command: redis-server /etc/redis/redis.conf
+    healthcheck:
+      test: redis-cli ping
+
+  mysql:
+    image: mysql:8
+    platform: linux/amd64
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_connections=500
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d
+    restart: always
+    networks:
+      - services_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=lisk
+      - MYSQL_PASSWORD=password
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-hlocalhost",
+          "-ppassword"
+        ]
+      timeout: 20s
+      retries: 10
+
+  blockchain-app-registry:
+    image: lisk/service_blockchain_app_registry
+    depends_on:
+      nats:
+        condition: service_started
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_APP_REGISTRY_MYSQL=mysql://lisk:password@mysql:3306/lisk
+      - GITHUB_ACCESS_TOKEN=${GITHUB_ACCESS_TOKEN}
+    restart: always
+
+  blockchain-connector:
+    image: lisk/service_blockchain_connector
+    depends_on:
+      nats:
+        condition: service_started
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - GEOIP_JSON=${GEOIP_JSON}
+      - LISK_APP_WS=${LISK_APP_WS}
+      # - USE_LISK_IPC_CLIENT=${USE_LISK_IPC_CLIENT}
+      # - LISK_APP_DATA_PATH=${LISK_APP_DATA_PATH}
+      # - GENESIS_BLOCK_URL=
+      # - GENESIS_BLOCK_URL_DEFAULT=
+      # - ENABLE_TESTING_MODE=
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  blockchain-indexer:
+    image: lisk/service_blockchain_indexer
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      redis_volatile:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_INDEXER_CACHE_REDIS=redis://redis_persistent:6379/0
+      - SERVICE_INDEXER_REDIS_VOLATILE=redis://redis_volatile:6379/0
+      - SERVICE_MESSAGE_QUEUE_REDIS=redis://redis_persistent:6379/8
+      - SERVICE_INDEXER_MYSQL=mysql://lisk:password@mysql:3306/lisk
+      - ENABLE_DATA_RETRIEVAL_MODE=${ENABLE_DATA_RETRIEVAL_MODE}
+      - ENABLE_INDEXING_MODE=${ENABLE_INDEXING_MODE}
+      - ENABLE_PERSIST_EVENTS=${ENABLE_PERSIST_EVENTS}
+    restart: always
+
+  blockchain-coordinator:
+    image: lisk/service_blockchain_coordinator
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      blockchain-indexer:
+        condition: service_started
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_MESSAGE_QUEUE_REDIS=redis://redis_persistent:6379/8
+    restart: always
+
+  transaction-statistics:
+    image: lisk/service_transaction_statistics
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_STATISTICS_REDIS=redis://redis_persistent:6379/5
+      - SERVICE_STATISTICS_MYSQL=mysql://lisk:password@mysql:3306/lisk
+      - TRANSACTION_STATS_HISTORY_LENGTH_DAYS=${TRANSACTION_STATS_HISTORY_LENGTH_DAYS}
+    restart: always
+
+  fee-estimator:
+    image: lisk/service_fee_estimator
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_FEE_ESTIMATOR_CACHE=redis://redis_persistent:6379/6
+      - ENABLE_FEE_ESTIMATOR_QUICK=${ENABLE_FEE_ESTIMATOR_QUICK}
+      - ENABLE_FEE_ESTIMATOR_FULL=${ENABLE_FEE_ESTIMATOR_FULL}
+      - FEE_EST_COLD_START_BATCH_SIZE=${ENABLE_FEE_ESTIMATOR_FULL}
+    restart: always
+
+  gateway:
+    image: lisk/service_gateway
+    depends_on:
+      nats:
+        condition: service_started
+      redis_volatile:
+        condition: service_healthy
+      blockchain-connector:
+        condition: service_started
+      blockchain-indexer:
+        condition: service_started
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_GATEWAY_REDIS_VOLATILE=redis://redis_volatile:6379/1
+      - ENABLE_HTTP_API=${ENABLE_HTTP_API}
+      - ENABLE_WS_API=${ENABLE_WS_API}
+      - HTTP_CACHE_CONTROL_DIRECTIVES=${HTTP_CACHE_CONTROL_DIRECTIVES}
+      - ENABLE_HTTP_CACHE_CONTROL=${ENABLE_HTTP_CACHE_CONTROL}
+      - ENABLE_WS_RATELIMIT=${ENABLE_WS_RATELIMIT}
+      - WS_RATELIMIT_POINTS=${WS_RATELIMIT_POINTS}
+      - WS_RATELIMIT_DURATION=${WS_RATELIMIT_DURATION}
+    restart: always
+    ports:
+      - 9901:9901
+    healthcheck:
+      test: curl --fail http://gateway:9901/api/v3/blocks
+
+  market:
+    image: lisk/service_market
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_MARKET_REDIS=redis://redis_persistent:6379/2
+      - EXCHANGERATESAPI_IO_API_KEY=${EXCHANGERATESAPI_IO_API_KEY}
+      - SERVICE_MARKET_FIAT_CURRENCIES=${SERVICE_MARKET_FIAT_CURRENCIES}
+      - SERVICE_MARKET_TARGET_PAIRS=${SERVICE_MARKET_TARGET_PAIRS}
+    restart: always
+
+  newsfeed:
+    image: lisk/service_newsfeed
+    depends_on:
+      nats:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_NEWSFEED_MYSQL=mysql://lisk:password@mysql:3306/newsfeed
+      - TWITTER_CONSUMER_KEY=${TWITTER_CONSUMER_KEY}
+      - TWITTER_CONSUMER_SECRET=${TWITTER_CONSUMER_SECRET}
+      - TWITTER_ACCESS_TOKEN_KEY=${TWITTER_ACCESS_TOKEN_KEY}
+      - TWITTER_ACCESS_TOKEN_SECRET=${TWITTER_ACCESS_TOKEN_SECRET}
+    restart: always
+
+  export:
+    image: lisk/service_export
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      redis_volatile:
+        condition: service_healthy
+    networks:
+      - services_network
+    environment:
+      - SERVICE_BROKER=nats://nats:4222
+      - SERVICE_EXPORT_REDIS=redis://redis_persistent:6379/3
+      - SERVICE_EXPORT_REDIS_VOLATILE=redis://redis_volatile:6379/3
+      - SERVICE_EXPORT_PARTIALS=/home/lisk/lisk-service/export/data/partials
+      - SERVICE_EXPORT_STATIC=/home/lisk/lisk-service/export/data/static
+    volumes:
+      - export-data:/home/lisk/lisk-service/export/data
+    restart: always
+
+networks:
+  services_network:
+
+
+volumes:
+  mysql-data:
+  redis-data:
+  export-data:

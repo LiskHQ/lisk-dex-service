@@ -1,4 +1,4 @@
-![Logo](./docs/assets/banner_service.png)
+![image](https://user-images.githubusercontent.com/121556982/211866309-b5c669d9-5888-4d69-b0de-ee18f7d15804.png)
 
 # Lisk DEX Service
 
@@ -27,6 +27,7 @@ Each service is an independent part of the repository and is placed in a separat
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Gateway](services/gateway)   | The Gateway provides the API, which all users of Lisk DEX Service can access and use. Its main purpose is to proxy API requests from users to other services provided by Lisk DEX Service. This provides the users with a central point of data access that never breaks existing application compatibility.           |
 | [DEX](services/core)          | The DEX Core service acts as a bridge between the Lisk DEX Core and the Lisk DEX Service API. Its main purpose is to provide enriched data from the Lisk DEX Core API. This service is aimed at providing high availability, and both efficient and reliable access to the Lisk DEX Core API.                          |
+| [Base](services/base)         | The DEX Base service fetches, indexes data from the sidechain and makes it available to the end users via an user-friendly API.                                                                                                                                                                                        |
 | [Market](services/market)     | The Market service allows price data retrieval. It supports multiple sources to keep the current Lisk and DEX token price up-to-date and available to the clients in real time.                                                                                                                                        |
 | [Export](services/export)     | The Export service enables users to download the transaction history as a CSV file for any given account on the blockchain.                                                                                                                                                                                            |
 | [Template](services/template) | The Template service is an abstract service that all of Lisk DEX Service services are inherited from. It allows all services to share a similar interface and design pattern. Its purpose is to reduce code duplication and increase consistency between each service, hence simplifying code maintenance and testing. |

@@ -1,18 +1,18 @@
 {
-  "name": "lisk-service-gateway",
+  "name": "lisk-dex-service-gateway",
   "version": "0.7.0-alpha.7",
-  "description": "Lisk Service Gateway",
+  "description": "Lisk DEX Service Gateway",
   "keywords": [
     "lisk",
     "blockchain"
   ],
-  "homepage": "https://github.com/LiskHQ/lisk-service",
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
   "repository": {
     "type": "git",
-    "url": "git@github.com:LiskHQ/lisk-service.git"
+    "url": "git@github.com:LiskHQ/lisk-dex-service.git"
   },
   "bugs": {
-    "url": "https://github.com/LiskHQ/lisk-service/issues"
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
   },
   "private": true,
   "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",

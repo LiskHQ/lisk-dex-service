@@ -37,7 +37,7 @@ config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json'
  * API Client related settings
  */
 config.isUseLiskIPCClient = Boolean(String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true');
-config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-core';
+config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
 
 /**
   * Network-related settings
@@ -48,23 +48,23 @@ config.genesisBlockUrl = process.env.GENESIS_BLOCK_URL
 // TODO: Remove when genesis height is available in system_getNodeInfo response
 config.genesisHeight = Number(process.env.GENESIS_HEIGHT || 0);
 config.networks = {
-	LISK: [
-		{
-			name: 'mainnet',
-			chainID: '00000000',
-			genesisBlockUrl: 'https://downloads.lisk.com/lisk/mainnet/genesis_block.json.tar.gz',
-		},
-		{
-			name: 'testnet',
-			chainID: '01000000',
-			genesisBlockUrl: 'https://downloads.lisk.com/lisk/testnet/genesis_block.json.tar.gz',
-		},
-		{
-			name: 'betanet',
-			chainID: '02000000',
-			genesisBlockUrl: 'https://downloads.lisk.com/lisk/betanet/genesis_block.json.tar.gz',
-		},
-	],
+	// LISK: [
+	// 	{
+	// 		name: 'mainnet',
+	// 		chainID: '00000000',
+	// 		genesisBlockUrl: 'https://downloads.lisk.com/lisk/mainnet/genesis_block.json.tar.gz',
+	// 	},
+	// 	{
+	// 		name: 'testnet',
+	// 		chainID: '01000000',
+	// 		genesisBlockUrl: 'https://downloads.lisk.com/lisk/testnet/genesis_block.json.tar.gz',
+	// 	},
+	// 	{
+	// 		name: 'betanet',
+	// 		chainID: '02000000',
+	// 		genesisBlockUrl: 'https://downloads.lisk.com/lisk/betanet/genesis_block.json.tar.gz',
+	// 	},
+	// ],
 };
 
 /**

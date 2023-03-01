@@ -4,8 +4,7 @@
 *.orig
 
 # Logs
-logs
-*.log
+logs/*.log
 npm-debug.log*
 
 # Runtime data
@@ -58,25 +57,5 @@ sftp-config.json
 # xUnit/Junit report
 xunit-report.xml
 
-# Helm charts dependencies
-helm/**/charts/*tgz
-
-# Docker compose override file
-/docker-compose.override.yml
-
-# Docker compose local data
-docker/graylog/data*
-
-# Temporary database snapshots
-/docker/*.db.gz
-
-# Custom Docker env file
-.env
-
-# Database snapshots
-*.gz.*
-*.sql
-*.zst
-
-# Legacy configs
-*.old
+# Service custom framework
+framework

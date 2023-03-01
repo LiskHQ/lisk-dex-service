@@ -70,6 +70,7 @@ config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
  */
 config.api.versions = {
 	'/api/v3': ['http-version3', 'http-exports'],
+	'/api/dex/v1': ['http-dex-version1'],
 };
 
 /**

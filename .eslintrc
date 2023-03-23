@@ -1,11 +1,19 @@
 {
 	"extends": [
-		"lisk-base"
+		"lisk-base",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:import/typescript",
 	],
 	"plugins": [
 		"import",
 		"mocha"
 	],
+	"settings": {
+	  "import/resolver": {
+		"typescript": {}
+	  },
+	},  
 	"globals": {
 		"ipc": true,
 		"PRODUCTION": true,

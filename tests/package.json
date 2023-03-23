@@ -1,7 +1,7 @@
 {
-  "name": "lisk-service-tests",
+  "name": "lisk-dex-service-tests",
   "version": "0.6.4",
-  "description": "Lisk Service Test Package",
+  "description": "Lisk DEX Service Test Package",
   "keywords": [
     "lisk",
     "service",

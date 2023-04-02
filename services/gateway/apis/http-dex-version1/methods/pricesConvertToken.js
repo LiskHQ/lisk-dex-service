@@ -23,8 +23,8 @@ module.exports = {
 	rpcMethod: 'get.prices.convert.token',
 	tags: ['pricesConvertToken'],
 	params: {
-		tokenID0: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.TOKEN_ID },
-		conversionTokenID: { optional: false, type: 'string', min: 0, pattern: regex.TOKEN_ID },
+		tokenID0: { optional: false, type: 'string', pattern: regex.TOKEN_ID },
+		conversionTokenID: { optional: false, type: 'string', pattern: regex.TOKEN_ID },
 	},
 	get schema() {
 		const pricesConvertTokenSchema = {};

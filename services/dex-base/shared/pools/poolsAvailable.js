@@ -16,10 +16,11 @@
 const getPoolsAvailable = async (params = {}) => {
 	
     let poolsAvailable;
-	//Check if token is valid
-    //check params.currency can only be EUR || USD 
-    //Convert token to equibalent LSK
-    //convert LSK to params.currency and get the exchange rate
+	
+    //Check if params are available
+    //setup the DB for pools available 
+    //retireve the list of pools
+
     return {
 		data: poolsAvailable,
 		meta: {},   

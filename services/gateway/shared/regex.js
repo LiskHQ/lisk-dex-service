@@ -68,4 +68,5 @@ module.exports = {
 	PROOF_OF_POSSESSION,
 	MODULE,
 	TOPIC,
+	CURRENCY
 };

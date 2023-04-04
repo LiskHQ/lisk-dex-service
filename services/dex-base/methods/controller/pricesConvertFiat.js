@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,18 +13,31 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
 const {
-	getPricesConvertFiat,
-} = require('./controller/Fiat');
+	HTTP,
+} = require('lisk-service-framework');
 
-module.exports = [
-	{
-		name: 'prices.convert.token',
-		controller: getPricesConvertFiat,
-		params: {
-			currency: { optional: false, type: 'string' },
-			tokenID: { optional: false, type: 'string' },
-		},
-	},
-];
+const { StatusCodes: { BAD_REQUEST } } = HTTP;
+
+
+const dataService = require('../../shared/dataService');
+
+
+const getPricesConvertFiat = async params => {
+	try {
+		const response = await dataService.getPricesConvertFiat(params);
+
+		return {
+			data: response.data,
+			meta: response.meta,
+			links: {},
+		};
+	} catch (err) {
+		throw err;
+	}
+};
+
+
+module.exports = {
+	getPricesConvertFiat,
+};

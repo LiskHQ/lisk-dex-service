@@ -4,7 +4,7 @@ const {
 
 const {
     getTokensAvailable
-} = require ('../prices/convert/tokenAvailable')
+} = require ('../prices/convert/tokensAvailable')
 
 module.exports = {
     getPricesConvertFiat,

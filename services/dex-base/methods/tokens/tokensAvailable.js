@@ -16,7 +16,7 @@
 
 const {
 	getTokensAvailable,
-} = require('./controller/tokenAvailable');
+} = require('./controller/tokensAvailable');
 
 module.exports = [
 	{

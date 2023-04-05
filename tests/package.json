@@ -1,0 +1,60 @@
+{
+  "name": "lisk-dex-service-tests",
+  "version": "0.6.4",
+  "description": "Lisk DEX Service Test Package",
+  "keywords": [
+    "lisk",
+    "service",
+    "blockchain"
+  ],
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:LiskHQ/lisk-dex-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+  },
+  "private": true,
+  "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+  "license": "Apache-2.0",
+  "main": "app.js",
+  "engines": {
+    "node": ">=16.15.0 <=16",
+    "npm": ">=8.5.0"
+  },
+  "scripts": {
+    "clean": "rm -rf ./node_modules",
+    "test": "npm run test:integration:APIv3:SDKv6",
+    "test:integration:APIv3:SDKv6": "jest --config=jest.config.integration.apiv3.sdkv6.js",
+    "test:functional": "jest --config=jest.config.functional.js",
+    "test:regression": "jest --config=jest.config.regression.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "async": "^3.2.3",
+    "chai": "^4.3.6",
+    "csv-parse": "^5.0.4",
+    "http-proxy": "^1.18.1",
+    "jest-watch-toggle-config": "^1.0.2",
+    "jest-watch-typeahead": "^0.4.2",
+    "log4js": "^6.4.7",
+    "mockserver": "^3.1.1",
+    "popsicle": "^10.0.1",
+    "semver": "^7.3.7",
+    "socket.io": "^4.5.3",
+    "socket.io-client": "^4.5.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/plugin-transform-runtime": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "artillery": "^1.7.9",
+    "await-to-js": "=2.1.1",
+    "axios": "^0.21.4",
+    "jest": "^26.6.3",
+    "jest-extended": "^0.11.5",
+    "joi": "^17.6.0",
+    "moment": "^2.29.4"
+  }
+}

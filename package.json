@@ -1,0 +1,42 @@
+{
+  "name": "lisk-dex-service",
+  "version": "0.7.0-alpha.10",
+  "description": "Lisk DEX Service",
+  "keywords": [
+    "lisk",
+    "service",
+    "blockchain"
+  ],
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiskHQ/lisk-dex-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+  },
+  "private": true,
+  "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+  "license": "Apache-2.0",
+  "main": "app.js",
+  "engines": {
+    "node": ">=16.15.0 <=16",
+    "npm": ">=8.5.0"
+  },
+  "scripts": {
+    "start": "pm2 start ecosystem.core3.config.js",
+    "stop": "pm2 delete ecosystem.core3.config.js",
+    "eslint": "eslint \"./framework/**/*.js\" \"./services/**/*.js\" \"./tests/**/*.js\"",
+    "eslint-fix": "eslint --fix \"./framework/**/*.js\" \"./services/**/*.js\" \"./tests/**/*.js\"",
+    "test:coverage": "jest --config=jest.config.unit.js --coverage=true --verbose --forceExit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-lisk-base": "^2.0.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.2.2",
+    "eslint-plugin-mocha": "^10.0.4",
+    "jest": "^27.3.0"
+  }
+}

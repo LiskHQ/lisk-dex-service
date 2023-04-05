@@ -1,0 +1,59 @@
+{
+    "executionStatus": {
+        "name": "executionStatus",
+        "in": "query",
+        "description": "Retrieve pending transactions.\nAccepted values: pending, success, fail.",
+        "type": "string",
+        "minLength": 1
+    },
+    "transaction": {
+        "name": "body",
+        "in": "body",
+        "required": true,
+        "description": "The request body can contain only one property:\n- transaction (required): Binary payload",
+        "schema": {
+            "$ref": "#/definitions/transactionParamEnvelope"
+        }
+    },
+    "dryrunTransaction": {
+        "name": "dryrunTransaction",
+        "in": "body",
+        "required": true,
+        "description": "The request body can contain two properties:\n- transaction (required): Binary payload or a transaction object\n- skipVerify (optional, default: false): A boolean indicator to skip the transaction verification",
+        "schema": {
+            "$ref": "#/definitions/dryrunTransactionParamEnvelope"
+        }
+    },
+    "recipientAddress": {
+        "name": "recipientAddress",
+        "in": "query",
+        "description": "Lisk account address",
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 41
+    },
+    "senderAddress": {
+        "name": "senderAddress",
+        "in": "query",
+        "description": "Lisk account address",
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 41
+    },
+    "transactionID": {
+        "name": "transactionID",
+        "in": "query",
+        "description": "Transaction ID to query",
+        "type": "string",
+        "format": "id",
+        "minLength": 1,
+        "maxLength": 64
+    },
+    "nonce": {
+        "name": "nonce",
+        "in": "query",
+        "description": "Query by nonce",
+        "type": "string",
+        "minLength": 1
+    }
+}

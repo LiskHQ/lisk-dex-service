@@ -1,0 +1,45 @@
+{
+  "name": "lisk-dex-service-fee-estimator",
+  "version": "0.7.0-alpha.10",
+  "description": "Lisk DEX Service Fee Estimator",
+  "keywords": [
+    "lisk",
+    "blockchain"
+  ],
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:LiskHQ/lisk-dex-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+  },
+  "private": true,
+  "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+  "license": "Apache-2.0",
+  "main": "app.js",
+  "engines": {
+    "node": ">=16.15.0 <=16",
+    "npm": ">=8.5.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "clean": "rm -rf ./node_modules",
+    "test": "npm run test:unit",
+    "test:unit": "jest --config=jest.config.js --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "@liskhq/lisk-codec": "0.3.0-alpha.9",
+    "@liskhq/lisk-cryptography": "4.0.0-alpha.7",
+    "@liskhq/lisk-transactions": "6.0.0-alpha.12",
+    "bluebird": "^3.7.2",
+    "lisk-dex-service-framework": "https://github.com/LiskHQ/lisk-dex-service/raw/97436b89082f857db2943c3eb4f1279f0693ac9c/framework/dist/lisk-dex-service-framework-1.4.12.tgz"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.14.0",
+    "babel-jest": "^27.3.0",
+    "jest": "^27.3.0",
+    "jest-when": "^3.5.1",
+    "mocker-data-generator": "^2.12.0"
+  }
+}

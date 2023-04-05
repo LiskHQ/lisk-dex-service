@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -21,10 +21,10 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/tokens/available',
 	rpcMethod: 'get.tokens.available',
-	tags: ['tokensAvailable'],
+	tags: ['Tokens'],
 	params: {
-		limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
-		offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },
+		limit: { optional: true, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
+		offset: { optional: true, type: 'string', min: 0, pattern: regex.NONCE },
 	},
 	get schema() {
 		const availableTokensSchema = {};

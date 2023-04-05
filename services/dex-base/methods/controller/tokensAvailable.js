@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,18 +13,31 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
 const {
-	getTokensAvailable,
-} = require('./controller/tokensAvailable');
+	HTTP,
+} = require('lisk-service-framework');
 
-module.exports = [
-	{
-		name: 'tokens.available',
-		controller: getTokensAvailable,
-		params: {
-			limit: { optional: false, type: 'string' },
-			offset: { optional: false, type: 'string' },
-		},
-	},
-];
+const { StatusCodes: { BAD_REQUEST } } = HTTP;
+
+
+const dataService = require('../../shared/dataService');
+
+
+const getTokensAvailable = async params => {
+	try {
+		const response = await dataService.getTokensAvailable(params);
+
+		return {
+			data: response.data,
+			meta: response.meta,
+			links: {},
+		};
+	} catch (err) {
+		throw err;
+	}
+};
+
+
+module.exports = {
+	getTokensAvailable,
+};

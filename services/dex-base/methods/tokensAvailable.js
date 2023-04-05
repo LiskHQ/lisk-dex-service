@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -15,16 +15,16 @@
  */
 
 const {
-	getPricesConvertFiat,
-} = require('./controller/Fiat');
+	getTokensAvailable,
+} = require('./controller/tokensAvailable');
 
 module.exports = [
 	{
-		name: 'prices.convert.token',
-		controller: getPricesConvertFiat,
+		name: 'tokens.available',
+		controller: getTokensAvailable,
 		params: {
-			currency: { optional: false, type: 'string' },
-			tokenID: { optional: false, type: 'string' },
+			limit: { optional: true, type: 'string' },
+			offset: { optional: true, type: 'string' },
 		},
 	},
 ];

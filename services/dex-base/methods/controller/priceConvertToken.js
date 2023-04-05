@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,16 +13,8 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	HTTP,
-	Exceptions: { ValidationException },
-} = require('lisk-service-framework');
 
-const { StatusCodes: { BAD_REQUEST } } = HTTP;
-
-//const dataService = require('../../../shared/dataService');
-const dataService = require('../../../../shared/dataService');
-
+const dataService = require('../../shared/dataService');
 
 const getPricesConvertToken = async params => {
 	try {
@@ -34,9 +26,6 @@ const getPricesConvertToken = async params => {
 			links: {},
 		};
 	} catch (err) {
-		let status;
-		if (err instanceof ValidationException) status = BAD_REQUEST;
-		if (status) return { status, data: { error: err.message } };
 		throw err;
 	}
 };

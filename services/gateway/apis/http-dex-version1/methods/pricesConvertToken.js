@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -21,7 +21,7 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/prices/convert/token',
 	rpcMethod: 'get.prices.convert.token',
-	tags: ['pricesConvertToken'],
+	tags: ['Prices'],
 	params: {
 		tokenID0: { optional: false, type: 'string', pattern: regex.TOKEN_ID },
 		conversionTokenID: { optional: false, type: 'string', pattern: regex.TOKEN_ID },

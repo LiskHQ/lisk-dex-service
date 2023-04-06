@@ -18,7 +18,7 @@ const { Utils } = require('lisk-service-framework');
 
 const getPriceImpact = async (params = {}) => {
 
-    let priceImpact;
+    let priceImpact='Working Price impact';
     //add the business logic for the 
     return {
         data: {

@@ -21,7 +21,7 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/pools/available',
 	rpcMethod: 'get.pools.available',
-	tags: ['poolsAvailable'],
+	tags: ['Pools'],
 	params: {
 		limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
 		offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },

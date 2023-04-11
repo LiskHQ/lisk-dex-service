@@ -17,15 +17,23 @@ const getPoolsAvailable = async (params = {}) => {
 	
     let poolsAvailable;
 	
-    //Check if params are available
-    //setup the DB for pools available 
-    //retireve the list of pools
-
-    return {
-		data: poolsAvailable,
-		meta: {},   
-	};
+    try {
+      poolsAvailable = await invokeEndpoint('dex_getAllPoolIDs');
+          return {
+              data: {
+                poolsAvailable,
+              },
+              meta: {},
+          };
+    } catch (err) {
+      if (err.message.includes(timeoutMessage)) {
+        throw new TimeoutException('Request timed out when calling \'getAllPoolIDs\'.');
+      }
+      logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
+      throw err;
+    }
 };
+
 
 module.exports = {
 	getPoolsAvailable,

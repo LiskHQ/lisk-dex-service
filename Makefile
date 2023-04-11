@@ -64,7 +64,7 @@ logs-live-%:
 print-config:
 	$(compose) config
 
-build: build-app-registry build-connector build-indexer build-coordinator build-statistics build-fees build-market build-newsfeed build-export build-gateway
+build: build-app-registry build-connector build-indexer build-dex-base build-coordinator build-statistics build-fees build-market build-newsfeed build-export build-gateway
 
 build-all: build build-template build-tests
 
@@ -76,6 +76,9 @@ build-connector:
 
 build-indexer:
 	cd ./services/blockchain-indexer && docker build --tag=lisk/service_blockchain_indexer ./
+
+build-dex-base:
+	cd ./services/dex-base && docker build --tag=lisk/service_dex_base ./
 
 build-coordinator:
 	cd ./services/blockchain-coordinator && docker build --tag=lisk/service_blockchain_coordinator ./
@@ -111,6 +114,7 @@ build-local:
 	cd ./services/blockchain-connector && npm ci
 	cd ./services/blockchain-coordinator && npm ci
 	cd ./services/blockchain-indexer && npm ci
+	cd ./services/dex-base && npm ci
 	cd ./services/transaction-statistics && npm ci
 	cd ./services/fee-estimator && npm ci
 	cd ./services/market && npm ci
@@ -129,6 +133,7 @@ clean-local:
 	cd ./services/blockchain-connector && rm -rf node_modules
 	cd ./services/blockchain-coordinator && rm -rf node_modules
 	cd ./services/blockchain-indexer && rm -rf node_modules
+	cd ./services/dex-base && rm -rf node_modules
 	cd ./services/transaction-statistics && rm -rf node_modules
 	cd ./services/fee-estimator && rm -rf node_modules
 	cd ./services/market && rm -rf node_modules
@@ -143,6 +148,7 @@ clean-images:
 	lisk/service_blockchain_app_registry \
 	lisk/service_blockchain_connector \
 	lisk/service_blockchain_indexer \
+	cd ./services/dex-base \
 	lisk/service_blockchain_coordinator \
 	lisk/service_transaction_statistics \
 	lisk/service_fee_estimator \
@@ -159,6 +165,7 @@ audit:
 	cd ./services/blockchain-connector && npm audit; :
 	cd ./services/blockchain-coordinator && npm audit; :
 	cd ./services/blockchain-indexer && npm audit; :
+	cd ./services/dex-base && npm audit; :
 	cd ./services/transaction-statistics && npm audit; :
 	cd ./services/fee-estimator && npm audit; :
 	cd ./services/market && npm audit; :
@@ -173,6 +180,7 @@ audit-fix:
 	cd ./services/blockchain-connector && npm audit fix; :
 	cd ./services/blockchain-coordinator && npm audit fix; :
 	cd ./services/blockchain-indexer && npm audit fix; :
+	cd ./services/dex-base && npm audit fix; :
 	cd ./services/transaction-statistics && npm audit fix; :
 	cd ./services/fee-estimator && npm audit fix; :
 	cd ./services/market && npm audit fix; :
@@ -187,6 +195,7 @@ tag-%:
 	cd services/blockchain-connector && npm version --no-git-tag-version --allow-same-version $*
 	cd services/blockchain-coordinator && npm version --no-git-tag-version --allow-same-version $*
 	cd services/blockchain-indexer && npm version --no-git-tag-version --allow-same-version $*
+	cd ./services/dex-base && npm version --no-git-tag-version --allow-same-version $*
 	cd services/transaction-statistics && npm version --no-git-tag-version --allow-same-version $*
 	cd services/fee-estimator && npm version --no-git-tag-version --allow-same-version $*
 	cd services/market && npm version --no-git-tag-version --allow-same-version $*

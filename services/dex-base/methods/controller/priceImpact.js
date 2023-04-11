@@ -18,11 +18,16 @@ const dataService = require('../../shared/dataService');
 
 const getPriceImpact = async params => {
 	try {
-		const response = await dataService.getPriceImpact(params);
-
+		let priceImpact;
+		if(params.isZeroToOne){
+			priceImpact = await dataService.getPriceImpactExactIn(params);
+		}else{
+			priceImpact = await dataService.getPriceImpactExactOut(params);
+		}
+		
 		return {
-			data: response.data,
-			meta: response.meta,
+			data: priceImpact.data,
+			meta: priceImpact.meta,
 			links: {},
 		};
 	} catch (err) {

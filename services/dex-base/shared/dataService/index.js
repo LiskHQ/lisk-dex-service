@@ -15,10 +15,12 @@
  */
 
 const {
-    getPriceImpact
+    getPriceImpactExactIn,
+    getPriceImpactExactOut
 } = require ('./priceImpact')
 
 module.exports = {
     //prices
-    getPriceImpact
+    getPriceImpactExactIn,
+    getPriceImpactExactOut
 }

@@ -14,22 +14,59 @@
  *
  */
 
-const { Utils } = require('lisk-service-framework');
+const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
-const getPriceImpact = async (params = {}) => {
+const getPriceImpactExactIn = async (address) => {
+	try {
+		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactIn', { 
+            tokenIdIn,
+			amountIn,
+			tokenIdOut,
+			minAmountOut,
+			swapRoute});
+        return {
+            data: {
+                priceImpact,
+                unit: "percentage",
+                symbol: "%",
+            },
+            meta: {},
+        };
+	} catch (err) {
+		if (err.message.includes(timeoutMessage)) {
+			throw new TimeoutException('Request timed out when calling \'dryRunSwapExactIn\'.');
+		}
+		logger.warn(`Error returned when invoking 'dex_dryRunSwapExactIn'.\n${err.stack}`);
+		throw err;
+	}
+};
 
-    let priceImpact='Working Price impact';
-    //add the business logic for the 
-    return {
-        data: {
-            priceImpact,
-            unit: "percentage",
-            symbol: "%",
-        },
-        meta: {},
-    };
+const getPriceImpactExactOut = async (address) => {
+	try {
+		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactOut', {  
+            tokenIdIn,
+			maxAmountIn,
+			tokenIdOut,
+			amountOut,
+			swapRoute });
+        return {
+            data: {
+                priceImpact,
+                unit: "percentage",
+                symbol: "%",
+            },
+            meta: {},
+        };
+	} catch (err) {
+		if (err.message.includes(timeoutMessage)) {
+			throw new TimeoutException('Request timed out when calling \'dryRunSwapExactOut\'.');
+		}
+		logger.warn(`Error returned when invoking 'dex_dryRunSwapExactOut'.\n${err.stack}`);
+		throw err;
+	}
 };
 
 module.exports = {
-    getPriceImpact,
+    getPriceImpactExactIn,
+    getPriceImpactExactOut
 };

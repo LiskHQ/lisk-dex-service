@@ -17,9 +17,6 @@ const {
 	HTTP,
 } = require('lisk-service-framework');
 
-const { StatusCodes: { BAD_REQUEST } } = HTTP;
-
-
 const dataService = require('../../shared/dataService');
 
 

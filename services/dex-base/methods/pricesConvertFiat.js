@@ -20,7 +20,7 @@ const {
 
 module.exports = [
 	{
-		name: 'prices.convert.fiat',
+		name: 'prices',
 		controller: getPricesConvertFiat,
 		params: {
 			currency: { optional: false, type: 'string' },

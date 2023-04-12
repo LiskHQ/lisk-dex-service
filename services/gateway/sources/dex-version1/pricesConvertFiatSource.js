@@ -16,7 +16,7 @@
 
 module.exports = {
 	type: 'moleculer',
-	method: 'dex.prices.convert.fiat',
+	method: 'dex.prices',
 	params: {
 		currency: '=,string',
 		tokenID: '=,string',

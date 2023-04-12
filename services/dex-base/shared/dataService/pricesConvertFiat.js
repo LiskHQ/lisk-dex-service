@@ -15,43 +15,32 @@
  */
 
 const { Utils } = require('lisk-service-framework');
+const { requestRpc } = require('../utils/request');
 
 const getPricesConvertFiat = async (params = {}) => {
 
     let convertedFiatPrice;
-    let app;
     
     //check params.currency can only be EUR || USD 
-    if (!(params.currency.equals('EUR')) && !(params.currency.equals('USD'))) {
+    if (!(params.currency === 'EUR') && !(params.currency === 'USD')) {
         convertedFiatPrice = 'please provide either EUR or USD as input currency'
     }  
 
-    const setAppContext = (h) => app = h;
-    const getAppContext = () => app;
-
-    const requestRpc = async (service, method, params = {}) => {
-        const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-        if (Utils.isObject(data) && data.error) throw new Error(data.error.message);
-        return data;
-    };
+    
 
     //get the market price for a specific token and return it
     const requestMarket = async (method, params) => requestRpc('market', method, params);
     const marketPrices = await requestMarket('prices');
     let inputTokenMarketPrice;    
     for (let i = 0;i<marketPrices.data.length;i++){
-        const marketPriceToken = marketPrices.data.from;
-        if(marketPriceToken.equals(params.tokenID) && marketPrices.data.code.equals(marketPriceToken.concat('_'+params.cuurecny.toUpperCase()))){
-            inputTokenMarketPrice = marketPrices.data.to;
+        const marketPriceToken = marketPrices.data[i].from;
+        if(marketPriceToken === params.tokenID && marketPrices.data[i].to === params.currency){
+            inputTokenMarketPrice = marketPrices.data[i].rate;
         }
     }
 
     convertedFiatPrice = inputTokenMarketPrice;
     
-    module.exports = {
-        setAppContext,
-    };
-
     return {
         data: convertedFiatPrice,
         meta: {},

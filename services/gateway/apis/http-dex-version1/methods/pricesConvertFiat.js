@@ -19,12 +19,12 @@ const regex = require('../../../shared/regex');
 
 module.exports = {
 	version: '2.0',
-	swaggerApiPath: '/prices/convert/fiat',
-	rpcMethod: 'get.prices.convert.fiat',
+	swaggerApiPath: '/dex/prices',
+	rpcMethod: 'get.dex.prices',
 	tags: ['Prices'],
 	params: {
-		currency: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.CURRENCY },
-		tokenID: { optional: false, type: 'string', min: 0, pattern: regex.TOKEN_ID },
+		currency: { optional: false, type: 'string', min: 1 },
+		tokenID: { optional: false, type: 'string', min: 3, },
 	},
 	get schema() {
 		const pricesConvertFiatSchema = {};

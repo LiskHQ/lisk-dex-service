@@ -21,4 +21,14 @@ module.exports = {
 		currency: '=,string',
 		tokenID: '=,string',
 	},
+	definition: {
+		data: {
+			convertedPrice: '=,string',
+			convertedTarget: '=,string',
+		},
+		meta: {
+
+		},
+		links: {},
+	},
 };

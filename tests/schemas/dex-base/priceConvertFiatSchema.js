@@ -13,27 +13,13 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	HTTP,
-} = require('lisk-service-framework');
+import Joi from 'joi';
 
-const dataService = require('../../shared/dataService');
-
-
-const getPricesConvertFiat = async params => {
-	try {
-		const response = await dataService.getPricesConvertFiat(params);
-
-		return {
-			data: {convertedPrice: response.data, convertedTarget: params.currency},
-			meta: {},
-		};
-	} catch (err) {
-		throw err;
-	}
+const priceConvertFiatSchema = {
+	convertedPrice: Joi.string().required(),
+	convertedTarget: Joi.string().required(),
 };
 
-
 module.exports = {
-	getPricesConvertFiat,
+	priceConvertFiatSchema: Joi.object(priceConvertFiatSchema).required(),
 };

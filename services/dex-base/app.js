@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -22,6 +22,7 @@ const {
 
 const config = require('./config');
 const packageJson = require('./package.json');
+const { setAppContext } = require('./shared/utils/request');
 
 // Configure logger
 const loggerConf = {
@@ -43,10 +44,14 @@ const app = Microservice({
 	logger: loggerConf,
 });
 
+setAppContext(app);
+
 // Add routes, events & jobs
 app.addMethods(path.join(__dirname, 'methods'));
 app.addEvents(path.join(__dirname, 'events'));
 app.addJobs(path.join(__dirname, 'jobs'));
+
+
 
 // Run the application
 app.run().then(() => {
@@ -56,3 +61,4 @@ app.run().then(() => {
 	logger.fatal(err.stack);
 	process.exit(1);
 });
+

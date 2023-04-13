@@ -21,9 +21,10 @@ const getPricesConvertToken = async params => {
 		const response = await dataService.getPricesConvertToken(params);
 
 		return {
-			data: response.data,
-			meta: response.meta,
-			links: {},
+			data: {
+				credibleDirectPriceToken2ToToken1: response.data.token2ToToken1,
+				credibleDirectPriceToken1ToToken2: response.data.token1ToToken2},
+			meta: {}
 		};
 	} catch (err) {
 		throw err;

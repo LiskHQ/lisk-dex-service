@@ -13,6 +13,9 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
+const { requestRpc } = require('../utils/request');
+
 const getPricesConvertToken = async (params = {}) => {
 
 	let marketPrices;
@@ -20,24 +23,16 @@ const getPricesConvertToken = async (params = {}) => {
 	let conversionTokenIDMarketPrice;
 
 	//getting all available tokens
-	const setAppContext = (h) => app = h;
-	const getAppContext = () => app;
-	const requestRpc = async (service, method, params) => {
-		const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-		if (Utils.isObject(data) && data.error) throw new Error(data.error.message);
-		return data;
-	};
 
 	const requestMarket = async (method, params) => requestRpc('market', method, params);
 	marketPrices = await requestMarket('prices');
-	const requestAppRegistry = async (method, params) => requestRpc('app-registry', method, params);
-  
+	
     for (let i = 0;i<marketPrices.data.length;i++){
-        const marketPriceToken = marketPrices.data.from;
-        if(marketPriceToken.equals(params.tokenID0) && marketPrices.data.code.includes('EUR')){
-			tokenID0TokenMarketPrice = marketPrices.data.to;
-		}else if(marketPriceToken.equals(params.conversionTokenID) && marketPrices.data.code.includes('EUR')){
-			conversionTokenIDMarketPrice = marketPrices.data.to;
+        const marketPriceToken = marketPrices.data[i].from;
+        if(marketPriceToken === params.tokenID0 && marketPrices.data[i].to === 'USD'){
+			tokenID0TokenMarketPrice = marketPrices.data[i].rate;
+		}else if(marketPriceToken === params.conversionTokenID && marketPrices.data[i].to === 'USD'){
+			conversionTokenIDMarketPrice = marketPrices.data[i].rate;
 		}
     }
 
@@ -45,16 +40,10 @@ const getPricesConvertToken = async (params = {}) => {
 	const token2ToToken1 = 1/token1ToToken2;
 
 	const convertedTokenPrice = {
-		token1ToToken2 : params.tokenID0+'is equal to'+token1ToToken2+params.conversionTokenID,
-		token2ToToken1 : params.conversionTokenID+'is equal to'+token2ToToken1+params.tokenID0,
+		token1ToToken2 : params.tokenID0+' is equal to '+token1ToToken2+" "+params.conversionTokenID,
+		token2ToToken1 : params.conversionTokenID+' is equal to '+token2ToToken1+" "+params.tokenID0,
 		
 	}
-
-	module.exports = {
-		setAppContext,
-		requestMarket,
-		requestAppRegistry
-	};
 
 	return {
 		data: convertedTokenPrice,

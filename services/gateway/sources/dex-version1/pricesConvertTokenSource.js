@@ -21,4 +21,11 @@ module.exports = {
 		tokenID0: '=,string',
 		conversionTokenID: '=,string',
 	},
+	definition: {
+		data: {
+			credibleDirectPriceToken2ToToken1: '=,string',
+			credibleDirectPriceToken1ToToken2: '=,string'
+		},
+		meta: {},
+	},
 };

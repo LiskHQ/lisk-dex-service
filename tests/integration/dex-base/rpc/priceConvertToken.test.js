@@ -16,9 +16,7 @@
 const config = require('../../../config');
 const { request } = require('../../../helpers/socketIoRpcRequest');
 
-const {
-	marketPriceSchema,
-} = require('../../../schemas/api_v3/marketPrice.schema');
+const { priceConvertTokenSchema } = require('../../../schemas/dex-base/priceConvertToken.schema')
 
 const wsRpcUrl = `${config.SERVICE_ENDPOINT}/rpc-dex-v1`;
 const getPricesConvertToken = async params => request(wsRpcUrl, 'get.prices.convert.token', params);
@@ -27,10 +25,9 @@ describe('Method get.prices.convert.token', () => {
 	describe('is able to convert token1 to token2 and token2 to token1', () => {
 		it('returns token1/token2 and token2/token1 converted price', async () => {
 			try {
-				const response = await getPricesConvertToken({tokenID0:'BTC', conversionTokenID:'ETH'});
+				const response = await getPricesConvertToken({ tokenID0: 'LSK', conversionTokenID: 'BTC' });
 				const { result } = response;
-				expect(result.data).toBeInstanceOf(Array);
-				expect(result.data.length).toBeGreaterThanOrEqual(1);
+				expect(result.data).toMap(priceConvertTokenSchema);
 			} catch (err) {
 				throw err;
 			}

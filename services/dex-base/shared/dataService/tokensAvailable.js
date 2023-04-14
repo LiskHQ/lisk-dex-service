@@ -14,23 +14,16 @@
  *
  */
 
-const { Utils } = require('lisk-service-framework');
+const { requestRpc } = require('../utils/request');
 
 const getTokensAvailable = async (params) => {
 
 	let tokensAvailable;
 	let app;
-	const setAppContext = (h) => app = h;
-	const getAppContext = () => app;
-	const requestRpc = async (service, method, params) => {
-		const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-		if (Utils.isObject(data) && data.error) throw new Error(data.error.message);
-		return data;
-	};
+
 	const requestConnector = async (method, params) => requestRpc('connector', method, params);
 	tokensAvailable = await requestConnector('getSupportedTokens', params);
-
-
+	
 	module.exports = {
 		setAppContext,
 		requestConnector,

@@ -1,6 +1,6 @@
 const {
     getTokensAvailable
-} = require ('../tokensAvailable')
+} = require ('./tokensAvailable')
 
 module.exports = {
     getTokensAvailable

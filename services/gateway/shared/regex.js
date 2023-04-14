@@ -39,7 +39,6 @@ const BLS_KEY = /^\b[a-fA-F0-9]{96}\b$/;
 const PROOF_OF_POSSESSION = /^\b[a-fA-F0-9]{192}\b$/;
 const MODULE = /^\b(?:[\w!@$&.]{1,32}|,)+\b$/;
 const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
-const CURRENCY = /^\(?=.*?\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|\d+)?(\.\d{1,2})\b$/; // Decimal and commas are optional for this format
 
 module.exports = {
 	PUBLIC_KEY,

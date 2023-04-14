@@ -27,6 +27,7 @@ const getPricesConvertToken = async params => {
 			meta: {}
 		};
 	} catch (err) {
+		// TODO: throwing caught error
 		throw err;
 	}
 };

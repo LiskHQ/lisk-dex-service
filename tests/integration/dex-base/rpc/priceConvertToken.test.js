@@ -29,6 +29,7 @@ describe('Method get.prices.convert.token', () => {
 				const { result } = response;
 				expect(result.data).toMap(priceConvertTokenSchema);
 			} catch (err) {
+				// TODO: throwing caught error
 				throw err;
 			}
 		});

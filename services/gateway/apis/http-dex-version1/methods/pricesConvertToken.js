@@ -15,7 +15,6 @@
  */
 const pricesConvertTokenSource = require('../../../sources/dex-version1/pricesConvertTokenSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const regex = require('../../../shared/regex');
 
 module.exports = {
 	version: '2.0',

@@ -17,11 +17,7 @@ const {
 	HTTP,
 } = require('lisk-service-framework');
 
-const { StatusCodes: { BAD_REQUEST } } = HTTP;
-
-
 const dataService = require('../../shared/dataService');
-
 
 const getTokensAvailable = async params => {
 	try {
@@ -33,6 +29,7 @@ const getTokensAvailable = async params => {
 			links: {},
 		};
 	} catch (err) {
+		//TODO: add more explicit message for throwing the error
 		throw err;
 	}
 };

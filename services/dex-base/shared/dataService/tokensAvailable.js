@@ -19,8 +19,6 @@ const { requestRpc } = require('../utils/request');
 const getTokensAvailable = async (params) => {
 
 	let tokensAvailable;
-	let app;
-
 	const requestConnector = async (method, params) => requestRpc('connector', method, params);
 	tokensAvailable = await requestConnector('getSupportedTokens', params);
 	

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -15,17 +15,22 @@
  */
 
 module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/async_hello',
-	rpcMethod: 'get.hello.async',
-	envelope: {},
-	source: {
-		type: 'moleculer',
-		method: 'template.asynchronous.hello',
-		params: {},
-		definition: {
-			data: '=',
-			meta: '=',
+	type: 'moleculer',
+	method: 'dex.gettingStatistics',
+	params: {
+		interval: '=,string',
+		limit: '=,string',
+        offset: '=,string'
+	},
+	definition: {
+		data: {
+			id: '=,string',
+			data: '=,string',
+            volume: '=,string',
+            tvl: '=,string',
+
 		},
+		meta: {},
+		links: {},
 	},
 };

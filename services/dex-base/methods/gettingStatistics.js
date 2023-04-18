@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,18 +14,18 @@
  *
  */
 
-module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/server_error',
-	rpcMethod: 'get.server_error',
-	envelope: {},
-	source: {
-		type: 'moleculer',
-		method: 'template.server.error',
-		params: {},
-		definition: {
-			error: '=,string',
-			status: '=,number',
+const {
+	gettingStatistics,
+} = require('./controller/gettingStatistics');
+
+module.exports = [
+	{
+		name: 'gettingStatistics',
+		controller: gettingStatistics,
+		params: {
+			interval: { optional: false, type: 'string' },
+            limit: { optional: false, type: 'string' },
+			offset: { optional: false, type: 'string' },
 		},
 	},
-};
+];

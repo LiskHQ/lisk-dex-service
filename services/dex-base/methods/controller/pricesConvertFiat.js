@@ -13,10 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	HTTP,
-} = require('lisk-service-framework');
-
 const dataService = require('../../shared/dataService');
 
 
@@ -29,6 +25,7 @@ const getPricesConvertFiat = async params => {
 			meta: {},
 		};
 	} catch (err) {
+		// TODO: throw more explicit message
 		throw err;
 	}
 };

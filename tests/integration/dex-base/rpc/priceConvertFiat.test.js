@@ -30,6 +30,7 @@ describe('Method get.dex.prices.convert.fiat', () => {
 				expect(result.data.convertedPrice).toBeGreaterThan(0.0000);
 				expect(result.data.convertedTarget).toBe('USD');
 			} catch (err) {
+				// TODO: add more explicit message for the error
 				throw err;
 			}
 		});

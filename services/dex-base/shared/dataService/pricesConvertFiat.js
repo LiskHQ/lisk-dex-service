@@ -14,7 +14,6 @@
  *
  */
 
-const { Utils } = require('lisk-service-framework');
 const { requestRpc } = require('../utils/request');
 
 const getPricesConvertFiat = async (params = {}) => {
@@ -22,11 +21,13 @@ const getPricesConvertFiat = async (params = {}) => {
     let convertedFiatPrice;
     
     //check params.currency can only be EUR || USD 
-    if (!(params.currency === 'EUR') && !(params.currency === 'USD')) {
-        convertedFiatPrice = 'please provide either EUR or USD as input currency'
-    }  
-
-    
+    if ((params.currency !== 'EUR') && (params.currency !== 'USD')) {
+        convertedFiatPrice = 'Please provide EUR or USD as an input currency.'
+        return {
+            data: convertedFiatPrice,
+            meta: {},
+        };
+    }   
 
     //get the market price for a specific token and return it
     const requestMarket = async (method, params) => requestRpc('market', method, params);

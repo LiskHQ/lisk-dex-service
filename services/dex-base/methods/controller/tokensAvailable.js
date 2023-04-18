@@ -13,9 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	HTTP,
-} = require('lisk-service-framework');
 
 const dataService = require('../../shared/dataService');
 
@@ -24,10 +21,9 @@ const getTokensAvailable = async params => {
 		const response = await dataService.getTokensAvailable(params);
 
 		return {
-			data: response.data,
-			meta: response.meta,
-			links: {},
-		};
+			data: {tokensAvailable:response.data.supportedTokens},
+			meta: {}
+			};
 	} catch (err) {
 		//TODO: add more explicit message for throwing the error
 		throw err;

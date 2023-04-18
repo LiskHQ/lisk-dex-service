@@ -23,7 +23,6 @@ const getTokensAvailable = async (params) => {
 	tokensAvailable = await requestConnector('getSupportedTokens', params);
 	
 	module.exports = {
-		setAppContext,
 		requestConnector,
 	};
 

@@ -16,7 +16,7 @@
 
 const { requestRpc } = require('../utils/request');
 
-const getPricesConvertToken = async (params = {}) => {
+const getPricesConvertToken = async (params) => {
 
 	let marketPrices;
 	let tokenID0TokenMarketPrice;  

@@ -24,8 +24,8 @@ module.exports = [
 		controller: gettingStatistics,
 		params: {
 			interval: { optional: false, type: 'string' },
-            limit: { optional: false, type: 'string' },
-			offset: { optional: false, type: 'string' },
+            limit: { optional: false, type: 'number' },
+			offset: { optional: false, type: 'number' },
 		},
 	},
 ];

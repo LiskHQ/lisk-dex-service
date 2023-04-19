@@ -22,9 +22,10 @@ module.exports = {
 	rpcMethod: 'get.dex.gettingStatistics',
 	tags: ['Statistics'],
     params: {
-        interval: { optional: false, type: 'string', min: 1 },
-        limit: { optional: false, type: 'string', min: 1 },
-        offset: { optional: false, type: 'string', min: 1 },
+        interval: { optional: false, type: 'string'},
+        limit: { optional: false, type: 'number' },
+        offset: { optional: false, type: 'number' },
+		
     },
 	get schema() {
 		const gettingStatisticsSchema = {};

@@ -24,14 +24,9 @@ const getPricesConvertToken = async params => request(wsRpcUrl, 'get.prices.conv
 describe('Method get.prices.convert.token', () => {
 	describe('is able to convert token1 to token2 and token2 to token1', () => {
 		it('returns token1/token2 and token2/token1 converted price', async () => {
-			try {
-				const response = await getPricesConvertToken({ tokenID0: 'LSK', conversionTokenID: 'BTC' });
-				const { result } = response;
-				expect(result.data).toMap(priceConvertTokenSchema);
-			} catch (err) {
-				// TODO: throwing caught error
-				throw err;
-			}
+			const response = await getPricesConvertToken({ tokenID0: 'LSK', conversionTokenID: 'BTC' });
+			const { result } = response;
+			expect(result.data).toMap(priceConvertTokenSchema);
 		});
 	});
 });

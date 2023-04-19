@@ -13,26 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-let app;
-
-const setAppContext = (h) => app = h;
-
-const getAppContext = () => app;
-
-const requestRpc = async (service, method, params = {}) => {
-	const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-	return data;
-};
-
-const requestConnector = async (method, params) => requestRpc('connector', method, params);
-const requestMarket = async (method, params) => requestRpc('market', method, params);
-	
+const currencies = {
+    USD : 'USD', 
+    EUR : 'EUR'
+}
 
 module.exports = {
-	setAppContext,
-	requestConnector,
-	requestMarket,
-	requestRpc,
-	getAppContext
+	currencies,
 };

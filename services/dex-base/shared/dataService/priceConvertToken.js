@@ -14,7 +14,8 @@
  *
  */
 
-const { requestRpc } = require('../utils/request');
+const { currencies } = require('../constants');
+const { requestRpc, requestMarket } = require('../utils/request');
 
 const getPricesConvertToken = async (params) => {
 
@@ -24,14 +25,13 @@ const getPricesConvertToken = async (params) => {
 
 	//getting all available tokens
 
-	const requestMarket = async (method, params) => requestRpc('market', method, params);
 	marketPrices = await requestMarket('prices');
 	
     for (let i = 0;i<marketPrices.data.length;i++){
         const marketPriceToken = marketPrices.data[i].from;
-        if(marketPriceToken === params.tokenID0 && marketPrices.data[i].to === 'USD'){
+        if(marketPriceToken === params.tokenID0 && marketPrices.data[i].to === currencies.USD){
 			tokenID0TokenMarketPrice = marketPrices.data[i].rate;
-		}else if(marketPriceToken === params.conversionTokenID && marketPrices.data[i].to === 'USD'){
+		}else if(marketPriceToken === params.conversionTokenID && marketPrices.data[i].to === currencies.USD){
 			conversionTokenIDMarketPrice = marketPrices.data[i].rate;
 		}
     }

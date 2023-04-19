@@ -17,6 +17,9 @@ const config = require('../../../config');
 const { request } = require('../../../helpers/socketIoRpcRequest');
 
 const { priceConvertTokenSchema } = require('../../../schemas/dex-base/priceConvertToken.schema')
+const {
+	invalidParamsSchema,
+} = require('../../../schemas/rpcGenerics.schema');
 
 const wsRpcUrl = `${config.SERVICE_ENDPOINT}/rpc-dex-v1`;
 const getPricesConvertToken = async params => request(wsRpcUrl, 'get.prices.convert.token', params);
@@ -27,6 +30,12 @@ describe('Method get.prices.convert.token', () => {
 			const response = await getPricesConvertToken({ tokenID0: 'LSK', conversionTokenID: 'BTC' });
 			const { result } = response;
 			expect(result.data).toMap(priceConvertTokenSchema);
+		});
+		it('params not supported -> INVALID_PARAMS ', async () => {
+			const response = await request(wsRpcUrl, 'get.prices.convert.token', {
+				someparam: 'not_supported',
+			}).catch(e => e);
+			expect(response).toMap(invalidParamsSchema);
 		});
 	});
 });

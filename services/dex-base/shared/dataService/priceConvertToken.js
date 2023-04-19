@@ -42,8 +42,7 @@ const getPricesConvertToken = async (params) => {
 	const convertedTokenPrice = {
 		token1ToToken2 : params.tokenID0+' is equal to '+token1ToToken2+" "+params.conversionTokenID,
 		token2ToToken1 : params.conversionTokenID+' is equal to '+token2ToToken1+" "+params.tokenID0,
-		
-	}
+	};
 
 	return {
 		data: convertedTokenPrice,

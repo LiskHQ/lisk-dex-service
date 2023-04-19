@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,7 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const getPoolsAvailable = async (params = {}) => {
+
+const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+
+
+const getPoolsAvailable = async () => {
 	
     let poolsAvailable;
 	
@@ -26,8 +30,8 @@ const getPoolsAvailable = async (params = {}) => {
               meta: {},
           };
     } catch (err) {
-      if (err.message.includes(timeoutMessage)) {
-        throw new TimeoutException('Request timed out when calling \'getAllPoolIDs\'.');
+      if (err) {
+        throw new Error('Request timed out when calling \'getAllPoolIDs\'.');
       }
       logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
       throw err;

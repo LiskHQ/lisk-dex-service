@@ -23,7 +23,8 @@ const getPricesConvertToken = async params => {
 		return {
 			data: {
 				credibleDirectPriceToken2ToToken1: response.data.token2ToToken1,
-				credibleDirectPriceToken1ToToken2: response.data.token1ToToken2},
+				credibleDirectPriceToken1ToToken2: response.data.token1ToToken2,
+			},
 			meta: {}
 		};
 	} catch (err) {

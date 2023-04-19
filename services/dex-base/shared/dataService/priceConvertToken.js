@@ -15,7 +15,7 @@
  */
 
 const { currencies } = require('../constants');
-const { requestRpc, requestMarket } = require('../utils/request');
+const { requestMarket } = require('../utils/request');
 
 const getPricesConvertToken = async (params) => {
 

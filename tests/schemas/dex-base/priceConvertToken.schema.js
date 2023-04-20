@@ -13,10 +13,12 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+import Joi from 'joi';
 
+<<<<<<< HEAD:services/gateway/sources/dex-version1/pricesConvertFiatSource.js
 module.exports = {
 	type: 'moleculer',
-	method: 'dex.prices.convert.fiat',
+	method: 'dex.prices',
 	params: {
 		currency: '=,string',
 		tokenID: '=,string',
@@ -31,4 +33,13 @@ module.exports = {
 		},
 		links: {},
 	},
+=======
+const priceConvertTokenSchema = {
+	credibleDirectPriceToken2ToToken1: Joi.string().required(),
+	credibleDirectPriceToken1ToToken2: Joi.string().required(),
+};
+
+module.exports = {
+	priceConvertTokenSchema: Joi.object(priceConvertTokenSchema).required(),
+>>>>>>> 3ac0dd49c4db9abf7e35abb831c184eb36b4b98d:tests/schemas/dex-base/priceConvertToken.schema.js
 };

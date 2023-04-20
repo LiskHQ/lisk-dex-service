@@ -16,9 +16,9 @@
 
 const {
     getPricesConvertFiat
-} = require ('./pricesConvertFiat')
+} = require('./pricesConvertFiat')
 
 module.exports = {
     //prices
-    getPricesConvertFiat
+    getPricesConvertFiat,
 }

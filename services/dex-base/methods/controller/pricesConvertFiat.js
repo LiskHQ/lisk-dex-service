@@ -21,7 +21,7 @@ const getPricesConvertFiat = async params => {
 		const response = await dataService.getPricesConvertFiat(params);
 
 		return {
-			data: {convertedPrice: response.data, convertedTarget: params.currency},
+			data: { convertedPrice: response.data, convertedTarget: params.currency },
 			meta: {},
 		};
 	} catch (err) {

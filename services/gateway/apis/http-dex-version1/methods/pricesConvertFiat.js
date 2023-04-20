@@ -18,8 +18,8 @@ const { transformParams, response, getSwaggerDescription } = require('../../../s
 
 module.exports = {
 	version: '2.0',
-	swaggerApiPath: '/dex/prices',
-	rpcMethod: 'get.dex.prices',
+	swaggerApiPath: '/prices/convert/fiat',
+	rpcMethod: 'get.prices.convert.fiat',
 	tags: ['Prices'],
 	params: {
 		currency: { optional: false, type: 'string', min: 1 },

@@ -15,7 +15,6 @@
  */
 import Joi from 'joi';
 
-<<<<<<< HEAD:tests/schemas/dex-base/priceConvertFiatSchema.js
 const priceConvertFiatSchema = {
 	convertedPrice: Joi.string().required(),
 	convertedTarget: Joi.string().required(),
@@ -23,24 +22,4 @@ const priceConvertFiatSchema = {
 
 module.exports = {
 	priceConvertFiatSchema: Joi.object(priceConvertFiatSchema).required(),
-=======
-let app;
-
-const setAppContext = (h) => app = h;
-
-const getAppContext = () => app;
-
-const requestRpc = async (service, method, params = {}) => {
-	const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-	return data;
-};
-
-const requestConnector = async (method, params) => requestRpc('connector', method, params);
-
-module.exports = {
-	setAppContext,
-	requestConnector,
-	requestRpc,
-	getAppContext
->>>>>>> 3ac0dd49c4db9abf7e35abb831c184eb36b4b98d:services/dex-base/shared/utils/request.js
 };

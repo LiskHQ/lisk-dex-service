@@ -14,17 +14,25 @@
  *
  */
 
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.pools.available',
-	params: {
-		limit: '=,string',
-		offset: '=,string',
-	},
-	definition: {
-		data: {
-			poolsAvailable: '=',
-		},
-		meta: {},
-	}
+
+let app;
+
+const setAppContext = (h) => app = h;
+
+const getAppContext = () => app;
+
+const requestRpc = async (service, method, params = {}) => {
+	const data = await getAppContext().requestRpc(`${service}.${method}`, params);
+	return data;
 };
+
+const requestConnector = async (method, params) => requestRpc('connector', method, params);
+
+module.exports = {
+	setAppContext,
+	requestConnector,
+	requestRpc,
+	getAppContext
+}
+
+

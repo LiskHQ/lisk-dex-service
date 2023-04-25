@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -34,9 +34,7 @@ const getPoolsAvailable = async params => {
 			links: {},
 		};
 	} catch (err) {
-		let status;
-		if (err instanceof ValidationException) status = BAD_REQUEST;
-		if (status) return { status, data: { error: err.message } };
+		// TODO: throw more explicit message
 		throw err;
 	}
 };

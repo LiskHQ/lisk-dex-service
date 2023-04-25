@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,13 +13,18 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { getStatus } = require('../shared/status');
+
+const {
+	getPoolsAvailable,
+} = require('./controller/poolsAvailable');
 
 module.exports = [
 	{
-		name: 'status',
-		description: 'Status',
-		params: {},
-		controller: getStatus,
+		name: 'pools.available',
+		controller: getPoolsAvailable,
+		params: {
+			limit: { optional: false, type: 'string' },
+			offset: { optional: false, type: 'string' },
+		},
 	},
 ];

@@ -13,14 +13,33 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
 const {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-} = require ('./priceImpact')
+	HTTP,
+	Exceptions: { ValidationException },
+} = require('lisk-service-framework');
+
+const { StatusCodes: { BAD_REQUEST } } = HTTP;
+
+
+const dataService = require('../../shared/dataService');
+
+
+const getPoolsAvailable = async params => {
+	try {
+		const response = await dataService.getPoolsAvailable(params);
+
+		return {
+			data: {poolsAvailable:response.data},
+			meta: response.meta,
+			links: {},
+		};
+	} catch (err) {
+		// TODO: throw more explicit message
+		throw err;
+	}
+};
+
 
 module.exports = {
-    //prices
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-}
+	getPoolsAvailable,
+};

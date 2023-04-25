@@ -152,7 +152,6 @@ services:
     networks:
       - services_network
     restart: always
-
   fee-estimator:
     image: lisk/service_fee_estimator
     depends_on:

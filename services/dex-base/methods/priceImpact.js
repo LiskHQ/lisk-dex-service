@@ -14,13 +14,17 @@
  *
  */
 
-const {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-} = require ('./priceImpact')
+const { getPriceImpact } = require('./controller/priceImpact');
 
-module.exports = {
-    //prices
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-}
+module.exports = [
+	{
+		name: 'prices.impact',
+		controller: getPriceImpact,
+		params: {
+			poolID: { optional: false, type: 'string' },
+			tokenAmount0: { optional: false, type: 'string' },
+            tokenAmount1: { optional: false, type: 'string' },
+            isZeroToOne: { optional: false, type: 'boolean' },
+		},
+	},
+];

@@ -14,13 +14,28 @@
  *
  */
 
-const {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-} = require ('./priceImpact')
+const dataService = require('../../shared/dataService');
+
+const getPriceImpact = async params => {
+	try {
+		let priceImpact;
+		if(params.isZeroToOne){
+			priceImpact = await dataService.getPriceImpactExactIn(params);
+		}else{
+			priceImpact = await dataService.getPriceImpactExactOut(params);
+		}
+		
+		return {
+			data: priceImpact.data,
+			meta: priceImpact.meta,
+			links: {},
+		};
+	} catch (err) {
+		throw err;
+	}
+};
+
 
 module.exports = {
-    //prices
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-}
+	getPriceImpact,
+};

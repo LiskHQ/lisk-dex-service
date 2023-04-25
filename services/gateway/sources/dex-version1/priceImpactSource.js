@@ -14,13 +14,13 @@
  *
  */
 
-const {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-} = require ('./priceImpact')
-
 module.exports = {
-    //prices
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-}
+	type: 'moleculer',
+	method: 'dex.prices.impact',
+	params: {
+		poolID: '=,string',
+		tokenAmount0: '=,string',
+        tokenAmount1: '=,string',
+        isZeroToOne: '=,boolean',
+	},
+};

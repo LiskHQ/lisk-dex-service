@@ -13,16 +13,8 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	HTTP,
-	Exceptions: { ValidationException },
-} = require('lisk-service-framework');
-
-const { StatusCodes: { BAD_REQUEST } } = HTTP;
-
 
 const dataService = require('../../shared/dataService');
-
 
 const getPoolsAvailable = async params => {
 	try {
@@ -38,7 +30,6 @@ const getPoolsAvailable = async params => {
 		throw err;
 	}
 };
-
 
 module.exports = {
 	getPoolsAvailable,

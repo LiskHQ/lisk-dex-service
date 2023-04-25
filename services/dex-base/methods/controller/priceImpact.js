@@ -31,6 +31,7 @@ const getPriceImpact = async params => {
 			links: {},
 		};
 	} catch (err) {
+		//TODO: Modify the error throwing logic
 		throw err;
 	}
 };

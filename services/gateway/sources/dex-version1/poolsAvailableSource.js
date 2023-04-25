@@ -21,4 +21,10 @@ module.exports = {
 		limit: '=,string',
 		offset: '=,string',
 	},
+	definition: {
+		data: {
+			poolsAvailable: '=',
+		},
+		meta: {},
+	},
 };

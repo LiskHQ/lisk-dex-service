@@ -29,7 +29,7 @@ const getPoolsAvailable = async params => {
 		const response = await dataService.getPoolsAvailable(params);
 
 		return {
-			data: response.data,
+			data: {poolsAvailable:response.data},
 			meta: response.meta,
 			links: {},
 		};

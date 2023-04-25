@@ -31,10 +31,11 @@ const getPoolsAvailable = async () => {
           };
     } catch (err) {
       if (err) {
-        throw new Error('Request timed out when calling \'getAllPoolIDs\'.');
+        logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
+        throw err;
       }
-      logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
-      throw err;
+      
+      
     }
 };
 

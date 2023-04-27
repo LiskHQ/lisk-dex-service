@@ -21,7 +21,7 @@ const gettingStatistics = async params => {
 		const response = await dataService.gettingStatistics(params);
 
 		return {
-			data: {id: response.data.id, data: response.data.data, volume: response.data.volume, tvl: response.data.tvl},
+			data: {transactionCount: response.data.timeline.transactionCount, volume: response.data.timeline.volume},
 			meta: {},
 		};
 	} catch (err) {

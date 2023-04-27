@@ -21,12 +21,17 @@ const gettingStatistics = async (params = {}) => {
    
     //get the market price for a specific token and return it
     const requestStatistics = async (method, params) => requestRpc('statistics', method, params);
-    const statistics = await requestStatistics('transactions.statistics');
+    try {
+        const statistics = await requestStatistics('transactions.statistics', params);
+        return {
+            data: statistics,
+            meta: {},
+        };
+    } catch (error) {
+        throw new Error(error)
+    } 
     
-    return {
-        data: statistics,
-        meta: {},
-    };
+    
 };
 
 module.exports = {

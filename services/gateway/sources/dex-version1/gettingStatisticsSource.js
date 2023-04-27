@@ -19,16 +19,13 @@ module.exports = {
 	method: 'dex.gettingStatistics',
 	params: {
 		interval: '=,string',
-		limit: '=,string',
-        offset: '=,string'
+		limit: '=,number',
+        offset: '=,number'
 	},
 	definition: {
 		data: {
-			id: '=,string',
-			data: '=,string',
+			transactionCount: '=,string',
             volume: '=,string',
-            tvl: '=,string',
-
 		},
 		meta: {},
 		links: {},

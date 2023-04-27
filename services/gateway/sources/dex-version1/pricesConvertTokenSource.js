@@ -18,8 +18,8 @@ module.exports = {
 	type: 'moleculer',
 	method: 'dex.prices.convert.token',
 	params: {
-		tokenID0: '=,string',
-		conversionTokenID: '=,string',
+		tokenSymbol: '=,string',
+		conversionTokenSymbol: '=,string',
 	},
 	definition: {
 		data: {

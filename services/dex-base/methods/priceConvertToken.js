@@ -23,8 +23,8 @@ module.exports = [
 		name: 'prices.convert.token',
 		controller: getPricesConvertToken,
 		params: {
-			tokenID0: { optional: false, type: 'string' },
-			conversionTokenID: { optional: false, type: 'string' },
+			tokenSymbol: { optional: false, type: 'string' },
+			conversionTokenSymbol: { optional: false, type: 'string' },
 		},
 	},
 ];

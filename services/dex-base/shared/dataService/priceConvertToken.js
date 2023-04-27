@@ -29,9 +29,9 @@ const getPricesConvertToken = async (params) => {
 	
     for (let i = 0;i<marketPrices.data.length;i++){
         const marketPriceToken = marketPrices.data[i].from;
-        if(marketPriceToken === params.tokenID0 && marketPrices.data[i].to === currencies.USD){
+        if(marketPriceToken === params.tokenSymbol && marketPrices.data[i].to === currencies.USD){
 			tokenID0TokenMarketPrice = marketPrices.data[i].rate;
-		}else if(marketPriceToken === params.conversionTokenID && marketPrices.data[i].to === currencies.USD){
+		}else if(marketPriceToken === params.conversionTokenSymbol && marketPrices.data[i].to === currencies.USD){
 			conversionTokenIDMarketPrice = marketPrices.data[i].rate;
 		}
     }

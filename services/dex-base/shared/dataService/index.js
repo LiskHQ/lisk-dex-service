@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,30 +14,11 @@
  *
  */
 
+const {
+    gettingCurrentsqrtprice
+} = require ('./gettingCurrentsqrtprice')
+
 module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/hello',
-	rpcMethod: 'get.hello',
-	envelope: {
-		data: [],
-		meta: {},
-		links: {},
-	},
-	source: {
-		type: 'moleculer',
-		method: 'template.generic.hello',
-		params: {},
-		definition: {
-			data: ['data', {
-				message: '=',
-				name: '=',
-			}],
-			meta: {
-				count: 'meta.count,number',
-				offset: '=,number',
-				total: 'meta.total,number',
-			},
-			links: {},
-		},
-	},
-};
+    //prices
+    gettingCurrentsqrtprice
+}

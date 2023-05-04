@@ -27,17 +27,47 @@ const getPricesConvertToken = async (params) => {
 
 	marketPrices = await requestMarket('prices');
 	
-    for (let i = 0;i<marketPrices.data.length;i++){
-        const marketPriceToken = marketPrices.data[i].from;
-        if(marketPriceToken === params.tokenSymbol && marketPrices.data[i].to === currencies.USD){
-			tokenID0TokenMarketPrice = marketPrices.data[i].rate;
-		}else if(marketPriceToken === params.conversionTokenSymbol && marketPrices.data[i].to === currencies.USD){
-			conversionTokenIDMarketPrice = marketPrices.data[i].rate;
-		}
-    }
+    // for (let i = 0;i<marketPrices.data.length;i++){
+    //     const marketPriceToken = marketPrices.data[i].from;
+    //     if(marketPriceToken === params.tokenSymbol && marketPrices.data[i].to === currencies.USD){
+	// 		tokenID0TokenMarketPrice = marketPrices.data[i].rate;
+	// 	}else if(marketPriceToken === params.conversionTokenSymbol && marketPrices.data[i].to === currencies.USD){
+	// 		conversionTokenIDMarketPrice = marketPrices.data[i].rate;
+	// 	}
+    // }
 
-	const token1ToToken2 = tokenID0TokenMarketPrice/conversionTokenIDMarketPrice;
-	const token2ToToken1 = 1/token1ToToken2;
+	// In case LSK_USD is not available then do LSK_BTC -> BTC->USD
+
+	const finalPrices = {};
+	const tokenID0Map=new Map();
+	const conversionTokenIDMap = new Map();
+	let rate;
+	let rateTokenIDs;
+	let rateconversionTokenID;
+
+	for (let i = 0; i<marketPrices.data.length;i++){
+		const marketPriceToken = marketPrices.data[i].from;
+		if(marketPriceToken === params.tokenSymbol){
+			tokenID0Map.set(marketPrices.data[i].to, marketPrices.data[i]);//{[BTC,LSK_BTC], [ETH,LSK_ETH]}
+		}else if (marketPriceToken === params.conversionTokenSymbol){
+			conversionTokenIDMap.set(marketPrices.data[i].to, marketPrices.data[i]);//{[ABC,BTC_ABC], [ETH,BTC_ETH]}
+		}
+	}
+
+	if(tokenID0Map.has(params.conversionTokenSymbol)){
+		rate = tokenID0Map.get(params.conversionTokenSymbol).rate;
+	}else{
+		for (const tokenIDs of tokenID0Map.entries()) {
+			if(conversionTokenIDMap.has(tokenIDs[0])){
+				rateTokenIDs = tokenIDs.rate;
+				rateconversionTokenID = conversionTokenIDMap.get(tokenIDs[0]).rate;
+				rate = rateTokenIDs/rateconversionTokenID;
+			}
+		  }
+	}
+
+	const token1ToToken2 = rate //tokenID0TokenMarketPrice/conversionTokenIDMarketPrice;
+	const token2ToToken1 = 1/rate;
 
 	const convertedTokenPrice = {
 		token1ToToken2 : token1ToToken2,

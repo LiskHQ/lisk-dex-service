@@ -57,16 +57,17 @@ const getPricesConvertToken = async (params) => {
 	if(tokenID0Map.has(params.conversionTokenSymbol)){
 		rate = tokenID0Map.get(params.conversionTokenSymbol).rate;
 	}else{
-		for (const tokenIDs of tokenID0Map.entries()) {
-			if(conversionTokenIDMap.has(tokenIDs[0])){
-				rateTokenIDs = tokenIDs.rate;
-				rateconversionTokenID = conversionTokenIDMap.get(tokenIDs[0]).rate;
+		for (const tokenIDs of tokenID0Map.keys()) {
+			if(conversionTokenIDMap.has(tokenIDs)){
+				rateTokenIDs = tokenID0Map.get(tokenIDs).rate;
+				rateconversionTokenID = conversionTokenIDMap.get(tokenIDs).rate;
 				rate = rateTokenIDs/rateconversionTokenID;
+				break;
 			}
 		  }
 	}
 
-	const token1ToToken2 = rate //tokenID0TokenMarketPrice/conversionTokenIDMarketPrice;
+	const token1ToToken2 = rate;
 	const token2ToToken1 = 1/rate;
 
 	const convertedTokenPrice = {

@@ -148,7 +148,7 @@ clean-images:
 	lisk/service_blockchain_app_registry \
 	lisk/service_blockchain_connector \
 	lisk/service_blockchain_indexer \
-	cd ./services/dex-base \
+	lisk/service_dex_base \
 	lisk/service_blockchain_coordinator \
 	lisk/service_transaction_statistics \
 	lisk/service_fee_estimator \

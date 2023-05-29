@@ -1,8 +1,8 @@
 const {
-    getPricesConvertToken
-} = require ('./priceConvertToken')
+	getPricesConvertToken,
+} = require('./priceConvertToken');
 
 module.exports = {
-    //prices
-    getPricesConvertToken
-}
+	// prices
+	getPricesConvertToken,
+};

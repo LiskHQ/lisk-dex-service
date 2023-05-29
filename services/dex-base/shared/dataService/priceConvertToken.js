@@ -14,48 +14,46 @@
  *
  */
 
-const { currencies } = require('../constants');
 const { requestMarket } = require('../utils/request');
 
 const getPricesConvertToken = async (params) => {
-
 	let marketPrices;
 	marketPrices = await requestMarket('prices');
 
-	const tokenID0Map=new Map();
+	const tokenID0Map = new Map();
 	const conversionTokenIDMap = new Map();
 	let rate;
 	let rateTokenIDs;
 	let rateconversionTokenID;
 
-	for (let i = 0; i<marketPrices.data.length;i++){
+	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
-		if(marketPriceToken === params.tokenSymbol){
-			tokenID0Map.set(marketPrices.data[i].to, marketPrices.data[i]);//{[BTC,LSK_BTC], [ETH,LSK_ETH]}
-		}else if (marketPriceToken === params.conversionTokenSymbol){
-			conversionTokenIDMap.set(marketPrices.data[i].to, marketPrices.data[i]);//{[ABC,BTC_ABC], [ETH,BTC_ETH]}
+		if (marketPriceToken === params.tokenSymbol) {
+			tokenID0Map.set(marketPrices.data[i].to, marketPrices.data[i]);// {[BTC,LSK_BTC], [ETH,LSK_ETH]}
+		} else if (marketPriceToken === params.conversionTokenSymbol) {
+			conversionTokenIDMap.set(marketPrices.data[i].to, marketPrices.data[i]);// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
 		}
 	}
 
-	if(tokenID0Map.has(params.conversionTokenSymbol)){
+	if (tokenID0Map.has(params.conversionTokenSymbol)) {
 		rate = tokenID0Map.get(params.conversionTokenSymbol).rate;
-	}else{
+	} else {
 		for (const tokenIDs of tokenID0Map.keys()) {
-			if(conversionTokenIDMap.has(tokenIDs)){
+			if (conversionTokenIDMap.has(tokenIDs)) {
 				rateTokenIDs = tokenID0Map.get(tokenIDs).rate;
 				rateconversionTokenID = conversionTokenIDMap.get(tokenIDs).rate;
-				rate = rateTokenIDs/rateconversionTokenID;
+				rate = rateTokenIDs / rateconversionTokenID;
 				break;
 			}
 		  }
 	}
 
 	const token1ToToken2 = rate;
-	const token2ToToken1 = 1/rate;
+	const token2ToToken1 = 1 / rate;
 
 	const convertedTokenPrice = {
-		token1ToToken2 : token1ToToken2,
-		token2ToToken1 : token2ToToken1
+		token1ToToken2,
+		token2ToToken1,
 	};
 
 	return {

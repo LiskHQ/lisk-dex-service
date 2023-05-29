@@ -14,9 +14,9 @@
  *
  */
 const currencies = {
-    USD : 'USD', 
-    EUR : 'EUR'
-}
+	USD: 'USD',
+	EUR: 'EUR',
+};
 
 module.exports = {
 	currencies,

@@ -25,14 +25,13 @@ const getPricesConvertToken = async params => {
 				credibleDirectPriceToken2ToToken1: response.data.token2ToToken1,
 				credibleDirectPriceToken1ToToken2: response.data.token1ToToken2,
 			},
-			meta: {}
+			meta: {},
 		};
 	} catch (err) {
 		// TODO: throwing caught error
 		throw err;
 	}
 };
-
 
 module.exports = {
 	getPricesConvertToken,

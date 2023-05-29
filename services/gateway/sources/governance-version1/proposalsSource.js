@@ -16,7 +16,7 @@
 
 module.exports = {
 	type: 'moleculer',
-	method: 'dex-governance',
+	method: 'governance.proposal',
 	params: {
 		proposalID: '=,string',
 	},

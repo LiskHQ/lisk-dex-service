@@ -26,16 +26,20 @@ LoggerConfig(config.log);
 
 const packageJson = require('./package.json');
 
+const { setAppContext } = require('./shared/utils/request');
+
 const logger = Logger();
 
 // Initialize Microservice framework
 const app = Microservice({
-	name: 'dex-governance',
+	name: 'governance',
 	transporter: config.transporter,
 	timeout: config.brokerTimeout,
 	packageJson,
 	logger: config.log,
 });
+
+setAppContext(app);
 
 // Add routes, events & jobs
 app.addMethods(path.join(__dirname, 'methods'));

@@ -15,7 +15,9 @@
  */
 const packageJson = require('./package.json');
 
-const config = {};
+const config = {
+	endpoints: {},
+};
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
@@ -51,5 +53,19 @@ config.log.file = process.env.SERVICE_LOG_FILE || 'false';
 
 // Set docker host if running inside the container
 config.log.docker_host = process.env.DOCKER_HOST || 'local';
+
+/**
+ * External endpoints
+ */
+config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
+config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
+config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json';
+
+/**
+ * API Client related settings
+ */
+config.isUseLiskIPCClient = Boolean(String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true');
+config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
+
 
 module.exports = config;

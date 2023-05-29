@@ -14,12 +14,14 @@
  *
  */
 
+const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+
 const getProposal = async (params) => {
 
 	let proposalsList;
 
     try {
-        proposalsList = await invokeEndpoint('dexGovernance_getProposal'); 
+        proposalsList = await invokeEndpoint('governance_getAllPoolIDs'); 
         return {
             data: {
                 proposalsList,
@@ -27,9 +29,9 @@ const getProposal = async (params) => {
             meta: {},
         };
     } catch (error) {
-        if (err) {
-            logger.warn(`Error returned when invoking 'dex_getProposal'.\n${err.stack}`);
-            throw err;
+        if (error) {
+            logger.warn(`Error returned when invoking 'dex_getProposal'.\n${error.stack}`);
+            throw error;
         }
     }
 

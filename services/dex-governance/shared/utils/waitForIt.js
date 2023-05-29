@@ -13,17 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const { Logger } = require('lisk-service-framework');
 
-const {
-	getProposal,
-} = require('./controller/proposal');
+const logger = Logger();
 
-module.exports = [
-	{
-		name: 'proposal',
-		controller: getProposal,
-		params: {
-			proposalID: { optional: true, type: 'string'},
-		},
-	},
-];
+const waitForIt = (fn, intervalMs = 1000) => new Promise((resolve) => {
+	const checkIfReady = async (that) => {
+		try {
+			const result = await fn();
+			clearInterval(that);
+			if (result !== undefined) resolve(result);
+		} catch (err) {
+			logger.debug(`Waiting for ${intervalMs}ms ...`);
+		}
+	};
+	const hInterval = setInterval(checkIfReady, intervalMs, this);
+	checkIfReady(hInterval);
+});
+
+module.exports = waitForIt;

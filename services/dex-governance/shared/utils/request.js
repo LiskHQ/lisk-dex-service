@@ -14,16 +14,24 @@
  *
  */
 
-const {
-	getProposal,
-} = require('./controller/proposal');
 
-module.exports = [
-	{
-		name: 'proposal',
-		controller: getProposal,
-		params: {
-			proposalID: { optional: true, type: 'string'},
-		},
-	},
-];
+let app;
+
+const setAppContext = (h) => app = h;
+
+const getAppContext = () => app;
+
+const requestRpc = async (service, method, params = {}) => {
+	const data = await getAppContext().requestRpc(`${service}.${method}`, params);
+	return data;
+};
+
+const requestConnector = async (method, params) => requestRpc('connector', method, params);
+
+module.exports = {
+	setAppContext,
+	requestConnector,
+	requestRpc,
+	getAppContext
+}
+

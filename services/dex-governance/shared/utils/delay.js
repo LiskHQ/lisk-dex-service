@@ -13,17 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const delay = (ms = 100, val) => new Promise(resolve => setTimeout(resolve.bind(null, val), ms));
 
-const {
-	getProposal,
-} = require('./controller/proposal');
-
-module.exports = [
-	{
-		name: 'proposal',
-		controller: getProposal,
-		params: {
-			proposalID: { optional: true, type: 'string'},
-		},
-	},
-];
+module.exports = delay;

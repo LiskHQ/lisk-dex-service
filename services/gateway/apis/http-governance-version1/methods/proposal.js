@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const proposalsSource = require('../../../sources/dex-governance-version1/proposalsSource');
+const proposalsSource = require('../../../sources/governance-version1/proposalsSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 
 module.exports = {

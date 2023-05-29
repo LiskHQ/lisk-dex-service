@@ -14,7 +14,7 @@
  *
  */
 
-import { requestMarket, requestRpc } from '../utils/request.js';
+import { requestMarket } from '../utils/request.js';
 
 const getPricesConvertFiat = async (params = {}) => {
 	let convertedFiatPrice;

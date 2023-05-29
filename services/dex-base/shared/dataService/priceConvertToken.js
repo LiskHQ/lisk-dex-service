@@ -20,25 +20,8 @@ const { requestMarket } = require('../utils/request');
 const getPricesConvertToken = async (params) => {
 
 	let marketPrices;
-	let tokenID0TokenMarketPrice;  
-	let conversionTokenIDMarketPrice;
-
-	//getting all available tokens
-
 	marketPrices = await requestMarket('prices');
-	
-    // for (let i = 0;i<marketPrices.data.length;i++){
-    //     const marketPriceToken = marketPrices.data[i].from;
-    //     if(marketPriceToken === params.tokenSymbol && marketPrices.data[i].to === currencies.USD){
-	// 		tokenID0TokenMarketPrice = marketPrices.data[i].rate;
-	// 	}else if(marketPriceToken === params.conversionTokenSymbol && marketPrices.data[i].to === currencies.USD){
-	// 		conversionTokenIDMarketPrice = marketPrices.data[i].rate;
-	// 	}
-    // }
 
-	// In case LSK_USD is not available then do LSK_BTC -> BTC->USD
-
-	const finalPrices = {};
 	const tokenID0Map=new Map();
 	const conversionTokenIDMap = new Map();
 	let rate;

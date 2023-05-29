@@ -14,7 +14,7 @@
  *
  */
 
-import { requestRpc } from '../utils/request.js';
+import { requestMarket, requestRpc } from '../utils/request.js';
 
 const getPricesConvertFiat = async (params = {}) => {
 	let convertedFiatPrice;
@@ -29,7 +29,7 @@ const getPricesConvertFiat = async (params = {}) => {
 	}
 
 	// get the market price for a specific token and return it
-	const requestMarket = async (method) => requestRpc('market', method, params);
+
 	const marketPrices = await requestMarket('prices');
 	let inputTokenMarketPrice;
 	for (let i = 0; i < marketPrices.data.length; i++) {

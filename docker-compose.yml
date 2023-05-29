@@ -149,6 +149,13 @@ services:
 
   dex-base:
     image: lisk/service_dex_base
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
     networks:
       - services_network
     restart: always

@@ -14,40 +14,39 @@
  *
  */
 
-const { requestRpc } = require('../utils/request');
+import { requestRpc } from '../utils/request.js';
 
 const getPricesConvertFiat = async (params = {}) => {
+	let convertedFiatPrice;
 
-    let convertedFiatPrice;
-    
-    //check params.currency can only be EUR || USD 
-    if ((params.currency !== 'EUR') && (params.currency !== 'USD')) {
-        convertedFiatPrice = 'Please provide EUR or USD as an input currency.'
-        return {
-            data: convertedFiatPrice,
-            meta: {},
-        };
-    }   
+	// check params.currency can only be EUR || USD
+	if ((params.currency !== 'EUR') && (params.currency !== 'USD')) {
+		convertedFiatPrice = 'Please provide EUR or USD as an input currency.';
+		return {
+			data: convertedFiatPrice,
+			meta: {},
+		};
+	}
 
-    //get the market price for a specific token and return it
-    const requestMarket = async (method, params) => requestRpc('market', method, params);
-    const marketPrices = await requestMarket('prices');
-    let inputTokenMarketPrice;    
-    for (let i = 0;i<marketPrices.data.length;i++){
-        const marketPriceToken = marketPrices.data[i].from;
-        if(marketPriceToken === params.tokenID && marketPrices.data[i].to === params.currency){
-            inputTokenMarketPrice = marketPrices.data[i].rate;
-        }
-    }
+	// get the market price for a specific token and return it
+	const requestMarket = async (method) => requestRpc('market', method, params);
+	const marketPrices = await requestMarket('prices');
+	let inputTokenMarketPrice;
+	for (let i = 0; i < marketPrices.data.length; i++) {
+		const marketPriceToken = marketPrices.data[i].from;
+		if (marketPriceToken === params.tokenID && marketPrices.data[i].to === params.currency) {
+			inputTokenMarketPrice = marketPrices.data[i].rate;
+		}
+	}
 
-    convertedFiatPrice = inputTokenMarketPrice;
-    
-    return {
-        data: convertedFiatPrice,
-        meta: {},
-    };
+	convertedFiatPrice = inputTokenMarketPrice;
+
+	return {
+		data: convertedFiatPrice,
+		meta: {},
+	};
 };
 
-module.exports = {
-    getPricesConvertFiat,
+export default {
+	getPricesConvertFiat,
 };

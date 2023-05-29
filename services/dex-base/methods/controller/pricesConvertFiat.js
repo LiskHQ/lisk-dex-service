@@ -15,11 +15,9 @@
  */
 const dataService = require('../../shared/dataService');
 
-
 const getPricesConvertFiat = async params => {
 	try {
 		const response = await dataService.getPricesConvertFiat(params);
-
 		return {
 			data: { convertedPrice: response.data, convertedTarget: params.currency },
 			meta: {},
@@ -29,7 +27,6 @@ const getPricesConvertFiat = async params => {
 		throw err;
 	}
 };
-
 
 module.exports = {
 	getPricesConvertFiat,

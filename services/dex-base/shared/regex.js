@@ -14,16 +14,10 @@
  *
  */
 
-import { getPricesConvertFiat } from './controller/pricesConvertFiat.js';
-const regex = require('../shared/regex.js')
+const CURRENCY = /^\b[a-fA-F0-9]{3,20}\b$/;
+const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
 
-export default [
-	{
-		name: 'prices.convert.fiat',
-		controller: getPricesConvertFiat,
-		params: {
-			currency: { optional: false, type: 'string',  pattern: regex.CURRENCY, min: 3 },
-			tokenID: { optional: false, type: 'string',  pattern: regex.TOKEN_ID, min: 16, max:16 },
-		},
-	},
-];
+module.exports = {
+	CURRENCY,
+	TOKEN_ID,
+};

@@ -14,7 +14,6 @@
  *
  */
 
-
 let app;
 
 const setAppContext = (h) => app = h;
@@ -32,7 +31,5 @@ module.exports = {
 	setAppContext,
 	requestConnector,
 	requestRpc,
-	getAppContext
-}
-
-
+	getAppContext,
+};

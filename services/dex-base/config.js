@@ -16,8 +16,7 @@
 
 const packageJson = require('./package.json');
 
-const config = {
-};
+const config = {};
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
@@ -57,8 +56,7 @@ config.log.docker_host = process.env.DOCKER_HOST || 'local';
 /**
  * External endpoints
  */
-config.endpoints={
-	redis : process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0'
-
-}
+config.endpoints = {
+	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
+};
 module.exports = config;

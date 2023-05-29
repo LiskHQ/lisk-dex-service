@@ -15,15 +15,16 @@
  */
 
 import { getPricesConvertFiat } from './controller/pricesConvertFiat.js';
-const regex = require('../shared/regex.js')
+
+const regex = require('../shared/regex.js');
 
 export default [
 	{
 		name: 'prices.convert.fiat',
 		controller: getPricesConvertFiat,
 		params: {
-			currency: { optional: false, type: 'string',  pattern: regex.CURRENCY, min: 3 },
-			tokenID: { optional: false, type: 'string',  pattern: regex.TOKEN_ID, min: 16, max:16 },
+			currency: { optional: false, type: 'string', pattern: regex.CURRENCY, min: 3 },
+			tokenID: { optional: false, type: 'string', pattern: regex.TOKEN_ID, min: 16, max: 16 },
 		},
 	},
 ];

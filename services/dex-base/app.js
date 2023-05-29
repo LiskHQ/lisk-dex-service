@@ -51,8 +51,6 @@ app.addMethods(path.join(__dirname, 'methods'));
 app.addEvents(path.join(__dirname, 'events'));
 app.addJobs(path.join(__dirname, 'jobs'));
 
-
-
 // Run the application
 app.run().then(() => {
 	logger.info(`Service started ${packageJson.name}`);
@@ -61,5 +59,3 @@ app.run().then(() => {
 	logger.fatal(err.stack);
 	process.exit(1);
 });
-
-

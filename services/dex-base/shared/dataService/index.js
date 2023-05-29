@@ -15,10 +15,10 @@
  */
 
 const {
-    getPricesConvertFiat
-} = require('./pricesConvertFiat')
+	getPricesConvertFiat,
+} = require('./pricesConvertFiat');
 
 module.exports = {
-    //prices
-    getPricesConvertFiat,
-}
+	// prices
+	getPricesConvertFiat,
+};

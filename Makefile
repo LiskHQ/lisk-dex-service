@@ -105,20 +105,20 @@ build-tests:
 	cd ./tests && docker build --tag=lisk/service_tests ./
 
 build-local:
-	npm install --registry https://npm.lisk.com
-	cd ./framework && npm install --registry https://npm.lisk.com
-	cd ./services/blockchain-app-registry && npm install --registry https://npm.lisk.com
-	cd ./services/blockchain-connector && npm install --registry https://npm.lisk.com
-	cd ./services/blockchain-coordinator && npm install --registry https://npm.lisk.com
-	cd ./services/blockchain-indexer && npm install --registry https://npm.lisk.com
-	cd ./services/transaction-statistics && npm install --registry https://npm.lisk.com
-	cd ./services/fee-estimator && npm install --registry https://npm.lisk.com
-	cd ./services/market && npm install --registry https://npm.lisk.com
-	cd ./services/newsfeed && npm install --registry https://npm.lisk.com
-	cd ./services/gateway && npm install --registry https://npm.lisk.com
-	cd ./services/export && npm install --registry https://npm.lisk.com
-	cd ./services/template && npm install --registry https://npm.lisk.com
-	cd ./tests && npm install --registry https://npm.lisk.com
+	npm ci
+	cd ./framework && npm ci
+	cd ./services/blockchain-app-registry && npm ci
+	cd ./services/blockchain-connector && npm ci
+	cd ./services/blockchain-coordinator && npm ci
+	cd ./services/blockchain-indexer && npm ci
+	cd ./services/transaction-statistics && npm ci
+	cd ./services/fee-estimator && npm ci
+	cd ./services/market && npm ci
+	cd ./services/newsfeed && npm ci
+	cd ./services/gateway && npm ci
+	cd ./services/export && npm ci
+	cd ./services/template && npm ci
+	cd ./tests && npm ci
 
 clean: clean-local clean-images
 

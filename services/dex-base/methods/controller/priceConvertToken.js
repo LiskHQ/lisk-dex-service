@@ -28,7 +28,9 @@ const getPricesConvertToken = async params => {
 			meta: {},
 		};
 	} catch (err) {
-		// TODO: throwing caught error
+		let status;
+		if (err instanceof ServiceUnavailableException) status = 'SERVICE_UNAVAILABLE';
+		if (status) return { status, data: { error: err.message } };
 		throw err;
 	}
 };

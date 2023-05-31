@@ -15,6 +15,7 @@
  */
 const pricesConvertTokenSource = require('../../../sources/dex-version1/pricesConvertTokenSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
+const envelope = require('../ ../../../sources/dex-version1/mappings/stdEnvelope');
 
 module.exports = {
 	version: '2.0',
@@ -39,7 +40,7 @@ module.exports = {
 			200: {
 				description: 'Convert token price to the equivalent amount of another token price.',
 				schema: {
-					$ref: '#/definitions/PricesConvertTokenWithoutEnvelope',
+					$ref: '#/definitions/PricesConvertTokenWithEnvelope',
 				},
 			},
 		};
@@ -47,4 +48,5 @@ module.exports = {
 		return pricesConvertTokenSchema;
 	},
 	source: pricesConvertTokenSource,
+	envelope,
 };

@@ -20,8 +20,8 @@ const getPricesConvertToken = async (params) => {
 	let marketPrices;
 	marketPrices = await requestMarket('prices');
 
-	const tokenID0Map = new Map();
-	const conversionTokenIDMap = new Map();
+	const tokenSymbolMap = new Map();
+	const conversionTokenSymbolMap = new Map();
 	let rate;
 	let rateTokenIDs;
 	let rateconversionTokenID;
@@ -29,19 +29,19 @@ const getPricesConvertToken = async (params) => {
 	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
 		if (marketPriceToken === params.tokenSymbol) {
-			tokenID0Map.set(marketPrices.data[i].to, marketPrices.data[i]);// {[BTC,LSK_BTC], [ETH,LSK_ETH]}
+			tokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);// {[BTC,LSK_BTC], [ETH,LSK_ETH]}
 		} else if (marketPriceToken === params.conversionTokenSymbol) {
-			conversionTokenIDMap.set(marketPrices.data[i].to, marketPrices.data[i]);// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
+			conversionTokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
 		}
 	}
 
-	if (tokenID0Map.has(params.conversionTokenSymbol)) {
-		rate = tokenID0Map.get(params.conversionTokenSymbol).rate;
+	if (tokenSymbolMap.has(params.conversionTokenSymbol.toUpperCase())) {
+		rate = tokenSymbolMap.get(params.conversionTokenSymbol).rate;
 	} else {
-		for (const tokenIDs of tokenID0Map.keys()) {
-			if (conversionTokenIDMap.has(tokenIDs)) {
-				rateTokenIDs = tokenID0Map.get(tokenIDs).rate;
-				rateconversionTokenID = conversionTokenIDMap.get(tokenIDs).rate;
+		for (const tokenSymbol of tokenSymbolMap.keys()) {
+			if (conversionTokenSymbolMap.has(tokenSymbol)) {
+				rateTokenIDs = tokenSymbolMap.get(tokenSymbol).rate;
+				rateconversionTokenID = conversionTokenSymbolMap.get(tokenSymbol).rate;
 				rate = rateTokenIDs / rateconversionTokenID;
 				break;
 			}

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,15 +14,9 @@
  *
  */
 
-const regex = 
-
-import Joi from 'joi';
-
-const priceConvertTokenSchema = {
-	credibleDirectPriceToken2ToToken1: Joi.string().pattern(regex.PRICE).required(),
-	credibleDirectPriceToken1ToToken2: Joi.string().required(),
-};
+const TOKEN_SYMBOL = /^\b[A-Za-z]{96}\b$/;
 
 module.exports = {
-	priceConvertTokenSchema: Joi.object(priceConvertTokenSchema).required(),
+	TOKEN_SYMBOL
 };
+

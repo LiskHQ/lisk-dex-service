@@ -18,13 +18,15 @@ const {
 	getPricesConvertToken,
 } = require('./controller/priceConvertToken');
 
+const regex = require('../shared/regex');
+
 module.exports = [
 	{
 		name: 'prices.convert.token',
 		controller: getPricesConvertToken,
 		params: {
-			tokenSymbol: { optional: false, type: 'string' },
-			conversionTokenSymbol: { optional: false, type: 'string' },
+			tokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3 },
+			conversionTokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3 },
 		},
 	},
 ];

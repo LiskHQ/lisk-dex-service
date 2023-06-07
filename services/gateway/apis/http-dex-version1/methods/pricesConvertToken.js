@@ -16,6 +16,7 @@
 const pricesConvertTokenSource = require('../../../sources/dex-version1/pricesConvertTokenSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const envelope = require('../ ../../../sources/dex-version1/mappings/stdEnvelope');
+const regex = require('../../../shared/regex');
 
 module.exports = {
 	version: '2.0',
@@ -23,8 +24,8 @@ module.exports = {
 	rpcMethod: 'get.prices.convert.token',
 	tags: ['Prices'],
 	params: {
-		tokenSymbol: { optional: false, type: 'string', min: 3, },
-		conversionTokenSymbol: { optional: false, type: 'string', min: 3 },
+		tokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3, },
+		conversionTokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3 },
 	},
 	get schema() {
 		const pricesConvertTokenSchema = {};

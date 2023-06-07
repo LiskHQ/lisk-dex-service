@@ -31,7 +31,7 @@ const getPricesConvertToken = async (params) => {
 		if (marketPriceToken === params.tokenSymbol.toUpperCase()) {
 			tokenSymbolMap.set(marketPrices.data[i].to.toUpperCase(), marketPrices.data[i].toUpperCase());// {[BTC,LSK_BTC], [ETH,LSK_ETH]}
 		} else if (marketPriceToken === params.conversionTokenSymbol.toUpperCase()) {
-			conversionTokenSymbolMap.set(marketPrices.data[i].to.toUpperCase(), marketPrices.data[i]).toUpperCase();// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
+			conversionTokenSymbolMap.set(marketPrices.data[i].to.toUpperCase(), marketPrices.data[i].toUpperCase());// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
 		}
 	}
 

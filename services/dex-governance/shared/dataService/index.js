@@ -1,8 +1,8 @@
 const {
-    getProposal
-} = require ('./proposal')
+    getVotes
+} = require ('./votes')
 
 module.exports = {
     //prices
-    getProposal
+    getVotes
 }

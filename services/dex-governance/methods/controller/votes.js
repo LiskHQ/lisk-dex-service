@@ -16,18 +16,13 @@
 
 const dataService = require('../../shared/dataService');
 
-const getProposal = async params => {
+const getVotes = async params => {
 	try {
-		const response = await dataService.getProposal(params);
+		const response = await dataService.getVotes(params);
 
 		return {
 			data: {
-				creationHeight: response.data.creationHeight,
-                votesYes: response.data.votesYes,
-                votesNo: response.data.votesNo,
-                votesPass: response.data.votesPass,
-                type: response.data.type,
-                content: response.data.content,
+				voteInfos:response.data.voteInfos,
 			},
 			meta: {}
 		};
@@ -39,5 +34,5 @@ const getProposal = async params => {
 
 
 module.exports = {
-	getProposal,
+	getVotes,
 };

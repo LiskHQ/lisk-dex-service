@@ -13,17 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const {
-	getProposal,
-} = require('./controller/proposal');
-
-module.exports = [
-	{
-		name: 'proposal',
-		controller: getProposal,
-		params: {
-			proposalID: { optional: true, type: 'string'},
-		},
-	},
-];
+module.exports = {
+	data: [],
+	meta: {},
+};

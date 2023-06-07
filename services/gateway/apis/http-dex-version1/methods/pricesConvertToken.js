@@ -15,7 +15,7 @@
  */
 const pricesConvertTokenSource = require('../../../sources/dex-version1/pricesConvertTokenSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const envelope = require('../ ../../../sources/dex-version1/mappings/stdEnvelope');
+const envelope = require('../../../sources/dex-version1/mappings/stdEnvelope');
 const regex = require('../../../shared/regex');
 
 module.exports = {

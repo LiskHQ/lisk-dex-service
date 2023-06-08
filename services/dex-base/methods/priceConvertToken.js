@@ -25,8 +25,8 @@ module.exports = [
 		name: 'prices.convert.token',
 		controller: getPricesConvertToken,
 		params: {
-			tokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3 },
-			conversionTokenSymbol: { optional: false, type: 'string', patten: regex.TOKEN_SYMBOL, min: 3 },
+			tokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
+			conversionTokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
 		},
 	},
 ];

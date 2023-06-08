@@ -27,16 +27,16 @@ const getPricesConvertToken = async (params) => {
 	let rateconversionTokenID;
 
 	for (let i = 0; i < marketPrices.data.length; i++) {
-		const marketPriceToken = marketPrices.data[i].from.toUpperCase();
+		const marketPriceToken = marketPrices.data[i].from;
 		if (marketPriceToken === params.tokenSymbol.toUpperCase()) {
-			tokenSymbolMap.set(marketPrices.data[i].to.toUpperCase(), marketPrices.data[i].toUpperCase());// {[BTC,LSK_BTC], [ETH,LSK_ETH]}
+			tokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);
 		} else if (marketPriceToken === params.conversionTokenSymbol.toUpperCase()) {
-			conversionTokenSymbolMap.set(marketPrices.data[i].to.toUpperCase(), marketPrices.data[i].toUpperCase());// {[ABC,BTC_ABC], [ETH,BTC_ETH]}
+			conversionTokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);
 		}
 	}
 
 	if (tokenSymbolMap.has(params.conversionTokenSymbol.toUpperCase())) {
-		rate = tokenSymbolMap.get(params.conversionTokenSymbol).rate;
+		rate = tokenSymbolMap.get(params.conversionTokenSymbol.toUpperCase()).rate;
 	} else {
 		for (const tokenSymbol of tokenSymbolMap.keys()) {
 			if (conversionTokenSymbolMap.has(tokenSymbol)) {

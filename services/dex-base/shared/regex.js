@@ -14,7 +14,7 @@
  *
  */
 
-const TOKEN_SYMBOL = /^\b[A-Za-z]{96}\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
 
 module.exports = {
 	TOKEN_SYMBOL

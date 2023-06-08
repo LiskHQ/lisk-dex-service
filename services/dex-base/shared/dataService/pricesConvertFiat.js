@@ -14,13 +14,14 @@
  *
  */
 
-import { requestMarket } from '../utils/request.js';
+const { requestMarket } = require('../utils/request');
+const currency = require('../../shared/constants');
 
 const getPricesConvertFiat = async (params = {}) => {
 	let convertedFiatPrice;
 
 	// check params.currency can only be EUR || USD
-	if ((params.currency !== 'EUR') && (params.currency !== 'USD')) {
+	if ((params.currency.toUpperCase() !== currency.currency.EUR) && (params.currency.toUpperCase() !== currency.currency.EUR)) {
 		convertedFiatPrice = 'Please provide EUR or USD as an input currency.';
 		return {
 			data: convertedFiatPrice,
@@ -30,11 +31,11 @@ const getPricesConvertFiat = async (params = {}) => {
 
 	// get the market price for a specific token and return it
 
-	const marketPrices = await requestMarket('prices');
+	const marketPrices = await requestMarket('prices', params);
 	let inputTokenMarketPrice;
 	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
-		if (marketPriceToken === params.tokenID && marketPrices.data[i].to === params.currency) {
+		if (marketPriceToken === params.tokenID.toUpperCase() && marketPrices.data[i].to === params.currency.toUpperCase()) {
 			inputTokenMarketPrice = marketPrices.data[i].rate;
 		}
 	}
@@ -47,6 +48,6 @@ const getPricesConvertFiat = async (params = {}) => {
 	};
 };
 
-export default {
+module.exports = {
 	getPricesConvertFiat,
 };

@@ -13,20 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const currency = {
+	USD: "USD",
+	EUR: "EUR",
+};
 
-const {
-	getPricesConvertFiat,
-} = require('./controller/pricesConvertFiat');
-
-const regex = require('../shared/regex.js');
-
-module.exports = [
-	{
-		name: 'prices.convert.fiat',
-		controller: getPricesConvertFiat,
-		params: {
-			currency: { optional: false, type: 'string', },
-			tokenID: { optional: false, type: 'string', },
-		},
-	},
-];
+module.exports = {
+	currency,
+};

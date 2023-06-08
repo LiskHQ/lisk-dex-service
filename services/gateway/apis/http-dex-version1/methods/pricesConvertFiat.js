@@ -22,8 +22,8 @@ module.exports = {
 	rpcMethod: 'get.prices.convert.fiat',
 	tags: ['Prices'],
 	params: {
-		currency: { optional: false, type: 'string', min: 1 },
-		tokenID: { optional: false, type: 'string', min: 3, },
+		currency: { optional: false, type: 'string', patter:regex.CURRENCY, min: 3 },
+		tokenSymbol: { optional: false, type: 'string', patter:regex.TOKEN_SYBMOL, min: 3, },
 	},
 	get schema() {
 		const pricesConvertFiatSchema = {};

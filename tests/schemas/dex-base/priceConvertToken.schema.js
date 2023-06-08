@@ -14,13 +14,13 @@
  *
  */
 
-const regex = 
+const regex = require('regex')
 
 import Joi from 'joi';
 
 const priceConvertTokenSchema = {
-	credibleDirectPriceToken2ToToken1: Joi.string().pattern(regex.PRICE).required(),
-	credibleDirectPriceToken1ToToken2: Joi.string().required(),
+	credibleDirectPriceToken2ToToken1: Joi.string().pattern(regex.TOKEN_SYMBOL).required(),
+	credibleDirectPriceToken1ToToken2: Joi.string().pattern(regex.TOKEN_SYMBOL).required(),
 };
 
 module.exports = {

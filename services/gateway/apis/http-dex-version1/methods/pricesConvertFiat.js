@@ -15,6 +15,8 @@
  */
 const pricesConvertFiatSource = require('../../../sources/dex-version1/pricesConvertFiatSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
+const regex = require('../../../shared/regex')
+const envelope = require('../../../sources/dex-version1/mappings/stdEnvelope');
 
 module.exports = {
 	version: '2.0',
@@ -22,8 +24,8 @@ module.exports = {
 	rpcMethod: 'get.prices.convert.fiat',
 	tags: ['Prices'],
 	params: {
-		currency: { optional: false, type: 'string', patter:regex.CURRENCY, min: 3 },
-		tokenSymbol: { optional: false, type: 'string', patter:regex.TOKEN_SYBMOL, min: 3, },
+		currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
+		tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
 	},
 	get schema() {
 		const pricesConvertFiatSchema = {};
@@ -39,7 +41,7 @@ module.exports = {
 			200: {
 				description: 'Convert token price to the equivalent amount of fiat.',
 				schema: {
-					$ref: '#/definitions/PricesConvertFiatWithoutEnvelope',
+					$ref: '#/definitions/PricesConvertFiatWithEnvelope',
 				},
 			},
 		};
@@ -47,4 +49,5 @@ module.exports = {
 		return pricesConvertFiatSchema;
 	},
 	source: pricesConvertFiatSource,
+	envelope
 };

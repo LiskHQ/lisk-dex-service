@@ -13,20 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const {
-	getPricesConvertFiat,
-} = require('./controller/pricesConvertFiat');
-
-const regex = require('../shared/regex.js');
-
-module.exports = [
-	{
-		name: 'prices.convert.fiat',
-		controller: getPricesConvertFiat,
-		params: {
-			currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
-			tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
-		},
-	},
-];
+module.exports = {
+	data: [],
+	meta: {},
+};

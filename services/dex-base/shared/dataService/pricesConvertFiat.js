@@ -20,8 +20,7 @@ const currency = require('../../shared/constants');
 const getPricesConvertFiat = async (params = {}) => {
 	let convertedFiatPrice;
 
-	// check params.currency can only be EUR || USD
-	if ((params.currency.toUpperCase() !== currency.currency.EUR) && (params.currency.toUpperCase() !== currency.currency.EUR)) {
+	if ((params.currency.toUpperCase() !== currency.currency.EUR) && (params.currency.toUpperCase() !== currency.currency.USD)) {
 		convertedFiatPrice = 'Please provide EUR or USD as an input currency.';
 		return {
 			data: convertedFiatPrice,
@@ -35,7 +34,7 @@ const getPricesConvertFiat = async (params = {}) => {
 	let inputTokenMarketPrice;
 	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
-		if (marketPriceToken === params.tokenID.toUpperCase() && marketPrices.data[i].to === params.currency.toUpperCase()) {
+		if (marketPriceToken === params.tokenSymbol.toUpperCase() && marketPrices.data[i].to === params.currency.toUpperCase()) {
 			inputTokenMarketPrice = marketPrices.data[i].rate;
 		}
 	}

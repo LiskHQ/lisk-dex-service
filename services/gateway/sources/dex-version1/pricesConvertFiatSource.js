@@ -19,7 +19,7 @@ module.exports = {
 	method: 'dex.prices.convert.fiat',
 	params: {
 		currency: '=,string',
-		tokenID: '=,string',
+		tokenSymbol: '=,string',
 	},
 	definition: {
 		data: {

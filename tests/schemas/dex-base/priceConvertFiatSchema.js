@@ -13,11 +13,14 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
+const regex = require('./regex.js');
+
 import Joi from 'joi';
 
 const priceConvertFiatSchema = {
-	convertedPrice: Joi.string().required(),
-	convertedTarget: Joi.string().required(),
+	convertedPrice: Joi.string().pattern(regex.CONVERTED_PRICE).required(),
+	convertedTarget: Joi.string().pattern(regex.CONVERTED_TARGET).required(),
 };
 
 module.exports = {

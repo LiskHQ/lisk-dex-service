@@ -14,10 +14,10 @@
  *
  */
 
-const CURRENCY = /^\b[a-fA-F0-9]{3,20}\b$/;
-const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
+const CURRENCY = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
 
 module.exports = {
 	CURRENCY,
-	TOKEN_ID,
+	TOKEN_SYMBOL,
 };

@@ -23,8 +23,8 @@ module.exports = [
 		name: 'tokens.available',
 		controller: getTokensAvailable,
 		params: {
-			limit: { optional: true, type: 'string' },
-			offset: { optional: true, type: 'string' },
+			limit: { optional: true, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
+			offset: { optional: true, type: 'string', min: 0, pattern: regex.NONCE },
 		},
 	},
 ];

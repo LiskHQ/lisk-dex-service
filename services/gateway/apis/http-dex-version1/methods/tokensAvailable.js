@@ -16,6 +16,7 @@
 const tokensAvailableSource = require('../../../sources/dex-version1/tokensAvailableSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const regex = require('../../../shared/regex');
+const envelope = require('../methods/dataDefinitions/stdEnvelope')
 
 module.exports = {
 	version: '2.0',
@@ -40,7 +41,7 @@ module.exports = {
 			200: {
 				description: 'Retrives list of tokens.',
 				schema: {
-					$ref: '#/definitions/TokensAvailableWithoutEnvelope',
+					$ref: '#/definitions/TokensAvailableWithEnvelope',
 				},
 			},
 		};
@@ -48,4 +49,5 @@ module.exports = {
 		return availableTokensSchema;
 	},
 	source: tokensAvailableSource,
+	envelope
 };

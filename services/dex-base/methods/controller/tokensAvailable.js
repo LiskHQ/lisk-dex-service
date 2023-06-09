@@ -25,7 +25,6 @@ const getTokensAvailable = async params => {
 			meta: {}
 			};
 	} catch (err) {
-		//TODO: add more explicit message for throwing the error
 		throw err;
 	}
 };

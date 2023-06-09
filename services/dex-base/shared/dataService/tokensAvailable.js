@@ -14,12 +14,12 @@
  *
  */
 
-const { requestRpc } = require('../utils/request');
+const { requestConnector } = require('../utils/request');
 
 const getTokensAvailable = async (params) => {
 
 	let tokensAvailable;
-	const requestConnector = async (method, params) => requestRpc('connector', method, params);
+
 	tokensAvailable = await requestConnector('getSupportedTokens', params);
 	
 	module.exports = {

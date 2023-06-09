@@ -19,6 +19,5 @@ const {
 } = require ('./gettingStatistics')
 
 module.exports = {
-    //statistics
     gettingStatistics
 }

@@ -15,6 +15,8 @@
  */
 const gettingStatisticsSource = require('../../../sources/dex-version1/gettingStatisticsSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
+const regex = require('./../../../shared/regex');
+const envelope = require('./dataDefinitions/stdEnvelope')
 
 module.exports = {
 	version: '2.0',
@@ -22,9 +24,9 @@ module.exports = {
 	rpcMethod: 'get.dex.gettingStatistics',
 	tags: ['Statistics'],
     params: {
-        interval: { optional: false, type: 'string'},
-        limit: { optional: false, type: 'number' },
-        offset: { optional: false, type: 'number' },
+        interval: { optional: false, type: 'string', pattern: regex.DEX_INTERVAL },
+        limit: { optional: false, type: 'number', pattern: regex.NONCE },
+        offset: { optional: false, type: 'number', pattern: regex.NONCE },
 		
     },
 	get schema() {
@@ -49,4 +51,5 @@ module.exports = {
 		return gettingStatisticsSchema;
 	},
 	source: gettingStatisticsSource,
+	envelope,
 };

@@ -14,13 +14,10 @@
  *
  */
 
-const { requestRpc } = require('../utils/request');
+const { requestStatistics } = require('../utils/request');
 
 const gettingStatistics = async (params = {}) => {
 
-   
-    //get the market price for a specific token and return it
-    const requestStatistics = async (method, params) => requestRpc('statistics', method, params);
     try {
         const statistics = await requestStatistics('transactions.statistics', params);
         return {
@@ -29,9 +26,8 @@ const gettingStatistics = async (params = {}) => {
         };
     } catch (error) {
         throw new Error(error)
-    } 
-    
-    
+    }
+
 };
 
 module.exports = {

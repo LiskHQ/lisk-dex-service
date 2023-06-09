@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,18 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const dataService = require('../../shared/dataService');
 
-const gettingStatistics = async params => {
-	const response = await dataService.gettingStatistics(params);
-
-	return {
-		data: { transactionCount: response.data.timeline.transactionCount, volume: response.data.timeline.volume },
-		meta: {},
-	};
-};
-
+const NONCE = /^[0-9]+$/;
+const DEX_INTERVAL = /^\b(?:day|month|,)+\b$/;
 
 module.exports = {
-	gettingStatistics,
+	NONCE,
+	DEX_INTERVAL,
 };

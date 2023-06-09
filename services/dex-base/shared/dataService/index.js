@@ -19,6 +19,5 @@ const {
 } = require ('./gettingCurrentsqrtprice')
 
 module.exports = {
-    //prices
     gettingCurrentsqrtprice
 }

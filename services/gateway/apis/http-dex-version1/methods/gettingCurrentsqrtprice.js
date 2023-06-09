@@ -13,17 +13,17 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
 const gettingCurrentsqrtpriceSource = require('../../../sources/dex-version1/gettingCurrentsqrtpriceSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
+const envelope = require('../methods/dataDefinitions/stdEnvelope')
 
 module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/tokens/currentsqrtprice',
 	rpcMethod: 'get.prices.currentsqrtprice',
 	tags: ['Prices'],
-	params: {
-
-	},
+	params: {},
 	get schema() {
 		const gettingCurrentsqrtpriceSchema = {};
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath] = { get: {} };
@@ -38,7 +38,7 @@ module.exports = {
 			200: {
 				description: 'Retrives the current sqrt price of a given pool.',
 				schema: {
-					$ref: '#/definitions/gettingCurrentsqrtpriceWithoutEnvelope',
+					$ref: '#/definitions/gettingCurrentsqrtpriceWithEnvelope',
 				},
 			},
 		};
@@ -46,4 +46,5 @@ module.exports = {
 		return gettingCurrentsqrtpriceSchema;
 	},
 	source: gettingCurrentsqrtpriceSource,
+	envelope,
 };

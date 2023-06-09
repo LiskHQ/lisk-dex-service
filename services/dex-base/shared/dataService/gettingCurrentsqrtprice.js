@@ -14,9 +14,6 @@
  *
  */
 
-
-const { requestMarket } = require('../utils/request');
-
 const gettingCurrentsqrtprice = async () => {
 	
     let currentsqrtprice;

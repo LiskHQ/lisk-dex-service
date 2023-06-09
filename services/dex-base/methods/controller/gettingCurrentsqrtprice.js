@@ -17,25 +17,20 @@
 const dataService = require('../../shared/dataService');
 
 const gettingCurrentsqrtprice = async params => {
-	try {
-		const response = await dataService.gettingCurrentsqrtprice(params);
+	
+	const response = await dataService.gettingCurrentsqrtprice();
 
-		return {
-			data: {
-				currentSqrtPrice: response.data.currentSqrtPrice,
-                tokenID0: response.data.tokenID0,
-                tokenID1: response.data.tokenID1,
-                unit: response.data.unit,
-				symbol: response.data.symbol,
-			},
-			meta: {}
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			currentSqrtPrice: response.data.currentsqrtprice,
+			tokenID0: response.data.tokenID0,
+			tokenID1: response.data.tokenID1,
+			unit: response.data.unit,
+			symbol: response.data.symbol,
+		},
+		meta: {}
+	};
 };
-
 
 module.exports = {
 	gettingCurrentsqrtprice,

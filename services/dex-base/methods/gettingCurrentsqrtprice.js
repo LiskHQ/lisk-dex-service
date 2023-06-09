@@ -22,8 +22,6 @@ module.exports = [
 	{
 		name: 'tokens.currentsqrtprice',
 		controller: gettingCurrentsqrtprice,
-		params: {
-			
-		},
+		params: {},
 	},
 ];

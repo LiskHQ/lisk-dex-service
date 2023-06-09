@@ -18,13 +18,15 @@ const {
 	getPoolsAvailable,
 } = require('./controller/poolsAvailable');
 
+const regex = require('../shared/regex');
+
 module.exports = [
 	{
 		name: 'pools.available',
 		controller: getPoolsAvailable,
 		params: {
-			limit: { optional: false, type: 'string' },
-			offset: { optional: false, type: 'string' },
+			limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
+			offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },
 		},
 	},
 ];

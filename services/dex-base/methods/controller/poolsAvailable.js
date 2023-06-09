@@ -17,18 +17,13 @@
 const dataService = require('../../shared/dataService');
 
 const getPoolsAvailable = async params => {
-	try {
-		const response = await dataService.getPoolsAvailable(params);
+	const response = await dataService.getPoolsAvailable(params);
 
-		return {
-			data: {poolsAvailable:response.data},
-			meta: response.meta,
-			links: {},
-		};
-	} catch (err) {
-		// TODO: throw more explicit message
-		throw err;
-	}
+	return {
+		data: { poolsAvailable: response.data },
+		meta: response.meta,
+		links: {},
+	};
 };
 
 module.exports = {

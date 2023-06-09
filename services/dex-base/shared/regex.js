@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,18 +14,8 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
-
-const getTokensAvailable = async params => {
-	const response = await dataService.getTokensAvailable(params);
-
-	return {
-		data: { tokensAvailable: response.data.supportedTokens },
-		meta: {}
-	};
-};
-
+const NONCE = /^[0-9]+$/;
 
 module.exports = {
-	getTokensAvailable,
+	NONCE
 };

@@ -18,6 +18,8 @@ const {
 	getTokensAvailable,
 } = require('./controller/tokensAvailable');
 
+const regex = require('../shared/regex');
+
 module.exports = [
 	{
 		name: 'tokens.available',

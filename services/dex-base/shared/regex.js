@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,17 +14,12 @@
  *
  */
 
-const {
-	getPoolsAvailable,
-} = require('./controller/poolsAvailable');
+const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
+const AMOUNT_IN = /^[0-9]+$/;
+const AMOUNT_OUT = /^[0-9]+$/;
 
-module.exports = [
-	{
-		name: 'pools.available',
-		controller: getPoolsAvailable,
-		params: {
-			limit: { optional: false, type: 'string' },
-			offset: { optional: false, type: 'string' },
-		},
-	},
-];
+module.exports = {
+	TOKEN_ID,
+    AMOUNT_IN,
+    AMOUNT_OUT
+};

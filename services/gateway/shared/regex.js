@@ -40,6 +40,8 @@ const PROOF_OF_POSSESSION = /^\b[a-fA-F0-9]{192}\b$/;
 const MODULE = /^\b(?:[\w!@$&.]{1,32}|,)+\b$/;
 const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
 const POOL_ID = /^\b[a-fA-F0-9]{40}\b$/;
+const AMOUNT_IN = /^[0-9]+$/;
+const AMOUNT_OUT = /^[0-9]+$/;
 
 module.exports = {
 	PUBLIC_KEY,
@@ -68,5 +70,7 @@ module.exports = {
 	PROOF_OF_POSSESSION,
 	MODULE,
 	TOPIC,
-	POOL_ID
+	POOL_ID,
+	AMOUNT_IN,
+	AMOUNT_OUT,
 };

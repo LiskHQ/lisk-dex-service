@@ -19,13 +19,7 @@ const {
     getPriceImpactExactOut
 } = require ('./priceImpact')
 
-const {
-    getPoolsAvailable
-} = require ('./poolsAvailable')
-
 module.exports = {
-    //pools
-    getPoolsAvailable,
     //prices
     getPriceImpactExactIn,
     getPriceImpactExactOut

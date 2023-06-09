@@ -15,18 +15,19 @@
  */
 
 const { getPriceImpact } = require('./controller/priceImpact');
+const regex = require('../shared/regex');
 
 module.exports = [
 	{
 		name: 'prices.impact',
 		controller: getPriceImpact,
 		params: {
-			tokenIdIn: { optional: false, type: 'string' },
-			amountIn: { optional: false, type: 'string' },
-            tokenIdOut: { optional: false, type: 'string' },
-            amountOut: { optional: false, type: 'string' },
-            swapRoute: { optional: false, type: 'string' },
-            isZeroToOne: { optional: false, type: 'boolean' },
+			tokenIdIn: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
+			amountIn: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_IN },
+			tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
+			amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
+			swapRoute: { optional: false, type: 'string' },
+			isZeroToOne: { optional: false, type: 'boolean' },
 		},
 	},
 ];

@@ -1,7 +1,6 @@
-
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -15,9 +14,13 @@
  *
  */
 
-const TOKEN_SYMBOL = /^\b([A-Za-z]{3,4})\b$/;
+const {
+    getMarketAppsPrices,
+    reloadMarketAppsPrices,
+} = require('./interoperability');
 
-module.exports = {
-	TOKEN_SYMBOL
-};
-
+module.exports={
+    // Interoperability
+    getMarketAppsPrices,
+    reloadMarketAppsPrices,
+}

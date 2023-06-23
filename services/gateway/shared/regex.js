@@ -39,7 +39,7 @@ const BLS_KEY = /^\b[a-fA-F0-9]{96}\b$/;
 const PROOF_OF_POSSESSION = /^\b[a-fA-F0-9]{192}\b$/;
 const MODULE = /^\b(?:[\w!@$&.]{1,32}|,)+\b$/;
 const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
-const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z]{3,4})\b$/;
 
 module.exports = {
 	PUBLIC_KEY,

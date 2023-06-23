@@ -14,18 +14,21 @@
  *
  */
 
-const { requestMarket } = require('../utils/request');
-
 const getPricesConvertToken = async (params) => {
-	let marketPrices;
-	marketPrices = await requestMarket('prices');
-
+	
+	const marketPrices = getMarketAppsPrices();
+	
 	const tokenSymbolMap = new Map();
 	const conversionTokenSymbolMap = new Map();
 	let rate;
 	let rateTokenIDs;
 	let rateconversionTokenID;
 
+	// set a global variable and 
+	// a function to call the marketservice and set the value for the global varibale
+	// updating the variable
+	// a fallback method for the market service is down then explicitly invoke the market service
+	
 	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
 		if (marketPriceToken === params.tokenSymbol.toUpperCase()) {
@@ -33,6 +36,7 @@ const getPricesConvertToken = async (params) => {
 		} else if (marketPriceToken === params.conversionTokenSymbol.toUpperCase()) {
 			conversionTokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);
 		}
+
 	}
 
 	if (tokenSymbolMap.has(params.conversionTokenSymbol.toUpperCase())) {

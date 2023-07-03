@@ -15,7 +15,7 @@
  */
 
 const {
-	getTokensAvailable,
+	getTokensAvailable, getBlockchainAppsMetadataSupported,
 } = require('./controller/tokensAvailable');
 
 const regex = require('../shared/regex');
@@ -28,5 +28,15 @@ module.exports = [
 			limit: { optional: true, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
 			offset: { optional: true, type: 'string', min: 0, pattern: regex.NONCE },
 		},
+	},
+	{
+		name: 'blockchain.apps.meta.tokens.supported',
+		controller: getBlockchainAppsMetadataSupported,
+		params: {
+			chainID: { optional: true, type: 'string' },
+			limit: { optional: true, type: 'number' },
+			offset: { optional: true, type: 'number' },
+			sort: { optional: true, type: 'string' },
+		},		
 	},
 ];

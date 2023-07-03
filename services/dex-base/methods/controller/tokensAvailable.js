@@ -16,6 +16,15 @@
 
 const dataService = require('../../shared/dataService');
 
+const {
+	HTTP,
+	Exceptions: { InvalidParamsException },
+} = require('lisk-service-framework');
+
+const { StatusCodes: { BAD_REQUEST } } = HTTP;
+
+const appRegistryService = require('../../shared/metadata');
+
 const getTokensAvailable = async params => {
 	const response = await dataService.getTokensAvailable(params);
 
@@ -25,7 +34,21 @@ const getTokensAvailable = async params => {
 	};
 };
 
+const getBlockchainAppsMetadataSupported = async (params) => {
+	const blockchainAppsMetadataSupported = {
+		data: [],
+		meta: {},
+	};
+
+	const response = await appRegistryService.getBlockchainAppsTokenMetadataSupported(params);
+	if (response.data) blockchainAppsMetadataSupported.data = response.data;
+	if (response.meta) blockchainAppsMetadataSupported.meta = response.meta;
+
+	return blockchainAppsMetadataSupported;
+};
+
 
 module.exports = {
 	getTokensAvailable,
+	getBlockchainAppsMetadataSupported
 };

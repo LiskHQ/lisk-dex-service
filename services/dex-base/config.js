@@ -28,6 +28,12 @@ config.log = {};
  */
 config.log.level = process.env.SERVICE_LOG_LEVEL || 'info';
 
+/**
+ * External endpoints
+ */
+config.endpoints = {};
+config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
+
 /*
  * True / False outputs
  * log.console - Plain JavaScript console.log() output

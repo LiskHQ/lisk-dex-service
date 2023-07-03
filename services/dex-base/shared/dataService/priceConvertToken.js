@@ -14,9 +14,13 @@
  *
  */
 
+const { getMarketAppsPrices } = require("./business");
+
+
+
 const getPricesConvertToken = async (params) => {
 	
-	const marketPrices = getMarketAppsPrices();
+	const marketPrices = await getMarketAppsPrices();
 	
 	const tokenSymbolMap = new Map();
 	const conversionTokenSymbolMap = new Map();

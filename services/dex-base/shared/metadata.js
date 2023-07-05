@@ -54,11 +54,23 @@ const getBlockchainAppsTokenMetadataSupported = async (params) => {
 	params.whereIn = [];
 
 	// Resolve network from chainID if present
-	if (params.chainID) {
+	if (params.chainID && !('network' in params)) {
 		params.network = config.CHAIN_ID_PREFIX_NETWORK_MAP[params.chainID.substring(0, 2)];
 	}
 
-    const tokensResultSet = await tokenMetadataTable.find(params, ['chainID']);
+	if (params.network) {
+		const { network, ...remParams } = params;
+		params = remParams;
+
+		params.whereIn.push({
+			property: 'network',
+			values: network.split(','),
+		});
+	}
+
+	console.log(tokenMetadataTable);
+
+    const tokensResultSet = await tokenMetadataTable.find(params, ['network', 'chainID', 'chainName']);
 
 	const uniqueChainMap = {};
 	tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);

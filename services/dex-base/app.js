@@ -44,6 +44,7 @@ const app = Microservice({
 	logger: loggerConf,
 	dependencies: [
 		'connector',
+		'app-registry',
 	],
 });
 

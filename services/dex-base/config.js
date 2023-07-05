@@ -34,6 +34,13 @@ config.log.level = process.env.SERVICE_LOG_LEVEL || 'info';
 config.endpoints = {};
 config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
 
+config.gitHub = {
+	accessToken: process.env.GITHUB_ACCESS_TOKEN,
+	appRegistryRepo: process.env.GITHUB_APP_REGISTRY_REPO || 'https://github.com/LiskHQ/app-registry',
+	branch: process.env.GITHUB_APP_REGISTRY_REPO_BRANCH || 'main',
+	get appRegistryRepoName() { return this.appRegistryRepo.split('/').pop(); },
+};
+
 /*
  * True / False outputs
  * log.console - Plain JavaScript console.log() output
@@ -52,5 +59,13 @@ config.log.file = process.env.SERVICE_LOG_FILE || 'false';
 
 // Set docker host if running inside the container
 config.log.docker_host = process.env.DOCKER_HOST || 'local';
+
+config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
+	'00': 'mainnet',
+	'01': 'testnet',
+	'02': 'betanet',
+	'03': 'alphanet',
+	'04': 'devnet',
+});
 
 module.exports = config;

@@ -58,7 +58,7 @@ const getBlockchainAppsTokenMetadataSupported = async (params) => {
 		params.network = config.CHAIN_ID_PREFIX_NETWORK_MAP[params.chainID.substring(0, 2)];
 	}
 
-    const tokensResultSet = await tokenMetadataTable.find(params, ['network', 'chainID', 'chainName']);
+    const tokensResultSet = await tokenMetadataTable.find(params, ['chainID']);
 
 	const uniqueChainMap = {};
 	tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);

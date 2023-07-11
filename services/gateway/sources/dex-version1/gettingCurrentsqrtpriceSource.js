@@ -18,6 +18,8 @@ module.exports = {
 	type: 'moleculer',
 	method: 'dex.prices.currentsqrtprice',
 	params: {
+		poolID: '=,string',
+		priceDirection: '=,boolean',
 	},
 	definition: {
 		data: {

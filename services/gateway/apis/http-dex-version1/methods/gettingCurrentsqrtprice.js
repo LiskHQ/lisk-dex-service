@@ -17,13 +17,17 @@
 const gettingCurrentsqrtpriceSource = require('../../../sources/dex-version1/gettingCurrentsqrtpriceSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const envelope = require('../methods/dataDefinitions/stdEnvelope')
+const regex = require('../../../shared/regex');
 
 module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/tokens/currentsqrtprice',
 	rpcMethod: 'get.prices.currentsqrtprice',
 	tags: ['Prices'],
-	params: {},
+	params: {
+		poolID: { optional: false, type: 'string' },
+		priceDirection: { optional: false, type: 'boolean'},
+	},
 	get schema() {
 		const gettingCurrentsqrtpriceSchema = {};
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath] = { get: {} };

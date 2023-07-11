@@ -60,12 +60,16 @@ config.log.file = process.env.SERVICE_LOG_FILE || 'false';
 // Set docker host if running inside the container
 config.log.docker_host = process.env.DOCKER_HOST || 'local';
 
-config.dataDir = '/home/irfan/lisk-dex-service-d/lisk-dex-service/services/blockchain-app-registry/data';
+//config.dataDir = '/home/irfan/lisk-dex-service-d/lisk-dex-service/services/blockchain-app-registry/data';
+
+config.dataDir = `${__dirname}/data`;
 
 config.FILENAME = Object.freeze({
 	APP_JSON: 'app.json',
 	NATIVETOKENS_JSON: 'nativetokens.json',
 });
+
+config.supportedNetworks = ['mainnet', 'testnet', 'betanet', 'alphanet', 'devnet'];
 
 config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
 	'00': 'mainnet',

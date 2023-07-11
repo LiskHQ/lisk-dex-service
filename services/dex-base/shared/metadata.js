@@ -83,7 +83,7 @@ const getBlockchainAppsTokenMetadataSupported = async (params) => {
 				{ network: tokenMeta.network, chainID: tokenMeta.chainID },
 				['appDirName'],
 			);
-			const appPathInClonedRepo = `${dataDir}/${repo}/${tokenMeta.network}/${appDirName}`;
+			const appPathInClonedRepo = `${dataDir}/${tokenMeta.network}/${appDirName}`;
 			const tokenMetaString = await read(`${appPathInClonedRepo}/${config.FILENAME.NATIVETOKENS_JSON}`);
 			const parsedTokenMeta = JSON.parse(tokenMetaString);
 

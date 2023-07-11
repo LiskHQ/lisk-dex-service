@@ -13,7 +13,15 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const config = {};
+const config = {
+    endpoints: {},
+};
+
+/**
+ * External endpoints
+ */
+config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
+config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';

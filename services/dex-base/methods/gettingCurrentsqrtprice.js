@@ -20,8 +20,11 @@ const {
 
 module.exports = [
 	{
-		name: 'tokens.currentsqrtprice',
+		name: 'prices.currentsqrtprice',
 		controller: gettingCurrentsqrtprice,
-		params: {},
+		params: {
+			poolID: { optional: false, type: 'string' },
+			priceDirection: { optional: false, type: 'boolean'},
+		},
 	},
 ];

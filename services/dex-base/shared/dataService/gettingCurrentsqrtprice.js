@@ -14,12 +14,21 @@
  *
  */
 
-const gettingCurrentsqrtprice = async () => {
+const { invokeEndpoint } = require("../sdk/client");
+
+const gettingCurrentsqrtprice = async (params) => {
 	
     let currentsqrtprice;
+
+    const methodContext = {
+      params:{
+        poolID: params.poolID,
+        priceDirection: params.priceDirection,             
+      }
+    }
 	
     try {
-        currentsqrtprice = await invokeEndpoint('dex_getCurrentSqrtPrice');
+        currentsqrtprice = await invokeEndpoint('dex_getCurrentSqrtPrice',{methodContext, poolID:params.poolID,priceDirection:params.priceDirection });
           return {
               data: {
                 currentsqrtprice,
@@ -28,7 +37,6 @@ const gettingCurrentsqrtprice = async () => {
           };
     } catch (err) {
       if (err) {
-        logger.warn(`Error returned when invoking 'dex_getCurrentSqrtPrice'.\n${err.stack}`);
         throw err;
       }
     }

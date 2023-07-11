@@ -13,25 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const { Logger } = require('lisk-service-framework');
 
-const dataService = require('../../shared/dataService');
+const logger = Logger();
 
-const gettingCurrentsqrtprice = async params => {
-	
-	const response = await dataService.gettingCurrentsqrtprice(params);
-
-	return {
-		data: {
-			currentSqrtPrice: response.data.currentsqrtprice,
-			tokenID0: response.data.tokenID0,
-			tokenID1: response.data.tokenID1,
-			unit: response.data.unit,
-			symbol: response.data.symbol,
-		},
-		meta: {}
+const waitForIt = (fn, intervalMs = 1000) => new Promise((resolve) => {
+	const checkIfReady = async (that) => {
+		try {
+			const result = await fn();
+			clearInterval(that);
+			if (result !== undefined) resolve(result);
+		} catch (err) {
+			logger.debug(`Waiting for ${intervalMs}ms ...`);
+		}
 	};
-};
+	const hInterval = setInterval(checkIfReady, intervalMs, this);
+	checkIfReady(hInterval);
+});
 
-module.exports = {
-	gettingCurrentsqrtprice,
-};
+module.exports = waitForIt;

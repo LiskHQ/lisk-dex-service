@@ -17,54 +17,49 @@
 const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
 const getPriceImpactExactIn = async (params) => {
-    const moduleEndpointContext = {
-		params:{
-			tokenIdIn: params.tokenIdIn,
-			amountIn:params.amountIn,
-			tokenIdOut:params.tokenIdOut,
-			minAmountOut:params.amountOut,
-			swapRoute:params.swapRoute,
-            
-		}
+	const moduleEndpointContext = {
+		tokenIdIn: params.tokenIdIn,
+		amountIn: params.amountIn,
+		tokenIdOut: params.tokenIdOut,
+		minAmountOut: params.amountOut,
+		swapRoute: params.swapRoute,
 	}
 	try {
 		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactIn', moduleEndpointContext);
-        return {
-            data: {
-                priceImpact,
-                unit: "percentage",
-                symbol: "%",
-            },
-            meta: {},
-        };
+		return {
+			data: {
+				priceImpact,
+				unit: "percentage",
+				symbol: "%",
+			},
+			meta: {},
+		};
 	} catch (err) {
 		if (err.message.includes(timeoutMessage)) {
-            logger.warn(`Error returned when invoking 'dex_dryRunSwapExactIn'.\n${err.stack}`);
+			logger.warn(`Error returned when invoking 'dex_dryRunSwapExactIn'.\n${err.stack}`);
 			throw new TimeoutException('Request timed out when calling \'dryRunSwapExactIn\'.');
 		}
 	}
 };
 
 const getPriceImpactExactOut = async (params) => {
-    const moduleEndpointContext = {
-		params:{
-			tokenIdIn: params.tokenIdIn,
-			maxAmountIn:params.amountIn,
-			tokenIdOut:params.tokenIdOut,
-			amountOut:params.amountOut,
-			swapRoute:params.swapRoute,
-		}
+	const moduleEndpointContext = {
+		tokenIdIn: params.tokenIdIn,
+		maxAmountIn: params.amountIn,
+		tokenIdOut: params.tokenIdOut,
+		amountOut: params.amountOut,
+		swapRoute: params.swapRoute,
 	}
 	try {
 		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactOut', moduleEndpointContext);
-        return {
-            data: {
-                priceImpact,
-                unit: "percentage",
-                symbol: "%",
-            },
-            meta: {},
-        };
+		return {
+			data: {
+				priceImpact,
+				unit: "percentage",
+				symbol: "%",
+			},
+			meta: {},
+		};
 	} catch (err) {
 		logger.warn(`Error returned when invoking 'dex_dryRunSwapExactOut'.\n${err.stack}`);
 		throw new TimeoutException('Request timed out when calling \'dryRunSwapExactOut\'.');
@@ -72,6 +67,6 @@ const getPriceImpactExactOut = async (params) => {
 };
 
 module.exports = {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
+	getPriceImpactExactIn,
+	getPriceImpactExactOut
 };

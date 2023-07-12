@@ -16,29 +16,43 @@
 
 const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
+
+const {
+	Logger,
+	Exceptions: { TimeoutException },
+} = require('lisk-service-framework');
+
+const logger = Logger();
+
 const getProposal = async (params) => {
 
-	let proposalsList;
+	let proposalsList; 
+
+    const context = {
+        params:params
+    }
 
     try {
-        proposalsList = await invokeEndpoint('governance_getAllPoolIDs'); 
+        proposalsList = await invokeEndpoint('dexGovernance_getProposal',context); 
+        if(proposalsList.error != null){
+            logger.warn(`Error returned when invoking 'dexGovernance_getProposal'.\n${proposalsList.error}`);
+            throw proposalsList.error;
+        }
         return {
             data: {
-                proposalsList,
+                creationHeight: proposalsList.creationHeight,
+                votesYes: proposalsList.votesYes,
+                votesNo: proposalsList.votesNo,
+                votesPass: proposalsList.votesPass,
+                type: proposalsList.type,
+                content: proposalsList.content,
             },
             meta: {},
         };
     } catch (error) {
-        if (error) {
-            logger.warn(`Error returned when invoking 'dex_getProposal'.\n${error.stack}`);
-            throw error;
-        }
+        logger.warn(`Error returned when invoking 'dexGovernance_getProposal'.\n${error.message}`);
+        throw error.message;
     }
-
-	return {
-		data: proposalsList,
-		meta: {},
-	};
 };
 
 module.exports = {

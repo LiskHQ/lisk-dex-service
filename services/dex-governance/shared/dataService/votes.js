@@ -18,13 +18,17 @@ const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/cli
 
 const getVotes = async (params) => {
 
-	let votesList;
+	let voteInfos;
+
+    const context = {
+        params:params
+    }
 
     try {
-        votesList = await invokeEndpoint('dexGovernance_getUserVotes'); 
-        return {
+        voteInfos = await invokeEndpoint('dexGovernance_getUserVotes',context);
+         return {
             data: {
-                votesList,
+                voteInfos,
             },
             meta: {},
         };

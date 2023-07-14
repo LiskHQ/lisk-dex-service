@@ -16,8 +16,12 @@
 
 const CURRENCY = /^\b([A-Za-z])+\b$/;
 const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
+const NONCE = /^[0-9]+$/;
 
 module.exports = {
 	CURRENCY,
 	TOKEN_SYMBOL,
+	NONCE
+	
 };
+

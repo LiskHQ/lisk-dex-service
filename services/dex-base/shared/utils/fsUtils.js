@@ -13,29 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const fs = require('fs');
 
-const {
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
+const { Logger } = require('lisk-service-framework');
 
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
+const logger = Logger();
 
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
-
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
+const read = (filePath) => new Promise((resolve, reject) => {
+	fs.readFile(filePath, 'utf8', (err, data) => {
+		if (err) {
+			logger.error(err);
+			return reject(err);
+		}
+		return resolve(data);
+	});
+});
 
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
-	getTokensAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
+	read,
 };

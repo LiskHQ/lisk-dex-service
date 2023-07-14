@@ -14,28 +14,24 @@
  *
  */
 
-const {
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
+const { requestConnector } = require('../utils/request');
 
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
+const getTokensAvailable = async (params) => {
 
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
+	let tokensAvailable;
 
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
+	tokensAvailable = await requestConnector('getSupportedTokens', params);
+	
+	module.exports = {
+		requestConnector,
+	};
+
+	return {
+		data: tokensAvailable,
+		meta: {},
+	};
+};
 
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
 	getTokensAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
 };

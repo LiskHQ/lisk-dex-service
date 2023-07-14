@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,29 +13,21 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const {
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
-
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
-
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
-
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
-
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
-	getTokensAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
+	tableName: 'application_metadata',
+	primaryKey: ['network', 'chainName'],
+	schema: {
+		chainName: { type: 'string' },
+		chainID: { type: 'string' },
+		network: { type: 'string' },
+		isDefault: { type: 'boolean', null: false, defaultValue: false },
+		appDirName: { type: 'string' },
+	},
+	indexes: {
+		chainID: { type: 'key' },
+		chainName: { type: 'key' },
+		network: { type: 'key' },
+		isDefault: { type: 'key' },
+	},
+	purge: {},
 };

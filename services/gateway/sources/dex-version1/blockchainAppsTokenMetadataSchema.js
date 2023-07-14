@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,29 +13,24 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const {
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
-
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
-
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
-
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
+const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
 
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
-	getTokensAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
+	type: 'moleculer',
+	method: 'dex.blockchain.apps.meta.tokens.supported',
+	params: {
+		chainID: '=,string',
+		offset: '=,number',
+		limit: '=,number',
+		sort: '=,string',
+	},
+	definition: {
+		data: ['data', blockchainAppTokenMetadata],
+		meta: {
+			count: '=,number',
+			offset: '=,number',
+			total: '=,number',
+		},
+		links: {},
+	},
 };

@@ -13,29 +13,15 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const {
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
-
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
-
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
-
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
+const currency = {
+	USD: 'USD',
+	EUR: 'EUR',
+};
 
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
-	getTokensAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
+	currency,
+};
+
+module.exports = {
+	currency,
 };

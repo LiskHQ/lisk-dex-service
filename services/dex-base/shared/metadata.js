@@ -41,7 +41,6 @@ const getTokenMetadataIndex = () => getTableInstance(
 
 const getBlockchainAppsTokenMetadataSupported = async (params) => {
 	const { dataDir } = config;
-	const repo = config.gitHub.appRegistryRepoName;
 	const applicationMetadataTable = await getApplicationMetadataIndex();
 	const tokenMetadataTable = await getTokenMetadataIndex();
 

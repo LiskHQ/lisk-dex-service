@@ -16,13 +16,6 @@
 
 const dataService = require('../../shared/dataService');
 
-const {
-	HTTP,
-	Exceptions: { InvalidParamsException },
-} = require('lisk-service-framework');
-
-const { StatusCodes: { BAD_REQUEST } } = HTTP;
-
 const appRegistryService = require('../../shared/metadata');
 
 const getTokensAvailable = async params => {

@@ -13,7 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const path = require('path');
 const fs = require('fs');
 
 const { Logger } = require('lisk-service-framework');

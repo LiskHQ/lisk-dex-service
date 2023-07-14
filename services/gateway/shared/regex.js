@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -42,6 +42,8 @@ const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
 const POOL_ID = /^\b[a-fA-F0-9]{40}\b$/;
 const AMOUNT_IN = /^[0-9]+$/;
 const AMOUNT_OUT = /^[0-9]+$/;
+const CURRENCY = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z]{3,4})\b$/;
 
 module.exports = {
 	PUBLIC_KEY,
@@ -73,4 +75,7 @@ module.exports = {
 	POOL_ID,
 	AMOUNT_IN,
 	AMOUNT_OUT,
+	CURRENCY,
+	TOKEN_SYMBOL
 };
+

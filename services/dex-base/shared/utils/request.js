@@ -14,7 +14,6 @@
  *
  */
 
-
 let app;
 
 const setAppContext = (h) => app = h;
@@ -27,12 +26,12 @@ const requestRpc = async (service, method, params = {}) => {
 };
 
 const requestConnector = async (method, params) => requestRpc('connector', method, params);
+const requestMarket = async (method,params) => requestRpc('market', method, params);
 
 module.exports = {
 	setAppContext,
 	requestConnector,
+	requestMarket,
 	requestRpc,
-	getAppContext
-}
-
-
+	getAppContext,
+};

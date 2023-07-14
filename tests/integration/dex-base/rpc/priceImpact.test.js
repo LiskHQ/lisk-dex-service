@@ -32,7 +32,7 @@ describe('Method get.prices.impact', () => {
                         minAmountOut:10,
                         swapRoute:[Buffer.from('0000000000000000000001000000000000c8', 'hex')],
                     }
-                }                
+                }    
                 const response = await getPriceImpact(moduleEndpointContext);
                 const { result } = response;
                 expect(result.priceImpact).not.toBe('0.0000');

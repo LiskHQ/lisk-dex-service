@@ -42,6 +42,11 @@ const app = Microservice({
 	timeout: config.brokerTimeout,
 	packageJson,
 	logger: loggerConf,
+	dependencies: [
+		'connector',
+		'app-registry',
+		'market',
+	],
 });
 
 setAppContext(app);
@@ -61,5 +66,3 @@ app.run().then(() => {
 	logger.fatal(err.stack);
 	process.exit(1);
 });
-
-

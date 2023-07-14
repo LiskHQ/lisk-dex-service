@@ -15,6 +15,11 @@
  */
 
 const {
+    getPriceImpactExactIn,
+    getPriceImpactExactOut
+} = require ('./priceImpact')
+
+const {
     getPoolsAvailable
 } = require ('./poolsAvailable')
 
@@ -38,6 +43,8 @@ module.exports = {
 	// prices
 	getPricesConvertFiat,
 	getPricesConvertToken,
+	getPriceImpactExactIn,
+    getPriceImpactExactOut,
 	//tokens
 	getTokensAvailable,
 	//pools

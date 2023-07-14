@@ -14,19 +14,24 @@
  *
  */
 
-const {
-	getPoolsAvailable,
-} = require('./controller/poolsAvailable');
+const dataService = require('../../shared/dataService');
 
-const regex = require('../shared/regex');
+const getPriceImpact = async params => {
+	let priceImpact;
+	if (params.isZeroToOne) {
+		priceImpact = await dataService.getPriceImpactExactIn(params);
+	} else {
+		priceImpact = await dataService.getPriceImpactExactOut(params);
+	}
 
-module.exports = [
-	{
-		name: 'pools.available',
-		controller: getPoolsAvailable,
-		params: {
-			limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
-			offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },
-		},
-	},
-];
+	return {
+		data: priceImpact.data,
+		meta: priceImpact.meta,
+		links: {},
+	};
+};
+
+
+module.exports = {
+	getPriceImpact,
+};

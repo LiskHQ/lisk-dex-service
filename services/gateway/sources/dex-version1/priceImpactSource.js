@@ -14,19 +14,21 @@
  *
  */
 
-const {
-	getPoolsAvailable,
-} = require('./controller/poolsAvailable');
-
-const regex = require('../shared/regex');
-
-module.exports = [
-	{
-		name: 'pools.available',
-		controller: getPoolsAvailable,
-		params: {
-			limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
-			offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },
-		},
-	},
-];
+module.exports = {
+    type: 'moleculer',
+    method: 'dex.prices.impact',
+    params: {
+        tokenIdIn: '=,string',
+        amountIn: '=,string',
+        tokenIdOut: '=,string',
+        amountOut: '=,string',
+        swapRoute: '=,string',
+        isZeroToOne: '=,boolean',       
+    },
+    definition: {
+        data: {
+            priceImpact: '=,string',
+        },
+        meta: {}
+    }
+};

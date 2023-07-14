@@ -23,7 +23,7 @@ module.exports = [
 		name: 'proposal',
 		controller: getProposal,
 		params: {
-			proposalID: { optional: true, type: 'string'},
+			proposal: { optional: false, type: 'number'},
 		},
 	},
 ];

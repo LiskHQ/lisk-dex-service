@@ -22,7 +22,7 @@ module.exports = {
 	rpcMethod: 'get.proposals',
 	tags: ['Proposals'],
 	params: {
-		proposalID: { optional: true, type: 'string'},
+		proposal: { optional: false, type: 'number'},
 	},
 	get schema() {
 		const proposalsSchema = {};

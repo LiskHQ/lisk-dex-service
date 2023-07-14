@@ -18,7 +18,7 @@ module.exports = {
 	type: 'moleculer',
 	method: 'governance.proposal',
 	params: {
-		proposalID: '=,string',
+		proposal: '=,number',
 	},
 	definition: {
 		data: {

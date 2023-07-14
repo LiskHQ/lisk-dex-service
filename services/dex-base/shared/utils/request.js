@@ -34,5 +34,4 @@ module.exports = {
 	requestMarket,
 	requestRpc,
 	getAppContext,
-	requestMarket,
 };

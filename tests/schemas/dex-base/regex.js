@@ -42,7 +42,9 @@ const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
 const EMPTY_STRING = /^$/;
 const POS_VALIDATOR_STATUS = /^\b(?:active|standby|banned|punished|ineligible|,)+\b$/;
 const SWAGGER_RESPONSE_KEY = /^([0-9]{3})$|^(default)$/;
-const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z]{3,4})+\b$/;
+const CONVERTED_PRICE = /^[1-9]+\d*$/;
+const CONVERTED_TARGET = /^[A-Za-z]+$/;
 
 module.exports = {
 	ADDRESS_LISK32,
@@ -74,5 +76,7 @@ module.exports = {
 	POSITIVE_DIGITS,
 	POS_VALIDATOR_STATUS,
 	SWAGGER_RESPONSE_KEY,
-	TOKEN_SYMBOL
+	TOKEN_SYMBOL,
+	CONVERTED_PRICE,
+	CONVERTED_TARGET
 };

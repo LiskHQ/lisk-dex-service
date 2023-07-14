@@ -16,16 +16,19 @@
 
 module.exports = {
 	type: 'moleculer',
-	method: 'dex.prices.convert.token',
+	method: 'dex.prices.convert.fiat',
 	params: {
+		currency: '=,string',
 		tokenSymbol: '=,string',
-		conversionTokenSymbol: '=,string',
 	},
 	definition: {
 		data: {
-			credibleDirectPriceToken2ToToken1: '=,string',
-			credibleDirectPriceToken1ToToken2: '=,string'
+			convertedPrice: '=,string',
+			convertedTarget: '=,string',
 		},
-		meta: {},
+		meta: {
+
+		},
+		links: {},
 	},
 };

@@ -14,18 +14,15 @@
  *
  */
 
+const regex = require('./regex.js');
+
+import Joi from 'joi';
+
+const priceConvertFiatSchema = {
+	convertedPrice: Joi.string().pattern(regex.CONVERTED_PRICE).required(),
+	convertedTarget: Joi.string().pattern(regex.CONVERTED_TARGET).required(),
+};
+
 module.exports = {
-	type: 'moleculer',
-	method: 'dex.prices.convert.token',
-	params: {
-		tokenSymbol: '=,string',
-		conversionTokenSymbol: '=,string',
-	},
-	definition: {
-		data: {
-			credibleDirectPriceToken2ToToken1: '=,string',
-			credibleDirectPriceToken1ToToken2: '=,string'
-		},
-		meta: {},
-	},
+	priceConvertFiatSchema: Joi.object(priceConvertFiatSchema).required(),
 };

@@ -21,3 +21,7 @@ const currency = {
 module.exports = {
 	currency,
 };
+
+module.exports = {
+	currency,
+};

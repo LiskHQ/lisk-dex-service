@@ -13,16 +13,16 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const dataService = require('../../shared/dataService');
 
-const regex = require('regex')
-
-import Joi from 'joi';
-
-const priceConvertTokenSchema = {
-	credibleDirectPriceToken2ToToken1: Joi.string().pattern(regex.TOKEN_SYMBOL).required(),
-	credibleDirectPriceToken1ToToken2: Joi.string().pattern(regex.TOKEN_SYMBOL).required(),
+const getPricesConvertFiat = async params => {
+	const response = await dataService.getPricesConvertFiat(params);
+	return {
+		data: { convertedPrice: response.data, convertedTarget: params.currency },
+		meta: {},
+	};
 };
 
 module.exports = {
-	priceConvertTokenSchema: Joi.object(priceConvertTokenSchema).required(),
+	getPricesConvertFiat,
 };

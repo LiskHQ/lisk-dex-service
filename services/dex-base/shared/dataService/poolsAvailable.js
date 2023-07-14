@@ -14,34 +14,32 @@
  *
  */
 
-const {
-    getPoolsAvailable
-} = require ('./poolsAvailable')
+const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
-const{
-	getPricesConvertFiat,
-} = require('./pricesConvertFiat');
 
-const {
-	getPricesConvertToken,
-} = require('./priceConvertToken');
+const getPoolsAvailable = async () => {
+	
+    let poolsAvailable;
+	
+    try {
+      poolsAvailable = await invokeEndpoint('dex_getAllPoolIDs');
+          return {
+              data: {
+                poolsAvailable,
+              },
+              meta: {},
+          };
+    } catch (err) {
+      if (err) {
+        logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
+        throw err;
+      }
+      
+      
+    }
+};
 
-const {
-    getTokensAvailable
-} = require ('./tokensAvailable')
-
-const {
-	reloadMarketAppsPrices
-} = require('./interoperability');
 
 module.exports = {
-	// prices
-	getPricesConvertFiat,
-	getPricesConvertToken,
-	//tokens
-	getTokensAvailable,
-	//pools
 	getPoolsAvailable,
-	//Interoperability
-	reloadMarketAppsPrices
 };

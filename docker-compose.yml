@@ -159,7 +159,6 @@ services:
     networks:
       - services_network
     restart: always
-  
   fee-estimator:
     image: lisk/service_fee_estimator
     depends_on:
@@ -261,7 +260,7 @@ services:
     volumes:
       - export-data:/home/lisk/lisk-service/export/data
     restart: always
-
+  
 networks:
   services_network:
 

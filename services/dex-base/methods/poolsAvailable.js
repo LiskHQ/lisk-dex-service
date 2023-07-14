@@ -15,18 +15,18 @@
  */
 
 const {
-	getPricesConvertFiat,
-} = require('./controller/pricesConvertFiat');
+	getPoolsAvailable,
+} = require('./controller/poolsAvailable');
 
-const regex = require('../shared/regex.js');
+const regex = require('../shared/regex');
 
 module.exports = [
 	{
-		name: 'prices.convert.fiat',
-		controller: getPricesConvertFiat,
+		name: 'pools.available',
+		controller: getPoolsAvailable,
 		params: {
-			currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
-			tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
+			limit: { optional: false, type: 'string', min: 1, max: 100, pattern: regex.NONCE },
+			offset: { optional: false, type: 'string', min: 0, pattern: regex.NONCE },
 		},
 	},
 ];

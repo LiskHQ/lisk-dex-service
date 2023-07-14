@@ -21,7 +21,6 @@ const NONCE = /^[0-9]+$/;
 module.exports = {
 	CURRENCY,
 	TOKEN_SYMBOL,
-	NONCE
-	
+	NONCE	
 };
 

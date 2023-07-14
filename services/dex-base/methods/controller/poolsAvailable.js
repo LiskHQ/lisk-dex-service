@@ -14,19 +14,18 @@
  *
  */
 
-const {
-	getPricesConvertFiat,
-} = require('./controller/pricesConvertFiat');
+const dataService = require('../../shared/dataService');
 
-const regex = require('../shared/regex.js');
+const getPoolsAvailable = async params => {
+	const response = await dataService.getPoolsAvailable(params);
 
-module.exports = [
-	{
-		name: 'prices.convert.fiat',
-		controller: getPricesConvertFiat,
-		params: {
-			currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
-			tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
-		},
-	},
-];
+	return {
+		data: { poolsAvailable: response.data },
+		meta: response.meta,
+		links: {},
+	};
+};
+
+module.exports = {
+	getPoolsAvailable,
+};

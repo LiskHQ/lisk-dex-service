@@ -2,31 +2,31 @@
     "title": "Lisk - Devnet - Native tokens",
     "tokens": [
         {
-            "tokenID": "0400000000000000",
-            "tokenName": "Lisk",
-            "description": "Default token for the entire Lisk ecosystem",
+            "tokenID": "0DEX00000000000000",
+            "tokenName": "DEX",
+            "description": "Default token for the DEX ecosystem",
             "denomUnits": [
                 {
-                    "denom": "beddows",
+                    "denom": "dex",
                     "decimals": 0,
                     "aliases": [
-                        "Beddows"
+                        "dex"
                     ]
                 },
                 {
-                    "denom": "lsk",
+                    "denom": "dex",
                     "decimals": 8,
                     "aliases": [
-                        "Lisk"
+                        "Dex"
                     ]
                 }
             ],
-            "baseDenom": "beddows",
-            "displayDenom": "lsk",
-            "symbol": "LSK",
+            "baseDenom": "dex",
+            "displayDenom": "dex",
+            "symbol": "DEX",
             "logo": {
-                "png": "https://raw.githubusercontent.com/LiskHQ/app-registry/main/devnet/Lisk/images/tokens/lisk.png",
-                "svg": "https://raw.githubusercontent.com/LiskHQ/app-registry/main/devnet/Lisk/images/tokens/lisk.svg"
+                "png": "https://github.com/LiskHQ/lisk-dex-service/blob/28-implement-getting-available-tokens/dex.png",
+                "svg": "https://github.com/LiskHQ/lisk-dex-service/blob/28-implement-getting-available-tokens/dex.svg"
             }
         },
         {

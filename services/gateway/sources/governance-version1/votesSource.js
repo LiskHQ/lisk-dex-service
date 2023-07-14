@@ -18,7 +18,7 @@ module.exports = {
 	type: 'moleculer',
 	method: 'governance.votes',
 	params: {
-		address: '=,string',
+		voterAddress: '=,string',
 	},
 	definition: {
 		data: {

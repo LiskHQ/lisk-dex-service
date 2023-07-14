@@ -25,7 +25,7 @@ module.exports = {
 	rpcMethod: 'get.votes',
 	tags: ['Votes'],
 	params: {
-		address: { optional: true, type: 'string' },
+		voterAddress: { optional: true, type: 'string' },
 	},
 	get schema() {
 		const votesSchema = {};

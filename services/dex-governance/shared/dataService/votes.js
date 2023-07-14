@@ -20,14 +20,8 @@ const getVotes = async (params) => {
 
 	let voteInfos;
 
-    const context = {
-        params:{
-            voterAddress:params.address
-        }
-    }
-
     try {
-        voteInfos = await invokeEndpoint('dexGovernance_getUserVotes',context);
+        voteInfos = await invokeEndpoint('dexGovernance_getUserVotes',params);
          return {
             data: {
                 voteInfos,

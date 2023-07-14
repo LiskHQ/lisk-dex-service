@@ -25,7 +25,7 @@ module.exports = [
 		name: 'votes',
 		controller: getVotes,
 		params: {
-			address: { optional: true, type: 'string', },
+			voterAddress: { optional: false, type: 'string', },
 		},
 	},
 ];

@@ -21,7 +21,9 @@ const getVotes = async (params) => {
 	let voteInfos;
 
     const context = {
-        params:params
+        params:{
+            voterAddress:params.address
+        }
     }
 
     try {

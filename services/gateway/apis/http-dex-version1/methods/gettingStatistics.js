@@ -20,14 +20,13 @@ const envelope = require('./dataDefinitions/stdEnvelope')
 
 module.exports = {
 	version: '2.0',
-	swaggerApiPath: '/dex/gettingStatistics',
-	rpcMethod: 'get.dex.gettingStatistics',
+	swaggerApiPath: '/gettingStatistics',
+	rpcMethod: 'get.gettingStatistics',
 	tags: ['Statistics'],
     params: {
         interval: { optional: false, type: 'string', pattern: regex.DEX_INTERVAL },
         limit: { optional: false, type: 'number', pattern: regex.NONCE },
         offset: { optional: false, type: 'number', pattern: regex.NONCE },
-		
     },
 	get schema() {
 		const gettingStatisticsSchema = {};
@@ -38,7 +37,7 @@ module.exports = {
 			rpcMethod: this.rpcMethod,
 			description: 'Retrieves statistics for transactions.',
 		});
-		gettingStatisticsSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
+		gettingStatisticsSchema[this.swaggerApiPath].get.parameters = transformParams('statistics', this.params);
 		gettingStatisticsSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Retrieves statistics for transactions.',

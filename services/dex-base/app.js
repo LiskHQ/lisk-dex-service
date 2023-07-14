@@ -43,7 +43,7 @@ const app = Microservice({
 	packageJson,
 	logger: loggerConf,
 	dependencies: [
-		'transactions',
+		'statistics',
 	],
 });
 

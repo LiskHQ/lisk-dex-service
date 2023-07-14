@@ -21,7 +21,9 @@ const gettingStatistics = async (params = {}) => {
     try {
         const statistics = await requestStatistics('transactions.statistics', params);
         return {
-            data: statistics,
+            data: {
+                transactionCount: statistics.data.timeline, volume: statistics.data.distributionByAmount
+            },
             meta: {},
         };
     } catch (error) {

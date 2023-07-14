@@ -13,14 +13,20 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
+const packageJson = require('./package.json');
+
 const config = {};
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
-config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 5; // in seconds
+config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 // Logging
-config.log = {};
+config.log = {
+	name: packageJson.name,
+	version: packageJson.version,
+};
 /**
  * log.level - Limits the importance of log messages for console and stdout outputs
  *             One fo the following in that order:
@@ -79,4 +85,10 @@ config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
 	'04': 'devnet',
 });
 
+/**
+ * External endpoints
+ */
+config.endpoints = {
+	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
+};
 module.exports = config;

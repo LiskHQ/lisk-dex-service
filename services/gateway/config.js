@@ -13,9 +13,14 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const packageJson = require('./package.json');
+
 const config = {
 	api: {},
-	log: {},
+	log: {
+		name: packageJson.name,
+		version: packageJson.version,
+	},
 };
 
 /**
@@ -62,8 +67,8 @@ config.debug = process.env.SERVICE_LOG_LEVEL === 'debug';
 /**
  * API enablement
  */
-config.api.http = process.env.ENABLE_HTTP_API || 'http-status,http-version3,http-exports';
-config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
+config.api.http = process.env.ENABLE_HTTP_API || 'http-status,http-version3,http-exports,http-dex-version1';
+config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3,rpc-dex-v1';
 
 /**
  * API versions

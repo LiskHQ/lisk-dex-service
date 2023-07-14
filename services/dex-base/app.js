@@ -45,6 +45,7 @@ const app = Microservice({
 	dependencies: [
 		'connector',
 		'app-registry',
+		'market',
 	],
 });
 

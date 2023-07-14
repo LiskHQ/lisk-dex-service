@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -39,6 +39,8 @@ const BLS_KEY = /^\b[a-fA-F0-9]{96}\b$/;
 const PROOF_OF_POSSESSION = /^\b[a-fA-F0-9]{192}\b$/;
 const MODULE = /^\b(?:[\w!@$&.]{1,32}|,)+\b$/;
 const TOPIC = /^\b(?:[0-9a-fA-F]+|lsk[a-hjkm-z2-9]{38})\b$/;
+const CURRENCY = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z]{3,4})\b$/;
 
 module.exports = {
 	PUBLIC_KEY,
@@ -67,4 +69,7 @@ module.exports = {
 	PROOF_OF_POSSESSION,
 	MODULE,
 	TOPIC,
+	CURRENCY,
+	TOKEN_SYMBOL
 };
+

@@ -13,15 +13,20 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
-};
 
-module.exports = {
-	currency,
-};
+const {
+	getPricesConvertToken,
+} = require('./controller/priceConvertToken');
 
-module.exports = {
-	currency,
-};
+const regex = require('../shared/regex');
+
+module.exports = [
+	{
+		name: 'prices.convert.token',
+		controller: getPricesConvertToken,
+		params: {
+			tokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
+			conversionTokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
+		},
+	},
+];

@@ -13,15 +13,10 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
-};
+
+const { getMarketAppsPrices, reloadMarketAppsPrices } = require('./marketAppsPrices');
 
 module.exports = {
-	currency,
-};
-
-module.exports = {
-	currency,
+	getMarketAppsPrices,
+	reloadMarketAppsPrices,
 };

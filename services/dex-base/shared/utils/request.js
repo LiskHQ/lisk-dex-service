@@ -31,6 +31,7 @@ const requestMarket = async (method,params) => requestRpc('market', method, para
 module.exports = {
 	setAppContext,
 	requestConnector,
+	requestMarket,
 	requestRpc,
 	getAppContext,
 	requestMarket,

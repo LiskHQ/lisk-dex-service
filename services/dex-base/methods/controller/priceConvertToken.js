@@ -13,15 +13,21 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
+
+const dataService = require('../../shared/dataService');
+
+const getPricesConvertToken = async params => {
+	const response = await dataService.getPricesConvertToken(params);
+
+	return {
+		data: {
+			credibleDirectPriceToken2ToToken1: response.data.token2ToToken1,
+			credibleDirectPriceToken1ToToken2: response.data.token1ToToken2,
+		},
+		meta: {},
+	};
 };
 
 module.exports = {
-	currency,
-};
-
-module.exports = {
-	currency,
+	getPricesConvertToken,
 };

@@ -13,15 +13,17 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
+
+const dataService = require('../business/index')
+
+const getMarketAppsPrices = async params => {
+	const response = await dataService.getMarketAppsPrices(params);
+	return response;
 };
 
-module.exports = {
-	currency,
-};
+const reloadMarketAppsPrices = async () => dataService.reloadMarketAppsPrices();
 
 module.exports = {
-	currency,
-};
+    getMarketAppsPrices,
+    reloadMarketAppsPrices,
+}

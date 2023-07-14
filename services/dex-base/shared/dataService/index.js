@@ -18,7 +18,18 @@ const {
 	getPricesConvertFiat,
 } = require('./pricesConvertFiat');
 
+const {
+	getPricesConvertToken,
+} = require('./priceConvertToken');
+
+const {
+	reloadMarketAppsPrices
+} = require('./interoperability');
+
 module.exports = {
 	// prices
 	getPricesConvertFiat,
+	getPricesConvertToken,
+	//Interoperability
+	reloadMarketAppsPrices
 };

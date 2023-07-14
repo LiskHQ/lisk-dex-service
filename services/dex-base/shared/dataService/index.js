@@ -18,6 +18,30 @@ const {
     getPoolsAvailable
 } = require ('./poolsAvailable')
 
+const{
+	getPricesConvertFiat,
+} = require('./pricesConvertFiat');
+
+const {
+	getPricesConvertToken,
+} = require('./priceConvertToken');
+
+const {
+    getTokensAvailable
+} = require ('./tokensAvailable')
+
+const {
+	reloadMarketAppsPrices
+} = require('./interoperability');
+
 module.exports = {
-    getPoolsAvailable,
-}
+	// prices
+	getPricesConvertFiat,
+	getPricesConvertToken,
+	//tokens
+	getTokensAvailable,
+	//pools
+	getPoolsAvailable,
+	//Interoperability
+	reloadMarketAppsPrices
+};

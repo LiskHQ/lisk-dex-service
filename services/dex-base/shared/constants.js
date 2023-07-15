@@ -13,6 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
 const currency = {
 	USD: 'USD',
 	EUR: 'EUR',

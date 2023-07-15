@@ -13,17 +13,25 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
+const { requestStatistics } = require('../utils/request');
+
+const gettingStatistics = async (params = {}) => {
+
+    try {
+        const statistics = await requestStatistics('transactions.statistics', params);
+        return {
+            data: {
+                transactionCount: statistics.data.timeline, volume: statistics.data.distributionByAmount
+            },
+            meta: {},
+        };
+    } catch (error) {
+        throw new Error(error)
+    }
+
+};
+
 module.exports = {
-	type: 'moleculer',
-	method: 'dex.pools.available',
-	params: {
-		limit: '=,string',
-		offset: '=,string',
-	},
-	definition: {
-		data: {
-			poolsAvailable: '=',
-		},
-		meta: {},
-	}
+    gettingStatistics,
 };

@@ -13,17 +13,20 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.pools.available',
-	params: {
-		limit: '=,string',
-		offset: '=,string',
-	},
-	definition: {
-		data: {
-			poolsAvailable: '=',
+
+const {
+	gettingStatistics,
+} = require('./controller/gettingStatistics');
+const regex = require('../shared/regex')
+
+module.exports = [
+	{
+		name: 'gettingStatistics',
+		controller: gettingStatistics,
+		params: {
+			interval: { optional: false, type: 'string', pattern: regex.DEX_INTERVAL },
+			limit: { optional: false, type: 'number', pattern: regex.NONCE },
+			offset: { optional: false, type: 'number', pattern: regex.NONCE },
 		},
-		meta: {},
-	}
-};
+	},
+];

@@ -26,12 +26,14 @@ const requestRpc = async (service, method, params = {}) => {
 };
 
 const requestConnector = async (method, params) => requestRpc('connector', method, params);
+const requestStatistics = async (method, params) => requestRpc('statistics', method, params);
 const requestMarket = async (method,params) => requestRpc('market', method, params);
 
 module.exports = {
 	setAppContext,
 	requestConnector,
-	requestMarket,
+	requestStatistics,
 	requestRpc,
 	getAppContext,
+	requestMarket,
 };

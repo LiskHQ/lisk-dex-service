@@ -15,6 +15,11 @@
  */
 
 const {
+    gettingStatistics
+} = require ('./gettingStatistics')
+
+
+const {
     getPriceImpactExactIn,
     getPriceImpactExactOut
 } = require ('./priceImpact')
@@ -49,6 +54,8 @@ module.exports = {
 	getTokensAvailable,
 	//pools
 	getPoolsAvailable,
+	//statistcs
+	gettingStatistics,
 	//Interoperability
 	reloadMarketAppsPrices
 };

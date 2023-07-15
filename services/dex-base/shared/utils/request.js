@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -27,11 +27,15 @@ const requestRpc = async (service, method, params = {}) => {
 
 const requestConnector = async (method, params) => requestRpc('connector', method, params);
 const requestStatistics = async (method, params) => requestRpc('statistics', method, params);
+const requestMarket = async (method,params) => requestRpc('market', method, params);
 
 module.exports = {
 	setAppContext,
 	requestConnector,
 	requestStatistics,
 	requestRpc,
-	getAppContext
+	getAppContext,
+	requestMarket,
+	requestRpc,
+	getAppContext,
 };

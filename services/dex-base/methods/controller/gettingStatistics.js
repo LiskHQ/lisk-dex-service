@@ -24,7 +24,6 @@ const gettingStatistics = async params => {
 	};
 };
 
-
 module.exports = {
 	gettingStatistics,
 };

@@ -20,7 +20,9 @@ module.exports = {
 		'<rootDir>/integration/api_v3/rpc/*.test.js',
 		'<rootDir>/integration/api_v3/events/*.test.js',
 		'<rootDir>/integration/gateway/*.test.js',
+		'<rootDir>/integration/dex-base/rpc/*.test.js',
 	],
+	
 	testEnvironment: 'node',
 	testTimeout: 50000,
 	maxWorkers: 1,

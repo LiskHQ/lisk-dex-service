@@ -79,7 +79,7 @@ services:
     environment:
       - SERVICE_BROKER=nats://nats:4222
       - GEOIP_JSON=${GEOIP_JSON}
-      - LISK_APP_WS=${LISK_APP_WS}
+      - LISK_APP_WS=eval $($LISK_APP_WS || ws://host.docker.internal:7887)
       # - USE_LISK_IPC_CLIENT=${USE_LISK_IPC_CLIENT}
       # - LISK_APP_DATA_PATH=${LISK_APP_DATA_PATH}
       # - GENESIS_BLOCK_URL=
@@ -147,6 +147,18 @@ services:
       - TRANSACTION_STATS_HISTORY_LENGTH_DAYS=${TRANSACTION_STATS_HISTORY_LENGTH_DAYS}
     restart: always
 
+  dex-base:
+    image: lisk/service_dex_base
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    restart: always
   fee-estimator:
     image: lisk/service_fee_estimator
     depends_on:
@@ -248,7 +260,7 @@ services:
     volumes:
       - export-data:/home/lisk/lisk-service/export/data
     restart: always
-
+  
 networks:
   services_network:
 

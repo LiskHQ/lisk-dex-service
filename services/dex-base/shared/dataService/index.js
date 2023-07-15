@@ -18,6 +18,44 @@ const {
     gettingStatistics
 } = require ('./gettingStatistics')
 
+
+const {
+    getPriceImpactExactIn,
+    getPriceImpactExactOut
+} = require ('./priceImpact')
+
+const {
+    getPoolsAvailable
+} = require ('./poolsAvailable')
+
+const{
+	getPricesConvertFiat,
+} = require('./pricesConvertFiat');
+
+const {
+	getPricesConvertToken,
+} = require('./priceConvertToken');
+
+const {
+    getTokensAvailable
+} = require ('./tokensAvailable')
+
+const {
+	reloadMarketAppsPrices
+} = require('./interoperability');
+
 module.exports = {
-    gettingStatistics
-}
+	// prices
+	getPricesConvertFiat,
+	getPricesConvertToken,
+	getPriceImpactExactIn,
+    getPriceImpactExactOut,
+	//tokens
+	getTokensAvailable,
+	//pools
+	getPoolsAvailable,
+	//statistcs
+	gettingStatistics,
+	//Interoperability
+	reloadMarketAppsPrices
+};

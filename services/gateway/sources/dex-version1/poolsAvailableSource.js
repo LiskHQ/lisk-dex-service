@@ -13,10 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const NONCE = /^[0-9]+$/;
-const DEX_INTERVAL = /^\b(?:day|month|,)+\b$/;
-
 module.exports = {
 	type: 'moleculer',
 	method: 'dex.pools.available',

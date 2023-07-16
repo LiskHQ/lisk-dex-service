@@ -13,15 +13,17 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-    getProposal
-} = require ('./proposal')
 
 const {
-    getVotes
-} = require ('./votes')
+	getProposal,
+} = require('./controller/proposal');
 
-module.exports = {
-    getProposal,
-    getVotes
-}
+module.exports = [
+	{
+		name: 'proposal',
+		controller: getProposal,
+		params: {
+			proposal: { optional: false, type: 'number'},
+		},
+	},
+];

@@ -19,7 +19,6 @@ const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/cli
 
 const {
 	Logger,
-	Exceptions: { TimeoutException },
 } = require('lisk-service-framework');
 
 const logger = Logger();

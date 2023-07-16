@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -42,6 +42,12 @@ const app = Microservice({
 	timeout: config.brokerTimeout,
 	packageJson,
 	logger: loggerConf,
+	dependencies: [
+		'statistics',
+		'connector',
+		'app-registry',
+		'market',
+	],
 });
 
 setAppContext(app);

@@ -1,10 +1,6 @@
 /*
  * LiskHQ/lisk-service
-<<<<<<< HEAD:services/dex-base/shared/utils/request.js
  * Copyright © 2023 Lisk Foundation
-=======
- * Copyright © 2022 Lisk Foundation
->>>>>>> origin/development:services/gateway/sources/dex-version1/blockchainAppsTokenMetadataSchema.js
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -19,18 +15,6 @@
  */
 const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
 
-<<<<<<< HEAD:services/dex-base/shared/utils/request.js
-
-let app;
-
-const setAppContext = (h) => app = h;
-
-const getAppContext = () => app;
-
-const requestRpc = async (service, method, params = {}) => {
-	const data = await getAppContext().requestRpc(`${service}.${method}`, params);
-	return data;
-=======
 module.exports = {
 	type: 'moleculer',
 	method: 'dex.blockchain.apps.meta.tokens.supported',
@@ -49,14 +33,4 @@ module.exports = {
 		},
 		links: {},
 	},
->>>>>>> origin/development:services/gateway/sources/dex-version1/blockchainAppsTokenMetadataSchema.js
 };
-
-const requestConnector = async (method, params) => requestRpc('connector', method, params);
-
-module.exports = {
-	setAppContext,
-	requestConnector,
-	requestRpc,
-	getAppContext
-}

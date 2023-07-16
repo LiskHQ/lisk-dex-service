@@ -13,32 +13,18 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
-};
 
-<<<<<<< HEAD:services/dex-base/methods/gettingCurrentsqrtprice.js
-const {
-	gettingCurrentsqrtprice,
-} = require('./controller/gettingCurrentsqrtprice');
-
-module.exports = [
-	{
-		name: 'prices.currentsqrtprice',
-		controller: gettingCurrentsqrtprice,
-		params: {
-			poolID: { optional: false, type: 'string' },
-			priceDirection: { optional: false, type: 'boolean'},
-		},
+module.exports = {
+	type: 'moleculer',
+	method: 'dex.tokens.available',
+	params: {
+		limit: '=,string',
+		offset: '=,string',
 	},
-];
-=======
-module.exports = {
-	currency,
+	definition: {
+		data: {
+			tokensAvailable: '='
+		},
+		meta: {},
+	},
 };
-
-module.exports = {
-	currency,
-};
->>>>>>> origin/development:services/gateway/sources/dex-version1/tokensAvailableSource.js

@@ -13,11 +13,6 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-<<<<<<< HEAD:services/dex-base/shared/utils/delay.js
-const delay = (ms = 100, val) => new Promise(resolve => setTimeout(resolve.bind(null, val), ms));
-
-module.exports = delay;
-=======
 module.exports = {
 	type: 'moleculer',
 	method: 'dex.pools.available',
@@ -32,4 +27,3 @@ module.exports = {
 		meta: {},
 	}
 };
->>>>>>> origin/development:services/gateway/sources/dex-version1/poolsAvailableSource.js

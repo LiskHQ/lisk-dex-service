@@ -16,22 +16,6 @@
 
 module.exports = {
 	type: 'moleculer',
-<<<<<<< HEAD:services/gateway/sources/dex-version1/gettingCurrentsqrtpriceSource.js
-	method: 'dex.prices.currentsqrtprice',
-	params: {
-		poolID: '=,string',
-		priceDirection: '=,boolean',
-	},
-	definition: {
-		data: {
-            currentSqrtPrice: '=',
-            tokenID0: '=',
-            tokenID1: '=',
-            unit: '=',
-			symbol: '=',
-		},
-		meta: {},
-=======
 	method: 'dex.prices.convert.fiat',
 	params: {
 		currency: '=,string',
@@ -46,6 +30,5 @@ module.exports = {
 
 		},
 		links: {},
->>>>>>> origin/development:services/gateway/sources/dex-version1/pricesConvertFiatSource.js
 	},
 };

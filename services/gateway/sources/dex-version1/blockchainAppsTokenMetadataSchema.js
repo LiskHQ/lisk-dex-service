@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,16 +13,24 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const logger = require('lisk-service-framework').Logger();
+const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
 
-module.exports = [
-	{
-		name: 'job.1',
-		description: 'Generic job template',
-		schedule: '* * * * *', // Every 1 min
-		controller: () => {
-			const operationResult = (() => ([1, 2, 3, 4, 5]))();
-			logger.info(`Dummy job is done, processed ${operationResult.length} items`);
-		},
+module.exports = {
+	type: 'moleculer',
+	method: 'dex.blockchain.apps.meta.tokens.supported',
+	params: {
+		chainID: '=,string',
+		offset: '=,number',
+		limit: '=,number',
+		sort: '=,string',
 	},
-];
+	definition: {
+		data: ['data', blockchainAppTokenMetadata],
+		meta: {
+			count: '=,number',
+			offset: '=,number',
+			total: '=,number',
+		},
+		links: {},
+	},
+};

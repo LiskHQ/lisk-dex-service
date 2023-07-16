@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -15,34 +15,19 @@
  */
 
 module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/hello/{path_name}',
-	rpcMethod: 'get.hello.param',
+	type: 'moleculer',
+	method: 'dex.gettingStatistics',
 	params: {
-		path_name: { optional: false, type: 'string', min: 3 },
+		interval: '=,string',
+		limit: '=,number',
+        offset: '=,number'
 	},
-	envelope: {
-		data: [],
+	definition: {
+		data: {
+			transactionCount: '=,string',
+            volume: '=,string',
+		},
 		meta: {},
 		links: {},
-	},
-	source: {
-		type: 'moleculer',
-		method: 'template.parametrized.hello',
-		params: {
-			name: 'path_name',
-		},
-		definition: {
-			data: ['data', {
-				message: '=',
-				name: '=',
-			}],
-			meta: {
-				count: 'meta.count,number',
-				offset: '=,number',
-				total: 'meta.total,number',
-			},
-			links: {},
-		},
 	},
 };

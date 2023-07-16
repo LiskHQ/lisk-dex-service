@@ -45,6 +45,7 @@ const getSocketNamespaces = (registeredModuleNames) => filterApis(
 				},
 			},
 		}),
+		'/rpc-dex-v1': () => registerApi(['http-dex-version1'], { ...defaultConfig }, registeredModuleNames),
 	},
 );
 

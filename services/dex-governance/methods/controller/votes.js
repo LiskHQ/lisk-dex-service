@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,18 +14,25 @@
  *
  */
 
+const dataService = require('../../shared/dataService');
+
+const getVotes = async params => {
+	try {
+		const response = await dataService.getVotes(params);
+
+		return {
+			data: {
+				voteInfos:response.data.voteInfos,
+			},
+			meta: {}
+		};
+	} catch (err) {
+		// TODO: throwing caught error
+		throw err;
+	}
+};
+
+
 module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/server_error',
-	rpcMethod: 'get.server_error',
-	envelope: {},
-	source: {
-		type: 'moleculer',
-		method: 'template.server.error',
-		params: {},
-		definition: {
-			error: '=,string',
-			status: '=,number',
-		},
-	},
+	getVotes,
 };

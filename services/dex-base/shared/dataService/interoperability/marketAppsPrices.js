@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,18 +14,16 @@
  *
  */
 
-module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/client_error',
-	rpcMethod: 'get.client_error',
-	envelope: {},
-	source: {
-		type: 'moleculer',
-		method: 'template.client.error',
-		params: {},
-		definition: {
-			error: '=,string',
-			status: '=,number',
-		},
-	},
+const dataService = require('../business/index')
+
+const getMarketAppsPrices = async params => {
+	const response = await dataService.getMarketAppsPrices(params);
+	return response;
 };
+
+const reloadMarketAppsPrices = async () => dataService.reloadMarketAppsPrices();
+
+module.exports = {
+    getMarketAppsPrices,
+    reloadMarketAppsPrices,
+}

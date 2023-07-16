@@ -21,7 +21,7 @@ RUN adduser -D lisk && \
     chown -R lisk:lisk /home/lisk/
 
 USER lisk
-WORKDIR /home/lisk/lisk-service/template
+WORKDIR /home/lisk/lisk-service/dex-base
 
 COPY ./ .
 COPY --from=builder /home/builder/build/node_modules/ ./node_modules/

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,18 +14,20 @@
  *
  */
 
+const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
+const AMOUNT_IN = /^[0-9]+$/;
+const AMOUNT_OUT = /^[0-9]+$/;
+const CURRENCY = /^\b([A-Za-z])+\b$/;
+const TOKEN_SYMBOL = /^\b([A-Za-z])+\b$/;
+const NONCE = /^[0-9]+$/;
+const DEX_INTERVAL = /^\b(?:day|month|,)+\b$/;
+
 module.exports = {
-	version: '2.0',
-	swaggerApiPath: '/async_hello',
-	rpcMethod: 'get.hello.async',
-	envelope: {},
-	source: {
-		type: 'moleculer',
-		method: 'template.asynchronous.hello',
-		params: {},
-		definition: {
-			data: '=',
-			meta: '=',
-		},
-	},
+	TOKEN_ID,
+    AMOUNT_IN,
+    AMOUNT_OUT,
+	CURRENCY,
+	TOKEN_SYMBOL,
+	NONCE,
+	DEX_INTERVAL,	
 };

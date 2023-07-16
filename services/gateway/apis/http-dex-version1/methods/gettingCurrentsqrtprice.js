@@ -17,7 +17,6 @@
 const gettingCurrentsqrtpriceSource = require('../../../sources/dex-version1/gettingCurrentsqrtpriceSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const envelope = require('../methods/dataDefinitions/stdEnvelope')
-const regex = require('../../../shared/regex');
 
 module.exports = {
 	version: '2.0',

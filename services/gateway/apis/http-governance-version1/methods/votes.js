@@ -16,7 +16,6 @@
 
 const votesSource = require('../../../sources/governance-version1/votesSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const regex = require('../../../shared/regex');
 const envelope = require('../../../sources/governance-version1/mappings/stdEnvelope');
 
 module.exports = {

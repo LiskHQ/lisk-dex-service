@@ -18,8 +18,6 @@ const {
 	getVotes,
 } = require('./controller/votes');
 
-const regex = require('../shared/utils/regex.js');
-
 module.exports = [
 	{
 		name: 'votes',

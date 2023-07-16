@@ -13,15 +13,18 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const currency = {
-	USD: 'USD',
-	EUR: 'EUR',
-};
 
 module.exports = {
-	currency,
-};
-
-module.exports = {
-	currency,
+	type: 'moleculer',
+	method: 'dex.tokens.available',
+	params: {
+		limit: '=,string',
+		offset: '=,string',
+	},
+	definition: {
+		data: {
+			tokensAvailable: '='
+		},
+		meta: {},
+	},
 };

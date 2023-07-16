@@ -13,10 +13,21 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const config = {
+    endpoints: {},
+};
+
+/**
+ * External endpoints
+ */
+config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
+config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
+config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
+config.endpoints = {
+	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
+};
 
 const packageJson = require('./package.json');
-
-const config = {};
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
@@ -33,12 +44,6 @@ config.log = {
  *               TRACE < DEBUG < INFO < WARN < ERROR < FATAL < MARK
  */
 config.log.level = process.env.SERVICE_LOG_LEVEL || 'info';
-
-/**
- * External endpoints
- */
-config.endpoints = {};
-config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
 
 config.gitHub = {
 	accessToken: process.env.GITHUB_ACCESS_TOKEN,
@@ -86,9 +91,9 @@ config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
 });
 
 /**
- * External endpoints
+ * API Client related settings
  */
-config.endpoints = {
-	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
-};
+config.isUseLiskIPCClient = Boolean(String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true');
+config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
+
 module.exports = config;

@@ -13,24 +13,17 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
+const {
+	gettingCurrentsqrtprice,
+} = require('./controller/gettingCurrentsqrtprice');
 
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.blockchain.apps.meta.tokens.supported',
-	params: {
-		chainID: '=,string',
-		offset: '=,number',
-		limit: '=,number',
-		sort: '=,string',
-	},
-	definition: {
-		data: ['data', blockchainAppTokenMetadata],
-		meta: {
-			count: '=,number',
-			offset: '=,number',
-			total: '=,number',
+module.exports = [
+	{
+		name: 'prices.currentsqrtprice',
+		controller: gettingCurrentsqrtprice,
+		params: {
+			poolID: { optional: false, type: 'string' },
+			priceDirection: { optional: false, type: 'boolean'},
 		},
-		links: {},
 	},
-};
+];

@@ -1,4 +1,4 @@
-/*
+	/*
  * LiskHQ/lisk-service
  * Copyright © 2023 Lisk Foundation
  *
@@ -13,24 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
 
 module.exports = {
 	type: 'moleculer',
-	method: 'dex.blockchain.apps.meta.tokens.supported',
+	method: 'dex.prices.currentsqrtprice',
 	params: {
-		chainID: '=,string',
-		offset: '=,number',
-		limit: '=,number',
-		sort: '=,string',
+		poolID: '=,string',
+		priceDirection: '=,boolean',
 	},
 	definition: {
-		data: ['data', blockchainAppTokenMetadata],
-		meta: {
-			count: '=,number',
-			offset: '=,number',
-			total: '=,number',
+		data: {
+            currentSqrtPrice: '=',
+            tokenID0: '=',
+            tokenID1: '=',
+            unit: '=',
+			symbol: '=',
 		},
-		links: {},
+		meta: {},
 	},
 };

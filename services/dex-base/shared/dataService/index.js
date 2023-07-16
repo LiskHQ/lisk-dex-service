@@ -15,6 +15,10 @@
  */
 
 const {
+    gettingCurrentsqrtprice
+} = require ('./gettingCurrentsqrtprice')
+
+const {
     gettingStatistics
 } = require ('./gettingStatistics')
 
@@ -50,6 +54,7 @@ module.exports = {
 	getPricesConvertToken,
 	getPriceImpactExactIn,
     getPriceImpactExactOut,
+    gettingCurrentsqrtprice,
 	//tokens
 	getTokensAvailable,
 	//pools

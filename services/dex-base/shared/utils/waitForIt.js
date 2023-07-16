@@ -13,24 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
+const { Logger } = require('lisk-service-framework');
 
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.blockchain.apps.meta.tokens.supported',
-	params: {
-		chainID: '=,string',
-		offset: '=,number',
-		limit: '=,number',
-		sort: '=,string',
-	},
-	definition: {
-		data: ['data', blockchainAppTokenMetadata],
-		meta: {
-			count: '=,number',
-			offset: '=,number',
-			total: '=,number',
-		},
-		links: {},
-	},
-};
+const logger = Logger();
+
+const waitForIt = (fn, intervalMs = 1000) => new Promise((resolve) => {
+	const checkIfReady = async (that) => {
+		try {
+			const result = await fn();
+			clearInterval(that);
+			if (result !== undefined) resolve(result);
+		} catch (err) {
+			logger.debug(`Waiting for ${intervalMs}ms ...`);
+		}
+	};
+	const hInterval = setInterval(checkIfReady, intervalMs, this);
+	checkIfReady(hInterval);
+});
+
+module.exports = waitForIt;

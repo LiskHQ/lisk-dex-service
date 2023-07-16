@@ -13,9 +13,14 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const packageJson = require('./package.json');
+
 const config = {
 	api: {},
-	log: {},
+	log: {
+		name: packageJson.name,
+		version: packageJson.version,
+	},
 };
 
 /**
@@ -63,7 +68,7 @@ config.debug = process.env.SERVICE_LOG_LEVEL === 'debug';
  * API enablement
  */
 config.api.http = process.env.ENABLE_HTTP_API || 'http-status, http-version3, http-exports, http-dex-version1, http-governance-version1';
-config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
+config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3,rpc-dex-v1';
 
 /**
  * API versions
@@ -95,7 +100,7 @@ config.rpcCache = {
 	enable: Boolean(String(process.env.ENABLE_REQUEST_CACHING).toLowerCase() !== 'false'),
 };
 
-const DEFAULT_DEPENDENCIES = 'indexer,connector';
+const DEFAULT_DEPENDENCIES = 'indexer,connector,dex';
 const { GATEWAY_DEPENDENCIES } = process.env;
 
 config.brokerDependencies = DEFAULT_DEPENDENCIES.concat(',', GATEWAY_DEPENDENCIES || '').split(',');

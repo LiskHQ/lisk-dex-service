@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,16 +13,25 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const logger = require('lisk-service-framework').Logger();
 
-module.exports = [
-	{
-		name: 'job.1',
-		description: 'Generic job template',
-		schedule: '* * * * *', // Every 1 min
-		controller: () => {
-			const operationResult = (() => ([1, 2, 3, 4, 5]))();
-			logger.info(`Dummy job is done, processed ${operationResult.length} items`);
-		},
-	},
-];
+const { requestConnector } = require('../utils/request');
+
+const getTokensAvailable = async (params) => {
+
+	let tokensAvailable;
+
+	tokensAvailable = await requestConnector('getSupportedTokens', params);
+	
+	module.exports = {
+		requestConnector,
+	};
+
+	return {
+		data: tokensAvailable,
+		meta: {},
+	};
+};
+
+module.exports = {
+	getTokensAvailable,
+};

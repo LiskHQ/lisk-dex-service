@@ -16,14 +16,12 @@
 
 const dataService = require('../../shared/dataService');
 
-const getPricesConvertToken = async params => {
+const gettingPopularPairings = async params => {
 	try {
-		const response = await dataService.getPricesConvertToken(params);
-
+		const response = await dataService.gettingPopularPairings(params);
 		return {
 			data: {
-				credibleDirectPriceToken2ToToken1: response.data.token2ToToken1,
-				credibleDirectPriceToken1ToToken2: response.data.token1ToToken2,
+				populatPairing: response.data,
 			},
 			meta: {}
 		};
@@ -35,5 +33,5 @@ const getPricesConvertToken = async params => {
 
 
 module.exports = {
-	getPricesConvertToken,
+	gettingPopularPairings,
 };

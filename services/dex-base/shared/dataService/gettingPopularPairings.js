@@ -13,25 +13,20 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const { requestStatistics } = require('../utils/request');
 
-
-const { requestMarket } = require('../utils/request');
-
-const gettingPopularPairings = async () => {
-	
-    let popularPairings;
-	
+const gettingPopularPairings = async (params = {}) => {
     try {
-        popularPairings = await invokeEndpoint('dex_getPopularPairings');
+      const statistics = await requestStatistics('transactions.statistics', params);
           return {
               data: {
-                popularPairings,
+                popularPairings:statistics,
               },
               meta: {},
           };
     } catch (err) {
       if (err) {
-        logger.warn(`Error returned when invoking 'dex_getPopularPairings'.\n${err.stack}`);
+        logger.warn(`Error returned when invoking 'transactions.statistics'.\n${err.stack}`);
         throw err;
       }
     }

@@ -22,8 +22,6 @@ module.exports = [
 	{
 		name: 'tokens.popularPairings',
 		controller: gettingPopularPairings,
-		params: {
-			
-		},
+		params: {},
 	},
 ];

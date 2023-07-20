@@ -14,23 +14,25 @@
  *
  */
 
-const {requestIndexer} = require('../utils/request');
+const { requestIndexer } = require('../utils/request');
 
 const getVotes = async (params) => {
 
-   let transactionsByTokenID = [];
+    let transactionsByTokenID = [];
 
-	try {
-        const transactions =    await requestIndexer('transactions');
+    try {
+        const transactions = await requestIndexer('transactions');
 
-        if (transactions.data!=null || transactions.data.length == 0){
-            for(let i = 0;i<transactions.data.length;i++){
-                if(transactions.data[i].tokenID == params.tokenID){
-                    transactionsByTokenID.push(transactions.data[i]);                   
+        if (transactions.data != null) {
+            if (transactions.data.length != 0) {
+                for (let i = 0; i < transactions.data.length; i++) {
+                    if (transactions.data[i].tokenID == params.tokenID) {
+                        transactionsByTokenID.push(transactions.data[i]);
+                    }
                 }
             }
-        }else{
-            throw new Error (`Error no transactions with the specified tokenID`);
+        } else {
+            throw new Error(`Error no transactions with the specified tokenID`);
         }
 
     } catch (error) {
@@ -48,5 +50,5 @@ const getVotes = async (params) => {
 };
 
 module.exports = {
-	getVotes,
+    getVotes,
 };

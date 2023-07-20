@@ -14,7 +14,6 @@
  *
  */
 
-
 let app;
 
 const setAppContext = (h) => app = h;
@@ -28,10 +27,16 @@ const requestRpc = async (service, method, params = {}) => {
 
 const requestConnector = async (method, params) => requestRpc('connector', method, params);
 
+const requestStatistics = async (method, params) => requestRpc('statistics', method, params);
+
+const requestIndexer = async (method,params) => requestRpc('indexer', method, params);
+
 module.exports = {
 	setAppContext,
 	requestConnector,
 	requestRpc,
-	getAppContext
+	getAppContext,
+	requestStatistics,
+	requestIndexer
 }
 

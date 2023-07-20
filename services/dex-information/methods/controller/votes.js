@@ -22,7 +22,7 @@ const getVotes = async params => {
 
 		return {
 			data: {
-				voteInfos:response.data.voteInfos,
+				transactionsByTokenID:response.data.transactionsByTokenID,
 			},
 			meta: {}
 		};

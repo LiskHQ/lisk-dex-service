@@ -14,31 +14,37 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+const {requestIndexer} = require('../utils/request');
 
 const getVotes = async (params) => {
 
-	let voteInfos;
+   let transactionsByTokenID = [];
 
-    try {
-        voteInfos = await invokeEndpoint('dexGovernance_getUserVotes',params);
-         return {
-            data: {
-                voteInfos,
-            },
-            meta: {},
-        };
+	try {
+        const transactions =    await requestIndexer('transactions');
+
+        if (transactions.data!=null || transactions.data.length == 0){
+            for(let i = 0;i<transactions.data.length;i++){
+                if(transactions.data[i].tokenID == params.tokenID){
+                    transactionsByTokenID.push(transactions.data[i]);                   
+                }
+            }
+        }else{
+            throw new Error (`Error no transactions with the specified tokenID`);
+        }
+
     } catch (error) {
         if (error) {
-            logger.warn(`Error returned when invoking 'dexGovernance_getUserVotes'.\n${error.stack}`);
             throw error;
         }
     }
 
-	return {
-		data: votesList,
-		meta: {},
-	};
+    return {
+        data: {
+            transactionsByTokenID
+        },
+        meta: {},
+    };
 };
 
 module.exports = {

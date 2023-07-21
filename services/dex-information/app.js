@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2019 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -21,32 +21,22 @@ const {
 } = require('lisk-service-framework');
 
 const config = require('./config');
+
+LoggerConfig(config.log);
+
 const packageJson = require('./package.json');
+
 const { setAppContext } = require('./shared/utils/request');
-
-// Configure logger
-const loggerConf = {
-	...config.log,
-	name: packageJson.name,
-	version: packageJson.version,
-};
-
-LoggerConfig(loggerConf);
 
 const logger = Logger();
 
 // Initialize Microservice framework
 const app = Microservice({
-	name: 'dex',
+	name: 'information',
 	transporter: config.transporter,
 	timeout: config.brokerTimeout,
 	packageJson,
-	logger: loggerConf,
-	dependencies: [
-		'statistics',
-		'connector',
-		'market',
-	],
+	logger: config.log,
 });
 
 setAppContext(app);
@@ -55,8 +45,6 @@ setAppContext(app);
 app.addMethods(path.join(__dirname, 'methods'));
 app.addEvents(path.join(__dirname, 'events'));
 app.addJobs(path.join(__dirname, 'jobs'));
-
-
 
 // Run the application
 app.run().then(() => {

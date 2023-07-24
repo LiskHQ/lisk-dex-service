@@ -1,8 +1,8 @@
 const {
-    gettingPopularPairings
-} = require ('./gettingPopularPairings')
+    getPopularPairings
+} = require ('./getPopularPairings')
 
 module.exports = {
     //tokens
-    gettingPopularPairings
+    getPopularPairings
 }

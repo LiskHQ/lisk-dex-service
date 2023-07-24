@@ -14,15 +14,16 @@
  *
  */
 
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.tokens.popularPairings',
-	params: {
-	},
-	definition: {
-		data: {
-			popularPairings: '=',
+const {
+	getPopularPairings,
+} = require('./controller/getPopularPairings');
+
+module.exports = [
+	{
+		name: 'tokens.popularPairings',
+		controller: getPopularPairings,
+		params: {
+			senderAddres: { optional: false, type: 'string'}
 		},
-		meta: {},
 	},
-};
+];

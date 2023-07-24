@@ -29,7 +29,7 @@ module.exports = {
 		amountIn: { optional: false, type: 'number', min: 1, max: 64, pattern: regex.AMOUNT_IN },
         tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
         minAmountOut: { optional: false, type: 'number', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
-        swapRoute: { optional: false, type: 'array' },         
+        swapRoute: { optional: false, type: 'string' },         
 	},
 	get schema() {
 		const gettingSlippageBoundsSchema = {};

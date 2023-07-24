@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2022 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,21 +14,20 @@
  *
  */
 
+const { parseInputBySchema } = require('../utils/parser');
+const {
+	getTransactionParamsSchema,
+} = require('./schema');
+
+const encodeTransaction = (transaction) => {
+	// Handle the transaction params
+	const txParamsSchema = getTransactionParamsSchema(transaction);
+
+	const parsedTxParams = parseInputBySchema(transaction.params, txParamsSchema);
+
+	return parsedTxParams;
+};
+
 module.exports = {
-    type: 'moleculer',
-    method: 'dex.prices.gettingSlippageBounds',
-    params: {
-        tokenIdIn: '=,string',
-        amountIn: '=,number',
-        tokenIdOut: '=,string',
-        minAmountOut: '=,number',
-        swapRoute: '=,string',      
-    },
-    definition: {
-        data: {
-            minimum: '=,string',
-            maximum: '=,string',
-        },
-        meta: {}
-    }
+	encodeTransaction,
 };

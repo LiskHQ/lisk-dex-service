@@ -23,7 +23,7 @@ module.exports = [
 		name: 'tokens.popularPairings',
 		controller: getPopularPairings,
 		params: {
-			senderAddres: { optional: false, type: 'string'}
+			senderAddress: { optional: false, type: 'string'}
 		},
 	},
 ];

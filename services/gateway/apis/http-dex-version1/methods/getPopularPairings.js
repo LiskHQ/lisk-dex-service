@@ -22,7 +22,7 @@ module.exports = {
 	rpcMethod: 'get.tokens.popularPairings',
 	tags: ['Tokens'],
 	params: {
-		senderAddres: { optional: false, type: 'string'},
+		senderAddress: { optional: false, type: 'string'},
 	},
 	get schema() {
 		const getPopularPairingsSchema = {};

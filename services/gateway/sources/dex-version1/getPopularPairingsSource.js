@@ -18,7 +18,7 @@ module.exports = {
 	type: 'moleculer',
 	method: 'dex.tokens.popularPairings',
 	params: {
-		senderAddres:'=,string'
+		senderAddress:'=,string'
 	},
 	definition: {
 		data: {

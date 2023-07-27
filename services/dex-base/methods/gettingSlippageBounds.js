@@ -16,18 +16,12 @@
 
 //const { gettingSlippageBounds } = require('./controller/gettingSlippageBounds');
 const regex = require('../shared/regex');
-const { dryRunTransaction } = require('../shared/sdk/transactions')
+const { gettingSlippageBounds } = require('./controller/gettingSlippageBounds');
 
 module.exports = [
 	{
 		name: 'prices.gettingSlippageBounds',
-		controller: async ({
-			tokenIdIn,
-			maxAmountIn,
-			tokenIdOut,
-			amountOut,
-			swapRoute
-		}) => dryRunTransaction({ tokenIdIn,maxAmountIn,tokenIdOut,amountOut,swapRoute }),
+		controller: gettingSlippageBounds,
 		params: {
 			tokenIdIn: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
 			maxAmountIn: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_IN },

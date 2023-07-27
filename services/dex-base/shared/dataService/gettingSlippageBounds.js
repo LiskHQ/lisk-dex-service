@@ -19,10 +19,9 @@ const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/cli
 const gettingSlippageBounds = async (params) => {
       
 	try {
-		const swapResponse = await invokeEndpoint('dex_dryRunSwapExactIn', params);
+		const swapResponse = await invokeEndpoint('dex_dryRunSwapExactOut', params);
         if(swapResponse.error!=null){
             throw new Error (`error in calling dex_dryRunSwapExactIn.\n${swapResponse.error.message}`);
-            return;
         }
 		return {
 			data: {

@@ -26,10 +26,10 @@ module.exports = {
 	tags: ['Prices'],
 	params: {
 		tokenIdIn: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
-		amountIn: { optional: false, type: 'number', min: 1, max: 64, pattern: regex.AMOUNT_IN },
+		maxAmountIn: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_IN },
         tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
-        minAmountOut: { optional: false, type: 'number', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
-        swapRoute: { optional: false, type: 'string' },         
+        amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
+        swapRoute: { optional: false, type: 'array' },         
 	},
 	get schema() {
 		const gettingSlippageBoundsSchema = {};

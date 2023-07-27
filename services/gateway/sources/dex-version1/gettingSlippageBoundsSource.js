@@ -19,10 +19,10 @@ module.exports = {
     method: 'dex.prices.gettingSlippageBounds',
     params: {
         tokenIdIn: '=,string',
-        amountIn: '=,number',
+        maxAmountIn: '=,string',
         tokenIdOut: '=,string',
-        minAmountOut: '=,number',
-        swapRoute: '=,string',      
+        amountOut: '=,string',
+        swapRoute: '=,array',      
     },
     definition: {
         data: {

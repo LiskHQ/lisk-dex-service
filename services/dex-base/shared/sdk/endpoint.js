@@ -22,13 +22,10 @@ const { invokeEndpoint } = require('./client');
 
 const dryRunTransaction = async (params) => {
 	try {
-		const response = await invokeEndpoint('dex_dryRunSwapExactIn', params);
+		const response = await invokeEndpoint('dex_dryRunSwapExactOut', params);
 		return response;
 	} catch (err) {
-		if (err.message.includes(timeoutMessage)) {
-			throw new TimeoutException(`Request timed out when calling 'dryRunTransaction' with transaction: ${transaction}.`);
-		}
-		throw err;
+		throw new TimeoutException(`Request timed out when calling 'dryRunTransaction' with transaction.`);
 	}
 };
 

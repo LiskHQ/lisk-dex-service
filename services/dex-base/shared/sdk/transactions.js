@@ -24,23 +24,7 @@ const { dryRunTransaction } = require('./endpoint');
 
 const dryRunTransactionWrapper = async (params) => {
 	
-	const { tokenIdIn,amountIn,tokenIdOut,
-		minAmountOut,
-		swapRoute } = params;
 	
-	console.log(typeof tokenIdIn);
-	
-	if(typeof tokenIdIn !== 'object' || typeof amountIn !== 'object' || typeof tokenIdOut !== 'object' ||
-	 typeof minAmountOut !== 'object' || typeof swapRoute !== 'array'){
-
-		params.tokenIdIn = Buffer.from(tokenIdIn, 'hex');
-		console.log(typeof params.tokenIdIn);
-		params.amountIn =  BigInt(amountIn);
-		params.tokenIdOut = Buffer.from(tokenIdOut, 'hex');
-		params.minAmountOut =  BigInt(minAmountOut);
-		params.swapRoute = tokenIdIn;
-		
-	}	
 		
 	const response = await dryRunTransaction(params);
 	//response.events = response.events.map(event => formatEvent(event));

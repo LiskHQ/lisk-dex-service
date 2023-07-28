@@ -48,6 +48,10 @@ const {
 	reloadMarketAppsPrices
 } = require('./interoperability');
 
+const {
+    getPopularPairings
+} = require ('./getPopularPairings')
+
 module.exports = {
 	// prices
 	getPricesConvertFiat,
@@ -62,5 +66,6 @@ module.exports = {
 	//statistcs
 	gettingStatistics,
 	//Interoperability
-	reloadMarketAppsPrices
+	reloadMarketAppsPrices,
+   getPopularPairings
 };

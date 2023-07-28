@@ -42,7 +42,11 @@ const {
 
 const {
     getTokensAvailable
-} = require ('./tokensAvailable')
+} = require ('./tokensAvailable');
+
+const {
+    gettingSlippageBounds
+} = require('./gettingSlippageBounds');
 
 const {
 	reloadMarketAppsPrices
@@ -59,6 +63,7 @@ module.exports = {
 	getPriceImpactExactIn,
     getPriceImpactExactOut,
     gettingCurrentsqrtprice,
+    gettingSlippageBounds,
 	//tokens
 	getTokensAvailable,
 	//pools

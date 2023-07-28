@@ -17,7 +17,7 @@
 module.exports = {
 	apps: [
 		{
-			name: 'lisk-dex-service-gateway',
+			name: 'lisk-service-gateway',
 			script: 'app.js',
 			cwd: './services/gateway',
 			pid_file: './pids/service_gateway.pid',

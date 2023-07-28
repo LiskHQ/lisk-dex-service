@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,13 +13,19 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { getStatus } = require('../shared/status');
 
-module.exports = [
-	{
-		name: 'status',
-		description: 'Status',
-		params: {},
-		controller: getStatus,
+module.exports = {
+	type: 'moleculer',
+	method: 'dex.prices.convert.token',
+	params: {
+		tokenSymbol: '=,string',
+		conversionTokenSymbol: '=,string',
 	},
-];
+	definition: {
+		data: {
+			credibleDirectPriceToken2ToToken1: '=,string',
+			credibleDirectPriceToken1ToToken2: '=,string'
+		},
+		meta: {},
+	},
+};

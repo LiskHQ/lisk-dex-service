@@ -47,6 +47,8 @@ const PATH_API_MAPPINGS = {
 	'/test': ['http-test'],
 	'/v3': ['http-version3', 'http-exports'],
 	'/dex/v1': ['http-dex-version1'],
+	'/dex-governance/v1': ['http-governance-version1'],
+	'/dex-information/v1': ['http-information-version1'],
 };
 
 const filterApis = (requiredApis, registeredModuleNames) => {

@@ -1,6 +1,6 @@
 {
   "name": "lisk-dex-service",
-  "version": "0.7.0-alpha.10",
+  "version": "1.0.0-alpha.0",
   "description": "Lisk DEX Service",
   "keywords": [
     "lisk",
@@ -16,7 +16,7 @@
     "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
   },
   "private": true,
-  "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+  "author": "irfan",
   "license": "Apache-2.0",
   "main": "app.js",
   "engines": {

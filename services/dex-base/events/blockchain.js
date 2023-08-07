@@ -15,13 +15,6 @@
  */
 const { Logger, Signals } = require('lisk-service-framework');
 
-const {
-	reloadAllPendingTransactions,
-	getTransactionsByBlockID,
-	reloadGeneratorsCache,
-	getGenerators,
-} = require('../shared/dataService');
-
 const logger = Logger();
 
 module.exports = [

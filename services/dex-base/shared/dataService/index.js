@@ -15,24 +15,24 @@
  */
 
 const {
-    gettingCurrentsqrtprice
-} = require ('./gettingCurrentsqrtprice')
+	gettingCurrentsqrtprice
+} = require('./gettingCurrentsqrtprice')
 
 const {
-    gettingStatistics
-} = require ('./gettingStatistics')
+	gettingStatistics
+} = require('./gettingStatistics')
 
 
 const {
-    getPriceImpactExactIn,
-    getPriceImpactExactOut
-} = require ('./priceImpact')
+	getPriceImpactExactIn,
+	getPriceImpactExactOut
+} = require('./priceImpact')
 
 const {
-    getPoolsAvailable
-} = require ('./poolsAvailable')
+	getPoolsAvailable
+} = require('./poolsAvailable')
 
-const{
+const {
 	getPricesConvertFiat,
 } = require('./pricesConvertFiat');
 
@@ -41,11 +41,11 @@ const {
 } = require('./priceConvertToken');
 
 const {
-    getTokensAvailable
-} = require ('./tokensAvailable');
+	getTokensAvailable
+} = require('./tokensAvailable');
 
 const {
-    gettingSlippageBounds
+	gettingSlippageBounds
 } = require('./gettingSlippageBounds');
 
 const {
@@ -53,17 +53,17 @@ const {
 } = require('./interoperability');
 
 const {
-    getPopularPairings
-} = require ('./getPopularPairings')
+	getPopularPairings
+} = require('./getPopularPairings')
 
 module.exports = {
 	// prices
 	getPricesConvertFiat,
 	getPricesConvertToken,
 	getPriceImpactExactIn,
-    getPriceImpactExactOut,
-    gettingCurrentsqrtprice,
-    gettingSlippageBounds,
+	getPriceImpactExactOut,
+	gettingCurrentsqrtprice,
+	gettingSlippageBounds,
 	//tokens
 	getTokensAvailable,
 	//pools
@@ -72,5 +72,5 @@ module.exports = {
 	gettingStatistics,
 	//Interoperability
 	reloadMarketAppsPrices,
-   getPopularPairings
+	getPopularPairings,
 };

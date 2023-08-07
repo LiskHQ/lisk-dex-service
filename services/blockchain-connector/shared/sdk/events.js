@@ -28,6 +28,17 @@ const EVENT_CHAIN_BLOCK_NEW = 'chain_newBlock';
 const EVENT_CHAIN_BLOCK_DELETE = 'chain_deleteBlock';
 const EVENT_CHAIN_VALIDATORS_CHANGE = 'chain_validatorsChanged';
 const EVENT_TX_POOL_TRANSACTION_NEW = 'txpool_newTransaction';
+//dex-base-events
+const EVENT_POOL_CREATED = 'poolCreated';
+const EVENT_POOL_CREATION_FAILED = 'poolCreationFailed';
+const EVENT_POSITION_CREATED = 'positionCreated';
+const EVENT_POSITION_CREATION_FAILED = 'positionCreationFailed';
+const EVENT_POSITION_UPDATED = 'positionUpdated';
+const EVENT_POSITION_UPDATE_FAILED = 'positionUpdateFailed';
+const EVENT_REMOVE_LIQUIDITY = 'removeLiquidity';
+const EVENT_REMOVE_LIQUIDITY_FAILED = 'removeLiquidityFailed';
+const EVENT_SWAPPED = 'swapped';
+const EVENT_SWAP_FIALED = 'swapFailed';
 
 const events = [
 	EVENT_CHAIN_FORK,
@@ -35,6 +46,16 @@ const events = [
 	EVENT_CHAIN_BLOCK_DELETE,
 	EVENT_CHAIN_VALIDATORS_CHANGE,
 	EVENT_TX_POOL_TRANSACTION_NEW,
+	EVENT_POOL_CREATED,
+	EVENT_POOL_CREATION_FAILED,
+	EVENT_POSITION_CREATED,
+	EVENT_POSITION_CREATION_FAILED,
+	EVENT_POSITION_UPDATED,
+	EVENT_POSITION_UPDATE_FAILED,
+	EVENT_REMOVE_LIQUIDITY,
+	EVENT_REMOVE_LIQUIDITY_FAILED,
+	EVENT_SWAPPED,
+	EVENT_SWAP_FIALED,
 ];
 
 const subscribeToAllRegisteredEvents = async () => {

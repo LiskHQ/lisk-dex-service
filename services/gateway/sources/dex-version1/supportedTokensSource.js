@@ -14,24 +14,22 @@
  *
  */
 
-const { requestConnector } = require('../utils/request');
-
-const getTokensAvailable = async (params) => {
-
-	let tokensAvailable;
-
-	tokensAvailable = await requestConnector('getSupportedTokens', params);
-	
-	module.exports = {
-		requestConnector,
-	};
-
-	return {
-		data: tokensAvailable,
-		meta: {},
-	};
-};
+const supportedTokensMetadata = require('./mappings/supportedTokensMetadata');
 
 module.exports = {
-	getTokensAvailable,
+	type: 'moleculer',
+	method: 'dex.tokens.supported',
+	params: {
+		limit: '=,string',
+		offset: '=,string',
+	},
+	definition: {
+		data: ['data', supportedTokensMetadata],
+		meta: {
+			count: '=,number',
+			offset: '=,number',
+			total: '=,number',
+		},
+		links: {},
+	},
 };

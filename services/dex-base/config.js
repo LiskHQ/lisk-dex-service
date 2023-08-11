@@ -17,6 +17,8 @@ const config = {
     endpoints: {},
 };
 
+config.dataDir = `${__dirname}/data`;
+
 /**
  * External endpoints
  */

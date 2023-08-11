@@ -18,15 +18,6 @@ const dataService = require('../../shared/dataService');
 
 const appRegistryService = require('../../shared/metadata');
 
-const getTokensAvailable = async params => {
-	const response = await dataService.getTokensAvailable(params);
-
-	return {
-		data: { tokensAvailable: response.data.supportedTokens },
-		meta: {}
-	};
-};
-
 const getBlockchainAppsMetadataSupported = async (params) => {
 	const blockchainAppsMetadataSupported = {
 		data: [],
@@ -42,6 +33,5 @@ const getBlockchainAppsMetadataSupported = async (params) => {
 
 
 module.exports = {
-	getTokensAvailable,
 	getBlockchainAppsMetadataSupported
 };

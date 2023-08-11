@@ -40,9 +40,6 @@ const {
 	getPricesConvertToken,
 } = require('./priceConvertToken');
 
-const {
-	getTokensAvailable
-} = require('./tokensAvailable');
 
 const {
 	gettingSlippageBounds
@@ -64,8 +61,6 @@ module.exports = {
 	getPriceImpactExactOut,
 	gettingCurrentsqrtprice,
 	gettingSlippageBounds,
-	//tokens
-	getTokensAvailable,
 	//pools
 	getPoolsAvailable,
 	//statistcs

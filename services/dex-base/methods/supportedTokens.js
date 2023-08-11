@@ -13,24 +13,20 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const blockchainAppTokenMetadata = require('./mappings/blockchainAppTokenMetadata');
 
-module.exports = {
-	type: 'moleculer',
-	method: 'dex.blockchain.apps.meta.tokens.supported',
-	params: {
-		chainID: '=,string',
-		offset: '=,number',
-		limit: '=,number',
-		sort: '=,string',
+const {
+	getTokensAvailable, getBlockchainAppsMetadataSupported,
+} = require('./controller/supportedTokens');
+
+const regex = require('../shared/regex');
+
+module.exports = [
+	{
+		name: 'tokens.supported',
+		controller: getBlockchainAppsMetadataSupported,
+		params: {
+			limit: { optional: true, type: 'number' },
+			offset: { optional: true, type: 'number' },
+		},		
 	},
-	definition: {
-		data: ['data', blockchainAppTokenMetadata],
-		meta: {
-			count: '=,number',
-			offset: '=,number',
-			total: '=,number',
-		},
-		links: {},
-	},
-};
+];

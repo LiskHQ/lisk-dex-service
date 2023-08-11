@@ -30,22 +30,22 @@
             }
         },
         {
-            "tokenID": "0400000000000000",
+            "tokenID": "0DEX00000000000000",
             "tokenName": "Lisk",
             "description": "Default token for the entire Lisk ecosystem",
             "denomUnits": [
                 {
-                    "denom": "beddows",
+                    "denom": "lisk",
                     "decimals": 0,
                     "aliases": [
-                        "Beddows"
+                        "lisk"
                     ]
                 },
                 {
                     "denom": "lsk",
                     "decimals": 8,
                     "aliases": [
-                        "Lisk"
+                        "lisk"
                     ]
                 }
             ],

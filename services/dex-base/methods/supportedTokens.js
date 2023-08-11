@@ -15,15 +15,13 @@
  */
 
 const {
-	getTokensAvailable, getBlockchainAppsMetadataSupported,
+	getSupportedTokens,
 } = require('./controller/supportedTokens');
-
-const regex = require('../shared/regex');
 
 module.exports = [
 	{
 		name: 'tokens.supported',
-		controller: getBlockchainAppsMetadataSupported,
+		controller: getSupportedTokens,
 		params: {
 			limit: { optional: true, type: 'number' },
 			offset: { optional: true, type: 'number' },

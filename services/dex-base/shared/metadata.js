@@ -17,7 +17,7 @@ const { read } = require('./utils/fsUtils');
 
 const config = require('../config');
 
-const getBlockchainAppsTokenMetadataSupported = async (params) => {
+const getSupportedTokens = async (params) => {
 	const { dataDir } = config;
 
 	const blockchainAppsTokenMetadataSupported = {
@@ -45,5 +45,5 @@ const getBlockchainAppsTokenMetadataSupported = async (params) => {
 };
 
 module.exports = {
-	getBlockchainAppsTokenMetadataSupported,
+	getSupportedTokens,
 };

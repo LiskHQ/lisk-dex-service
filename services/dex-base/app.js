@@ -14,6 +14,8 @@
  *
  */
 const path = require('path');
+
+
 const {
 	Microservice,
 	LoggerConfig,
@@ -31,6 +33,8 @@ const loggerConf = {
 	name: packageJson.name,
 	version: packageJson.version,
 };
+
+
 
 LoggerConfig(loggerConf);
 

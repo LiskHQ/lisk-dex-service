@@ -14,24 +14,17 @@
  *
  */
 
-const { requestConnector } = require('../utils/request');
+const {
+	getSupportedTokens,
+} = require('./controller/supportedTokens');
 
-const getTokensAvailable = async (params) => {
-
-	let tokensAvailable;
-
-	tokensAvailable = await requestConnector('getSupportedTokens', params);
-	
-	module.exports = {
-		requestConnector,
-	};
-
-	return {
-		data: tokensAvailable,
-		meta: {},
-	};
-};
-
-module.exports = {
-	getTokensAvailable,
-};
+module.exports = [
+	{
+		name: 'tokens.supported',
+		controller: getSupportedTokens,
+		params: {
+			limit: { optional: true, type: 'number' },
+			offset: { optional: true, type: 'number' },
+		},		
+	},
+];

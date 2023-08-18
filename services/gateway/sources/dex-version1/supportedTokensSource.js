@@ -14,17 +14,22 @@
  *
  */
 
+const supportedTokensMetadata = require('./mappings/supportedTokensMetadata');
+
 module.exports = {
 	type: 'moleculer',
-	method: 'dex.tokens.available',
+	method: 'dex.tokens.supported',
 	params: {
 		limit: '=,string',
 		offset: '=,string',
 	},
 	definition: {
-		data: {
-			tokensAvailable: '='
+		data: ['data', supportedTokensMetadata],
+		meta: {
+			count: '=,number',
+			offset: '=,number',
+			total: '=,number',
 		},
-		meta: {},
+		links: {},
 	},
 };

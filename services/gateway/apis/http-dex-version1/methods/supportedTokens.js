@@ -13,15 +13,15 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const tokensAvailableSource = require('../../../sources/dex-version1/tokensAvailableSource');
+const tokensAvailableSource = require('../../../sources/dex-version1/supportedTokensSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const regex = require('../../../shared/regex');
-const envelope = require('../methods/dataDefinitions/stdEnvelope')
+const envelope = require('./dataDefinitions/stdEnvelope')
 
 module.exports = {
 	version: '2.0',
-	swaggerApiPath: '/tokens/available',
-	rpcMethod: 'get.tokens.available',
+	swaggerApiPath: '/tokens/supported',
+	rpcMethod: 'get.tokens.supported',
 	tags: ['Tokens'],
 	params: {
 		limit: { optional: true, type: 'string', min: 1, max: 100, pattern: regex.NONCE },

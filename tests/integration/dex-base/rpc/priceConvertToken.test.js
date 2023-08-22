@@ -16,19 +16,19 @@
 
 const config = require('../../../config');
 const { request } = require('../../../helpers/socketIoRpcRequest');
-const { priceConvertFiatSchema } = require('../../../schemas/dex-base/priceConvertFiatSchema')
+const { priceConvertTokenSchema } = require('../../../schemas/dex-base/priceConvertTokenSchema')
 const wsRpcUrl = `${config.SERVICE_ENDPOINT}/rpc-dex-v1`;
-const getPricesConvertFiat = async params => request(wsRpcUrl, 'get.dex.prices.convert.fiat', params);
+const getPricesConvertToken = async params => request(wsRpcUrl, 'get.dex.prices.convert.token', params);
 
 describe('Method get.dex.prices.convert.fiat', () => {
-	describe('is able to retrieve specified currency fiat price for the input token', () => {
+	describe('is able to convert price of token1 to token1', () => {
 		it('returns fiat price', async () => {
 			try {
-				const response = await getPricesConvertFiat({currency:'USD', tokenSymbol:'LSK'});
+				const response = await getPricesConvertToken({tokenSymbol:'LSK', conversionTokenSymbol:'BTC'});
 				const { result } = response;
-				expect(result.data).toMap(priceConvertFiatSchema);
-				expect(result.data.convertedPrice).toBeGreaterThan(0.0000);
-				expect(result.data.convertedTarget).toBe('USD');
+				expect(result.data).toMap(priceConvertTokenSchema);
+				expect(result.data.credibleDirectPriceToken2ToToken1).toBeGreaterThan(0.0000);
+				expect(result.data.credibleDirectPriceToken2ToToken1).toBeGreaterThan(0.0000);
 			} catch (err) {
 				// TODO: add more explicit message for the error
 				throw err;

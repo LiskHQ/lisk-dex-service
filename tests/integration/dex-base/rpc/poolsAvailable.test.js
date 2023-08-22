@@ -16,19 +16,20 @@
 
 const config = require('../../../config');
 const { request } = require('../../../helpers/socketIoRpcRequest');
-const { priceConvertFiatSchema } = require('../../../schemas/dex-base/priceConvertFiatSchema')
+const { poolsAvailableMetaResponseSchema,goodResponseSchema,poolsAvailableResponseSchema } = require('../../../schemas/dex-base/poolsSchema')
 const wsRpcUrl = `${config.SERVICE_ENDPOINT}/rpc-dex-v1`;
-const getPricesConvertFiat = async params => request(wsRpcUrl, 'get.dex.prices.convert.fiat', params);
+const getPoolsAvailable = async params => request(wsRpcUrl, 'get.dex.pools.available', params);
 
-describe('Method get.dex.prices.convert.fiat', () => {
+describe('Method get.dex.pools.available', () => {
 	describe('is able to retrieve specified currency fiat price for the input token', () => {
-		it('returns fiat price', async () => {
+		it('returns a list of pools', async () => {
 			try {
-				const response = await getPricesConvertFiat({currency:'USD', tokenSymbol:'LSK'});
+				const response = await getPoolsAvailable({ limit: '0', offset: '0' });
 				const { result } = response;
-				expect(result.data).toMap(priceConvertFiatSchema);
-				expect(result.data.convertedPrice).toBeGreaterThan(0.0000);
-				expect(result.data.convertedTarget).toBe('USD');
+				expect(result).toMap(goodResponseSchema);
+				expect(result.data).toBeInstanceOf(Object);
+				expect(result.data).toMap(poolsAvailableResponseSchema);
+				expect(result.meta).toMap(poolsAvailableMetaResponseSchema);
 			} catch (err) {
 				// TODO: add more explicit message for the error
 				throw err;

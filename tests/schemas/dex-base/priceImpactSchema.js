@@ -19,19 +19,19 @@ const regex = require('./regex.js');
 import Joi from 'joi';
 
 const goodResponseSchema = {
-	data: Joi.object(poolsAvailableResponseSchema).required(),
-	meta: Joi.object(poolsAvailableMetaResponseSchema).required(),
+	data: Joi.object(priceImpactResponseSchema).required(),
+	meta: Joi.object(priceImpactMetaResponseSchema).required(),
 };
 
 
-const poolsAvailableResponseSchema = {
-	poolsAvailable: Joi.array().items(poolsAvailable).required(),
+const priceImpactResponseSchema = {
+	priceImpact: Joi.array().items(priceImpact).required(),
 };
 
-const poolsAvailableMetaResponseSchema = {};
+const priceImpactMetaResponseSchema = {};
 
 module.exports = {
-	poolsAvailableMetaResponseSchema: Joi.object(poolsAvailableMetaResponseSchema).required(),
+	priceImpactMetaResponseSchema: Joi.object(priceImpactMetaResponseSchema).required(),
 	goodResponseSchema: Joi.object(goodResponseSchema).required(),
-	poolsAvailableResponseSchema: Joi.object(poolsAvailableResponseSchema).required(),
+	priceImpactResponseSchema: Joi.object(priceImpactResponseSchema).required(),
 };

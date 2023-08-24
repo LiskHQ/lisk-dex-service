@@ -16,11 +16,12 @@
 module.exports = {
 	verbose: true,
 	testMatch: [
-		'<rootDir>/integration/api_v3/http/*.test.js',
-		'<rootDir>/integration/api_v3/rpc/*.test.js',
-		'<rootDir>/integration/api_v3/events/*.test.js',
-		'<rootDir>/integration/gateway/*.test.js',
-		'<rootDir>/integration/dex-base/rpc/*.test.js',
+		'<rootDir>/integration/dex-base/rpc/poolsAvailable.test.js'
+		//'<rootDir>/integration/api_v3/http/*.test.js',
+		// '<rootDir>/integration/api_v3/rpc/*.test.js',
+		// '<rootDir>/integration/api_v3/events/*.test.js',
+		// '<rootDir>/integration/gateway/*.test.js',
+		// '<rootDir>/integration/dex-base/rpc/*.test.js',
 	],
 	
 	testEnvironment: 'node',

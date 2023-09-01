@@ -17,17 +17,20 @@
 
 import Joi from 'joi';
 
-const goodResponseSchema = {
-	data: Joi.object(popularPairingsResponseSchema).required(),
-	meta: Joi.object(popularPairingsMetaResponseSchema).required(),
-};
 
 
 const popularPairingsResponseSchema = {
 	popularPairings: Joi.array().items(popularPairings).required(),
 };
 
+
 const popularPairingsMetaResponseSchema = {};
+
+const goodResponseSchema = {
+	data: Joi.object(popularPairingsResponseSchema).required(),
+	meta: Joi.object(popularPairingsMetaResponseSchema).required(),
+};
+
 
 module.exports = {
 	popularPairingsMetaResponseSchema: Joi.object(popularPairingsMetaResponseSchema).required(),

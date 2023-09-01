@@ -20,7 +20,7 @@ const getPopularPairings = async params => {
 	try {
 		const response = await dataService.getPopularPairings(params);
 		return {
-			data: { populatPairing: response.data.popularPairings, },
+			data: { popularPairings: response.data.popularPairings, },
 			meta: response.meta,
 			links: {},
 		};

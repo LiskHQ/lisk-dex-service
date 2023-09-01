@@ -18,6 +18,11 @@ const regex = require('./regex.js');
 
 import Joi from 'joi';
 
+
+const poolsAvailable = {
+	poolsAvailable: Joi.array().items(Joi.string().pattern(regex.TOKEN_ID)).required()
+};
+
 const goodResponseSchema = {
 	data: Joi.object(poolsAvailableResponseSchema).required(),
 	meta: Joi.object(poolsAvailableMetaResponseSchema).required(),

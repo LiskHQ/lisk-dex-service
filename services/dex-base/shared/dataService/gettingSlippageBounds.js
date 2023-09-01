@@ -21,7 +21,14 @@ const gettingSlippageBounds = async (params) => {
 	try {
 		const swapResponse = await invokeEndpoint('dex_dryRunSwapExactOut', params);
         if(swapResponse.error!=null){
-            throw new Error (`error in calling dex_dryRunSwapExactIn.\n${swapResponse.error.message}`);
+           return{
+			data:{
+				minimum:swapResponse.error.message,
+				maximum:swapResponse.error.message,
+				unit: "percentage",
+				symbol: "%",
+			}
+		   }
         }
 		return {
 			data: {

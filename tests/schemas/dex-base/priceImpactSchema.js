@@ -14,21 +14,18 @@
  *
  */
 
-const regex = require('./regex.js');
-
 import Joi from 'joi';
-
-const goodResponseSchema = {
-	data: Joi.object(priceImpactResponseSchema).required(),
-	meta: Joi.object(priceImpactMetaResponseSchema).required(),
-};
-
 
 const priceImpactResponseSchema = {
 	priceImpact: Joi.array().items(priceImpact).required(),
 };
 
 const priceImpactMetaResponseSchema = {};
+
+const goodResponseSchema = {
+	data: Joi.object(priceImpactResponseSchema).required(),
+	meta: Joi.object(priceImpactMetaResponseSchema).required(),
+};
 
 module.exports = {
 	priceImpactMetaResponseSchema: Joi.object(priceImpactMetaResponseSchema).required(),

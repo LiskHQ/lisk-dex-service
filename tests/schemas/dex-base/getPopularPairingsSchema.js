@@ -14,7 +14,6 @@
  *
  */
 
-const regex = require('./regex.js');
 
 import Joi from 'joi';
 

@@ -14,14 +14,11 @@
  *
  */
 
-const regex = require('./regex.js');
+
 
 import Joi from 'joi';
 
-const goodResponseSchema = {
-	data: Joi.object(gettingSlippageBoundsResponseSchema).required(),
-	meta: Joi.object(gettingSlippageBoundsMetaResponseSchema).required(),
-};
+
 
 
 const gettingSlippageBoundsResponseSchema = {
@@ -30,6 +27,11 @@ const gettingSlippageBoundsResponseSchema = {
 };
 
 const gettingSlippageBoundsMetaResponseSchema = {};
+
+const goodResponseSchema = {
+	data: Joi.object(gettingSlippageBoundsResponseSchema).required(),
+	meta: Joi.object(gettingSlippageBoundsMetaResponseSchema).required(),
+};
 
 module.exports = {
 	gettingSlippageBoundsMetaResponseSchema: Joi.object(gettingSlippageBoundsMetaResponseSchema).required(),

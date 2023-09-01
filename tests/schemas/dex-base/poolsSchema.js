@@ -23,10 +23,7 @@ const poolsAvailable = {
 	poolsAvailable: Joi.array().items(Joi.string().pattern(regex.TOKEN_ID)).required()
 };
 
-const goodResponseSchema = {
-	data: Joi.object(poolsAvailableResponseSchema).required(),
-	meta: Joi.object(poolsAvailableMetaResponseSchema).required(),
-};
+
 
 
 const poolsAvailableResponseSchema = {
@@ -34,6 +31,11 @@ const poolsAvailableResponseSchema = {
 };
 
 const poolsAvailableMetaResponseSchema = {};
+
+const goodResponseSchema = {
+	data: Joi.object(poolsAvailableResponseSchema).required(),
+	meta: Joi.object(poolsAvailableMetaResponseSchema).required(),
+};
 
 module.exports = {
 	poolsAvailableMetaResponseSchema: Joi.object(poolsAvailableMetaResponseSchema).required(),

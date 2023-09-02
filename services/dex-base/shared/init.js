@@ -13,21 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const logger = require('lisk-service-framework').Logger();
+
+const { initDatabase } = require('./database/index');
+
+
+const init = async () => {
+	try {
+		await initDatabase();
+	} catch (error) {
+		const errorMsg = Array.isArray(error)
+			? error.map(e => e.message).join('\n')
+			: error.message;
+		logger.error(`Unable to initialize metadata information due to: ${errorMsg}`);
+	}
+};
+
 module.exports = {
-	tableName: 'application_metadata',
-	primaryKey: ['network', 'chainName'],
-	schema: {
-		chainName: { type: 'string' },
-		chainID: { type: 'string' },
-		network: { type: 'string' },
-		isDefault: { type: 'boolean', null: false, defaultValue: false },
-		appDirName: { type: 'string' },
-	},
-	indexes: {
-		chainID: { type: 'key' },
-		chainName: { type: 'key' },
-		network: { type: 'key' },
-		isDefault: { type: 'key' },
-	},
-	purge: {},
+	init,
 };

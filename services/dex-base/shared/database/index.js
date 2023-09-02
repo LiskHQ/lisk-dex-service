@@ -25,8 +25,7 @@ const logger = Logger();
 const config = require('../../config');
 
 const indexSchemas = {
-	application_metadata: require('./schema/application_metadata'),
-	token_metadata: require('./schema/token_metadata'),
+	token_metadata: require('./schema/dex_info_top_tokens'),
 };
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
@@ -60,7 +59,7 @@ const truncateAllTables = async () => {
 };
 
 const initDatabase = async () => {
-	if (config.isRebuildIndexAtInit) await truncateAllTables();
+	//if (config.isRebuildIndexAtInit) await truncateAllTables();
 	await initializeSearchIndex();
 };
 

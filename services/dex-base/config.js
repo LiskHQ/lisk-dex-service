@@ -14,7 +14,9 @@
  *
  */
 const config = {
-    endpoints: {},
+    endpoints: {
+		mysql:process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk',
+	},
 };
 
 config.dataDir = `${__dirname}/data`;

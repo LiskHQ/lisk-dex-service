@@ -16,9 +16,9 @@
 
 const dataService = require('../../shared/dataService');
 
-const getVotes = async params => {
+const getTransactionsByTokenID = async params => {
 	try {
-		const response = await dataService.getVotes(params);
+		const response = await dataService.getTransactionsByTokenID(params);
 
 		return {
 			data: {
@@ -34,5 +34,5 @@ const getVotes = async params => {
 
 
 module.exports = {
-	getVotes,
+	getTransactionsByTokenID,
 };

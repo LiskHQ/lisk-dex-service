@@ -15,9 +15,9 @@
  */
 
 const {
-    getVotes
-} = require ('./votes')
+    getTransactionsByTokenID
+} = require ('./getTransactionsByTokenID')
 
 module.exports = {
-    getVotes
+    getTransactionsByTokenID
 }

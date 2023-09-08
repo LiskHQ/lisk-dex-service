@@ -17,22 +17,18 @@ const BluebirdPromise = require('bluebird');
 
 const {
 	Logger,
-	MySQL: {
-		getDbConnection,
-		getTableInstance,
-		startDbTransaction,
-		commitDbTransaction,
-		rollbackDbTransaction,
+	MySQL: {		
+		getTableInstance,		
 	},
 } = require('lisk-service-framework');
 
 const logger = Logger();
 
 const config = require('../../config');
-const { set, get } = require('./mysqlKVStore');
 
 const indexSchemas = {
 	token_metadata: require('./schema/dex_info_top_tokens'),
+	pool_metadata: require('')
 };
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
@@ -65,25 +61,9 @@ const truncateAllTables = async () => {
 	logger.debug('Truncated all the tables successfully.');
 };
 
-const initTopTokensTable = async() => {
-	try {
-		const connection = await getDbConnection(MYSQL_ENDPOINT);
-		const dbTrx = await startDbTransaction(connection);
-		await set("tokenName", "LSK", dbTrx);
-		await commitDbTransaction(dbTrx);
-
-	} catch (error) {
-		console.log("error in usertin")
-	}
-	
-	
-}
-
 const initDatabase = async () => {
-	//if (config.isRebuildIndexAtInit) await truncateAllTables();
-	
+	await truncateAllTables();	
 	await initializeSearchIndex();
-	await initTopTokensTable();
 };
 
 module.exports = {

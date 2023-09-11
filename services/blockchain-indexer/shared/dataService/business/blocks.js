@@ -13,51 +13,46 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const BluebirdPromise = require('bluebird');
-
 const util = require('util');
+const BluebirdPromise = require('bluebird');
 
 const {
 	CacheRedis,
 	Logger,
-	MySQL: { getTableInstance },
+	DB: { MySQL: { getTableInstance } },
 } = require('lisk-service-framework');
 
 const logger = Logger();
 
-// const { getEventsByHeight } = require('./events');
-const { getFinalizedHeight } = require('../../constants');
-const blocksIndexSchema = require('../../database/schema/blocks');
+const { getEventsByHeight } = require('./events');
+const { getFinalizedHeight, MODULE, EVENT } = require('../../constants');
+const blocksTableSchema = require('../../database/schema/blocks');
 
-const { getIndexedAccountInfo } = require('../../utils/accountUtils');
+const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
-const { normalizeRangeParam } = require('../../utils/paramUtils');
+const { normalizeRangeParam } = require('../../utils/param');
 const { parseToJSONCompatObj } = require('../../utils/parser');
-const { normalizeTransaction } = require('../../utils/transactionsUtils');
-const { getNameByAddress } = require('../../utils/validatorUtils');
+const { normalizeTransaction } = require('../../utils/transactions');
+const { getNameByAddress } = require('../../utils/validator');
 
 const config = require('../../../config');
 
-const MYSQL_ENDPOINT = config.endpoints.mysql;
+const MYSQL_ENDPOINT = config.endpoints.mysqlReplica;
 
-const getBlocksIndex = () => getTableInstance(
-	blocksIndexSchema.tableName,
-	blocksIndexSchema,
-	MYSQL_ENDPOINT,
-);
+const getBlocksTable = () => getTableInstance(blocksTableSchema, MYSQL_ENDPOINT);
 
 const latestBlockCache = CacheRedis('latestBlock', config.endpoints.cache);
 
 let latestBlock;
 
-const normalizeBlock = async (originalblock) => {
+const normalizeBlock = async (originalBlock) => {
 	try {
-		const blocksTable = await getBlocksIndex();
+		const blocksTable = await getBlocksTable();
 
 		const block = {
-			...originalblock.header,
-			transactions: originalblock.transactions,
-			assets: originalblock.assets,
+			...originalBlock.header,
+			transactions: originalBlock.transactions,
+			assets: originalBlock.assets,
 		};
 
 		if (block.generatorAddress) {
@@ -78,11 +73,35 @@ const normalizeBlock = async (originalblock) => {
 		block.isFinal = block.height <= (await getFinalizedHeight());
 		block.numberOfTransactions = block.transactions.length;
 		block.numberOfAssets = block.assets.length;
-		const [{ numberOfEvents, reward } = {}] = await blocksTable.find({ height: block.height }, ['numberOfEvents', 'reward']);
-		block.numberOfEvents = numberOfEvents;
 
+		const { numberOfEvents, reward } = await (async () => {
+			const [dbResponse] = await blocksTable.find(
+				{ height: block.height, limit: 1 },
+				['numberOfEvents', 'reward'],
+			);
+
+			if (dbResponse) {
+				return {
+					numberOfEvents: dbResponse.numberOfEvents,
+					reward: dbResponse.reward,
+				};
+			}
+
+			const events = await getEventsByHeight(block.height);
+			const blockRewardEvent = events.find(
+				e => [MODULE.REWARD, MODULE.DYNAMIC_REWARD].includes(e.module)
+					&& e.name === EVENT.REWARD_MINTED,
+			);
+
+			return {
+				numberOfEvents: events.length,
+				reward: blockRewardEvent ? blockRewardEvent.data.amount : null,
+			};
+		})();
+
+		block.numberOfEvents = numberOfEvents;
 		block.size = 0;
-		// TODO: get reward value from block event
+		block.reward = reward;
 		block.totalForged = BigInt(reward || '0');
 		block.totalBurnt = BigInt('0');
 		block.networkFee = BigInt('0');
@@ -103,7 +122,7 @@ const normalizeBlock = async (originalblock) => {
 
 		return parseToJSONCompatObj(block);
 	} catch (error) {
-		logger.error(`Error occured when normalizing block at height ${originalblock.header.height}, id: ${originalblock.header.id}:\n${error.stack}`);
+		logger.error(`Error occurred when normalizing block at height ${originalBlock.header.height}, id: ${originalBlock.header.id}:\n${error.stack}`);
 		throw error;
 	}
 };
@@ -166,7 +185,7 @@ const isQueryFromIndex = params => {
 };
 
 const getBlocks = async params => {
-	const blocksTable = await getBlocksIndex();
+	const blocksTable = await getBlocksTable();
 	const blocks = {
 		data: [],
 		meta: {},
@@ -226,7 +245,7 @@ const filterBlockAssets = (modules, block) => {
 };
 
 const getBlocksAssets = async (params) => {
-	const blocksTable = await getBlocksIndex();
+	const blocksTable = await getBlocksTable();
 	const blockAssets = {
 		data: [],
 		meta: {},

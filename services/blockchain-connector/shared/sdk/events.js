@@ -20,6 +20,7 @@ const { Logger, Signals } = require('lisk-service-framework');
 const { getApiClient } = require('./client');
 const { formatEvent } = require('./formatter');
 const { getRegisteredEvents, getEventsByHeight, getNodeInfo } = require('./endpoints');
+const { updateTokenInfo } = require('./token');
 
 const logger = Logger();
 
@@ -28,17 +29,6 @@ const EVENT_CHAIN_BLOCK_NEW = 'chain_newBlock';
 const EVENT_CHAIN_BLOCK_DELETE = 'chain_deleteBlock';
 const EVENT_CHAIN_VALIDATORS_CHANGE = 'chain_validatorsChanged';
 const EVENT_TX_POOL_TRANSACTION_NEW = 'txpool_newTransaction';
-//dex-base-events
-const EVENT_POOL_CREATED = 'poolCreated';
-const EVENT_POOL_CREATION_FAILED = 'poolCreationFailed';
-const EVENT_POSITION_CREATED = 'positionCreated';
-const EVENT_POSITION_CREATION_FAILED = 'positionCreationFailed';
-const EVENT_POSITION_UPDATED = 'positionUpdated';
-const EVENT_POSITION_UPDATE_FAILED = 'positionUpdateFailed';
-const EVENT_REMOVE_LIQUIDITY = 'removeLiquidity';
-const EVENT_REMOVE_LIQUIDITY_FAILED = 'removeLiquidityFailed';
-const EVENT_SWAPPED = 'swapped';
-const EVENT_SWAP_FIALED = 'swapFailed';
 
 const events = [
 	EVENT_CHAIN_FORK,
@@ -46,17 +36,12 @@ const events = [
 	EVENT_CHAIN_BLOCK_DELETE,
 	EVENT_CHAIN_VALIDATORS_CHANGE,
 	EVENT_TX_POOL_TRANSACTION_NEW,
-	EVENT_POOL_CREATED,
-	EVENT_POOL_CREATION_FAILED,
-	EVENT_POSITION_CREATED,
-	EVENT_POSITION_CREATION_FAILED,
-	EVENT_POSITION_UPDATED,
-	EVENT_POSITION_UPDATE_FAILED,
-	EVENT_REMOVE_LIQUIDITY,
-	EVENT_REMOVE_LIQUIDITY_FAILED,
-	EVENT_SWAPPED,
-	EVENT_SWAP_FIALED,
 ];
+
+const logError = (method, err) => {
+	logger.warn(`Invocation for ${method} failed with error: ${err.message}.`);
+	logger.debug(err.stack);
+};
 
 const subscribeToAllRegisteredEvents = async () => {
 	const apiClient = await getApiClient();
@@ -66,14 +51,17 @@ const subscribeToAllRegisteredEvents = async () => {
 		apiClient.subscribe(
 			event,
 			async payload => {
-				// Force update nodeInfo cache on new chain events
-				if (event.startsWith('chain_')) await getNodeInfo(true);
+				// Force update necessary caches on new chain events
+				if (event.startsWith('chain_')) {
+					await getNodeInfo(true).catch(err => logError('getNodeInfo', err));
+					await updateTokenInfo().catch(err => logError('updateTokenInfo', err));
+				}
 
 				logger.debug(`Received event: ${event} with payload:\n${util.inspect(payload)}`);
 				Signals.get(event).dispatch(payload);
 			},
 		);
-		logger.info(`Subscribed to the API client event: ${event}`);
+		logger.info(`Subscribed to the API client event: ${event}.`);
 	});
 };
 

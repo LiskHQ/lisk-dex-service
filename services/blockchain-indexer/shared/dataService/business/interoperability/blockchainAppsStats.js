@@ -15,7 +15,9 @@
 */
 const {
 	Logger,
-	MySQL: { getTableInstance },
+	DB: {
+		MySQL: { getTableInstance },
+	},
 } = require('lisk-service-framework');
 
 const logger = Logger();
@@ -23,15 +25,15 @@ const logger = Logger();
 const { APP_STATUS } = require('./constants');
 const config = require('../../../../config');
 
-const MYSQL_ENDPOINT = config.endpoints.mysql;
+const MYSQL_ENDPOINT = config.endpoints.mysqlReplica;
 
 const blockchainAppsTableSchema = require('../../../database/schema/blockchainApps');
+const { requestConnector } = require('../../../utils/request');
+const { getAnnualInflation } = require('../dynamicReward');
+const { getNetworkStatus } = require('../network');
+const { getTotalStaked } = require('../../../utils/pos');
 
-const getBlockchainAppsTable = () => getTableInstance(
-	blockchainAppsTableSchema.tableName,
-	blockchainAppsTableSchema,
-	MYSQL_ENDPOINT,
-);
+const getBlockchainAppsTable = () => getTableInstance(blockchainAppsTableSchema, MYSQL_ENDPOINT);
 
 let blockchainAppsStatsCache = {};
 
@@ -50,20 +52,24 @@ const reloadBlockchainAppsStats = async () => {
 		// TODO: Update implementation once interoperability_getOwnChainAccount is available
 		const blockchainAppsTable = await getBlockchainAppsTable();
 
-		const numActiveChains = await blockchainAppsTable.count({ status: APP_STATUS.ACTIVE });
+		const numActivatedChains = await blockchainAppsTable.count({ status: APP_STATUS.ACTIVATED });
 		const numRegisteredChains = await blockchainAppsTable.count({ status: APP_STATUS.REGISTERED });
 		const numTerminatedChains = await blockchainAppsTable.count({ status: APP_STATUS.TERMINATED });
 
-		logger.debug('Updating blockchain apps statistics cache');
+		const { totalSupply: [{ totalSupply }] } = await requestConnector('getTotalSupply');
+		const { data: { height } } = await getNetworkStatus();
+		const { data: { rate: annualInflation } } = await getAnnualInflation({ height });
+		const { amount: totalStaked } = await getTotalStaked();
+
+		logger.debug('Updating blockchain apps statistics cache.');
 
 		blockchainAppsStatsCache = {
 			registered: numRegisteredChains,
-			active: numActiveChains,
+			activated: numActivatedChains,
 			terminated: numTerminatedChains,
-			// TODO: Get these information directly from SDK once issue https://github.com/LiskHQ/lisk-sdk/issues/7225 is closed
-			totalSupplyLSK: '',
-			stakedLSK: '',
-			inflationRate: '',
+			totalSupplyLSK: totalSupply,
+			totalStakedLSK: totalStaked,
+			currentAnnualInflationRate: annualInflation,
 		};
 
 		logger.info('Updated blockchain apps statistics cache.');

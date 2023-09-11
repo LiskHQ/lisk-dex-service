@@ -32,8 +32,8 @@ const config = require('../config');
 
 const logger = Logger();
 
-const eventsQueue = new MessageQueue(
-	config.queue.events.name,
+const eventMessageQueue = new MessageQueue(
+	config.queue.event.name,
 	config.endpoints.messageQueue,
 	{ defaultJobOptions: config.queue.defaultJobOptions },
 );
@@ -47,7 +47,6 @@ const newBlockProcessor = async (block) => {
 	Signals.get('newBlock').dispatch(response);
 };
 
-// TODO: Test delete block implementation with the issue https://github.com/LiskHQ/lisk-service/issues/1189
 const deleteBlockProcessor = async (block) => {
 	let response;
 	try {
@@ -76,7 +75,7 @@ const newRoundProcessor = async () => {
 };
 
 const initEventsProcess = async () => {
-	eventsQueue.process(async (job) => {
+	eventMessageQueue.process(async (job) => {
 		logger.debug('Subscribed to the events from coordinator.');
 		const { isNewBlock, isDeleteBlock, isNewRound } = job.data;
 

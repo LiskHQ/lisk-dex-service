@@ -21,6 +21,8 @@ const config = require('../../../../config');
 
 const { requestConnector } = require('../../../utils/request');
 
+const { getIndexedAccountInfo } = require('../../utils/account');
+
 const LAST_BLOCK_KEY = 'lastBlock';
 const lastBlockCache = CacheRedis(LAST_BLOCK_KEY, config.endpoints.cache);
 
@@ -67,7 +69,6 @@ const getAllPosValidators = async () => {
 	const validators = await BluebirdPromise.map(
 		rawValidators,
 		async validator => {
-			// TODO: Get validatorWeight from SDK directly when available
 			if (validator.isBanned || await verifyIfPunished(validator)) {
 				validator.validatorWeight = BigInt('0');
 			} else {
@@ -78,7 +79,12 @@ const getAllPosValidators = async () => {
 					: validator.totalStake;
 			}
 
-			return validator;
+			const { publicKey = null } = await getIndexedAccountInfo({ address: validator.address }, ['publicKey']);
+
+			return {
+				...validator,
+				publicKey,
+			};
 		},
 		{ concurrency: rawValidators.length },
 	);

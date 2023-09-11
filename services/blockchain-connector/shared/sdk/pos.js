@@ -20,7 +20,9 @@ const {
 
 const { timeoutMessage, invokeEndpoint } = require('./client');
 const { MODULE_NAME_POS } = require('./constants/names');
-const { getBlockByHeight } = require('./endpoints');
+const { getBlockByHeight } = require('./blocks');
+const regex = require('../utils/regex');
+const { getGenesisHeight } = require('./genesisBlock');
 
 const logger = Logger();
 
@@ -93,6 +95,14 @@ const getPosPendingUnlocks = async (address) => {
 const getStaker = async (address) => {
 	try {
 		const staker = await invokeEndpoint('pos_getStaker', { address });
+
+		if (staker.error && regex.KEY_NOT_EXIST.test(staker.error.message)) {
+			return {
+				stakes: [],
+				pendingUnlocks: [],
+			};
+		}
+
 		return staker;
 	} catch (err) {
 		if (err.message.includes(timeoutMessage)) {
@@ -129,9 +139,10 @@ const getPosLockedReward = async ({ address, tokenID }) => {
 	}
 };
 
-const getPoSGenesisStakers = async (height) => {
+const getPoSGenesisStakers = async () => {
 	try {
-		const block = await getBlockByHeight(height, true);
+		const genesisHeight = await getGenesisHeight();
+		const block = await getBlockByHeight(genesisHeight, true);
 		const { stakers = [] } = (block.assets
 			.find(asset => asset.module === MODULE_NAME_POS)).data;
 		return stakers;
@@ -143,9 +154,10 @@ const getPoSGenesisStakers = async (height) => {
 	}
 };
 
-const getPoSGenesisValidators = async (height) => {
+const getPoSGenesisValidators = async () => {
 	try {
-		const block = await getBlockByHeight(height, true);
+		const genesisHeight = await getGenesisHeight();
+		const block = await getBlockByHeight(genesisHeight, true);
 		const { validators = [] } = (block.assets
 			.find(asset => asset.module === MODULE_NAME_POS)).data;
 		return validators;

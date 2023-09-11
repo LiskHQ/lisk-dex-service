@@ -13,7 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { Logger, Exceptions: { TimeoutException }, Signals } = require('lisk-service-framework');
+const { Logger, Signals } = require('lisk-service-framework');
 const {
 	createWSClient,
 	createIPCClient,
@@ -28,39 +28,23 @@ const logger = Logger();
 // Constants
 const timeoutMessage = 'Response not received in';
 const liskAddress = config.endpoints.liskWs;
-const MAX_INSTANTIATION_WAIT_TIME = 100; // in ms
-const RETRY_INTERVAL = 500; // ms
 const NUM_REQUEST_RETRIES = 5;
-const LIVENESS_CHECK_THRESHOLD_IN_MS = 1000; // in ms
+const RETRY_INTERVAL = 500; // ms
+const MAX_INSTANTIATION_WAIT_TIME = 100; // in ms
 
 // Caching and flags
 let clientCache;
 let instantiationBeginTime;
-let lastApiClientLivelinessCheck = 0;
-let isClientAlive = false;
 let isInstantiating = false;
 
-const checkIsClientAlive = async () => {
-	if (config.isUseLiskIPCClient) {
-		if (Date.now() - lastApiClientLivelinessCheck > LIVENESS_CHECK_THRESHOLD_IN_MS) {
-			await clientCache._channel.invoke('system_getNodeInfo')
-				.then(() => { isClientAlive = true; })
-				.catch(() => { isClientAlive = false; })
-				.finally(() => { if (isClientAlive) lastApiClientLivelinessCheck = Date.now(); });
-		}
-	} else {
-		isClientAlive = clientCache._channel.isAlive;
-	}
-
-	return isClientAlive;
-};
+const checkIsClientAlive = () => clientCache && clientCache._channel.isAlive;
 
 // eslint-disable-next-line consistent-return
 const instantiateClient = async () => {
 	try {
 		if (!isInstantiating) {
 			// TODO: Verify and enable the code
-			if (!clientCache || !(await checkIsClientAlive())) {
+			if (!checkIsClientAlive()) {
 				isInstantiating = true;
 				instantiationBeginTime = Date.now();
 				// if (clientCache) await clientCache.disconnect();
@@ -84,9 +68,12 @@ const instantiateClient = async () => {
 			isInstantiating = false;
 		}
 	} catch (err) {
-		logger.error(`Error instantiating WS client to ${liskAddress}`);
+		// Nullify the apiClient cache, so that it can be re-instantiated properly
+		clientCache = null;
+
+		logger.error(`Error instantiating WS client to ${liskAddress}.`);
 		logger.error(err.message);
-		if (err.code === 'ECONNREFUSED') throw new Error('ECONNREFUSED: Unable to reach a network node');
+		if (err.code === 'ECONNREFUSED') throw new Error('ECONNREFUSED: Unable to reach a network node.');
 
 		return {
 			data: { error: 'Action not supported' },
@@ -97,9 +84,7 @@ const instantiateClient = async () => {
 
 const getApiClient = async () => {
 	const apiClient = await waitForIt(instantiateClient, RETRY_INTERVAL);
-	return (apiClient && await checkIsClientAlive())
-		? apiClient
-		: getApiClient();
+	return checkIsClientAlive() ? apiClient : getApiClient();
 };
 
 // eslint-disable-next-line consistent-return
@@ -112,8 +97,11 @@ const invokeEndpoint = async (endpoint, params = {}, numRetries = NUM_REQUEST_RE
 			const response = await apiClient._channel.invoke(endpoint, params);
 			return response;
 		} catch (err) {
-			if (retries && err instanceof TimeoutException) await delay(10);
-			else throw err;
+			if (retries && err.message.includes(timeoutMessage)) {
+				await delay(10);
+			} else {
+				throw err;
+			}
 		}
 		/* eslint-enable no-await-in-loop */
 	} while (retries--);

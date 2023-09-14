@@ -28,7 +28,7 @@ const config = require('../../config');
 
 const indexSchemas = {
 	token_metadata: require('./schema/dex_info_top_tokens'),
-	pool_metadata: require('')
+	pool_metadata: require('./schema/dex_info_top_pools')
 };
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;

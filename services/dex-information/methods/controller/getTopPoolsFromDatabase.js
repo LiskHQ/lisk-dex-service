@@ -14,20 +14,25 @@
  *
  */
 
-const {
-    getTransactionsByTokenID
-} = require ('./getTransactionsByTokenID')
+const dataService = require('../../shared/dataService');
 
-const {
-    getTopPoolsFromDatabase
-} = require ('./getTopPoolsFromDatabase')
+const getTransactionsByTokenID = async params => {
+	try {
+		const response = await dataService.getTransactionsByTokenID(params);
 
-const {
-    getTopTokensFromDatabase
-} = require ('./getTopTokensFromDatabase')
+		return {
+			data: {
+				transactionsByTokenID:response.data.transactionsByTokenID,
+			},
+			meta: {}
+		};
+	} catch (err) {
+		// TODO: throwing caught error
+		throw err;
+	}
+};
+
 
 module.exports = {
-    getTransactionsByTokenID,
-    getTopPoolsFromDatabase,
-    getTopTokensFromDatabase
-}
+	getTransactionsByTokenID,
+};

@@ -14,20 +14,16 @@
  *
  */
 
-const {
-    getTransactionsByTokenID
-} = require ('./getTransactionsByTokenID')
-
-const {
-    getTopPoolsFromDatabase
-} = require ('./getTopPoolsFromDatabase')
-
-const {
-    getTopTokensFromDatabase
-} = require ('./getTopTokensFromDatabase')
-
 module.exports = {
-    getTransactionsByTokenID,
-    getTopPoolsFromDatabase,
-    getTopTokensFromDatabase
-}
+	type: 'moleculer',
+	method: 'information.getTopTokensFromDatabase',
+	params: {
+		limit: '=,number',
+	},
+	definition: {
+		data: {
+			topPoolsFromDatabase:'='
+		},
+		meta: {},
+	},
+};

@@ -15,19 +15,17 @@
  */
 
 const {
-    getTransactionsByTokenID
-} = require ('./getTransactionsByTokenID')
+	getTopTokensFromDatabase,
+} = require('./controller/getTopTokensFromDatabase');
 
-const {
-    getTopPoolsFromDatabase
-} = require ('./getTopPoolsFromDatabase')
+const regex = require('../shared/regex');
 
-const {
-    getTopTokensFromDatabase
-} = require ('./getTopTokensFromDatabase')
-
-module.exports = {
-    getTransactionsByTokenID,
-    getTopPoolsFromDatabase,
-    getTopTokensFromDatabase
-}
+module.exports = [
+	{
+		name: 'getTopTokensFromDatabase',
+		controller: getTopTokensFromDatabase,
+		params: {
+			limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
+		},
+	},
+];

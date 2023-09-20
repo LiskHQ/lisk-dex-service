@@ -24,7 +24,7 @@ const {
 
 const logger = Logger();
 
-const config = require('../../config');
+const config = require('../../dex-base/config');
 
 const indexSchemas = {
 	token_metadata: require('./schema/dex_info_top_tokens'),

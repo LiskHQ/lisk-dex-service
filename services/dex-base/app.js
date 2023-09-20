@@ -26,7 +26,7 @@ const {
 const config = require('./config');
 const packageJson = require('./package.json');
 const { setAppContext } = require('./shared/utils/request');
-const { init } = require('./shared/init');
+
 
 // Configure logger
 const loggerConf = {
@@ -108,7 +108,6 @@ app.addJobs(path.join(__dirname, 'jobs'));
 
 // Run the application
 app.run().then(async() => {
-	await init();
 	logger.info(`Service started ${packageJson.name}`);	
 }).catch(err => {
 	logger.fatal(`Could not start the service ${packageJson.name} + ${err.message}`);

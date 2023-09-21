@@ -19,11 +19,14 @@ const { invokeEndpoint } = require("../sdk/client");
 const gettingCurrentsqrtprice = async (params) => {
 
   let currentsqrtprice;
-  poolID = params.poolID;
-  priceDirection = params.priceDirection;
 
+  const methodContext = {
+    poolID : params.poolID,
+    priceDirection : params.priceDirection,
+  }
+  
   try {
-    currentsqrtprice = await invokeEndpoint('dex_getCurrentSqrtPrice', { poolID, priceDirection });
+    currentsqrtprice = await invokeEndpoint('dex_getCurrentSqrtPrice', methodContext);
     if (currentsqrtprice.error != null) {
       return {
         data: {

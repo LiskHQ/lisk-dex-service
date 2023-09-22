@@ -16,13 +16,13 @@
 
 const dataService = require('../../shared/dataService');
 
-const getTransactionsByTokenID = async params => {
+const getTopTokensFromDatabase = async params => {
 	try {
-		const response = await dataService.getTransactionsByTokenID(params);
+		const response = await dataService.getTopTokensFromDatabase(params);
 
 		return {
 			data: {
-				transactionsByTokenID:response.data.transactionsByTokenID,
+				topTokensFromDatabase:response.data.getTopTokensFromDatabase,
 			},
 			meta: {}
 		};
@@ -34,5 +34,5 @@ const getTransactionsByTokenID = async params => {
 
 
 module.exports = {
-	getTransactionsByTokenID,
+	getTopTokensFromDatabase,
 };

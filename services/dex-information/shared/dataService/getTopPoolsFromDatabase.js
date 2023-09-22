@@ -14,9 +14,11 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
-const topPoolsMetadataIndexSchema = require('../../database/schema/dex_info_top_pools');
 
+const topPoolsMetadataIndexSchema = require('../../database/schema/dex_info_top_pools');
+const config = require('../../config');
+const { getTableInstance } = require('lisk-service-framework/src/mysql');
+const MYSQL_ENDPOINT = config.endpoints.mysql;
 
 const getTopPoolsMetadataIndex = () => getTableInstance(
 	topPoolsMetadataIndexSchema.tableName,
@@ -25,11 +27,9 @@ const getTopPoolsMetadataIndex = () => getTableInstance(
 );
 
 const getTopPoolsFromDatabase = async params => {
-	const { dataDir } = config;
-	const repo = config.gitHub.appRegistryRepoName;
 	const topPoolsTokenMetadataTable = await getTopPoolsMetadataIndex();
 
-	const topPoolsTokenMetadataData = {
+	const topPoolsMetadataData = {
 		data: [],
 		meta: {},
 	};
@@ -37,45 +37,16 @@ const getTopPoolsFromDatabase = async params => {
 	// Initialize DB params
 	params.whereIn = [];
 
-	const tokensResultSet = await tokenMetadataTable.find(params, ['network', 'chainID', 'chainName']);
+	//const tokensResultSet = await topPoolsTokenMetadataTable.find(params, ['poolName', 'poolTVL', 'chainName']);
 
-	const uniqueChainMap = {};
-	tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);
-	const uniqueChainList = Object.values(uniqueChainMap);
+	// const uniqueChainMap = {};
+	// tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);
+	// const uniqueChainList = Object.values(uniqueChainMap);
 
-	await BluebirdPromise.map(
-		uniqueChainList,
-		async (topPoolsMetaData) => {
+	let topPoolsData = await topPoolsTokenMetadataTable.rawQuery(` SELECT * FROM ${topPoolsMetadataIndexSchema.tableName}`);
 
-			const [{ topPoolsData }] = await topPoolsTokenMetadataTable.rawQuery(` SELECT * FROM ${topPoolsMetadataIndexSchema.tableName}`);
-
-			const appPathInClonedRepo = `${dataDir}/${repo}/${topPoolsMetaData.network}/${topPoolsData}`;
-			const tokenMetaString = await read(`${appPathInClonedRepo}/${config.FILENAME.NATIVETOKENS_JSON}`);
-			const parsedTokenMeta = JSON.parse(tokenMetaString);
-
-			parsedTokenMeta.tokens.forEach(token => {
-				topPoolsTokenMetadataData.data.push({
-					...token,
-					chainID: topPoolsMetaData.chainID,
-					chainName: topPoolsMetaData.chainName,
-					network: topPoolsMetaData.network,
-				});
-			});
-		},
-		{ concurrency: uniqueChainList.length },
-	);
-
-	// TODO: Use count method directly once support for custom column-based count added https://github.com/LiskHQ/lisk-service/issues/1188
-	const [{ total }] = await tokenMetadataTable.rawQuery(`SELECT COUNT(tokenName) as total from ${tokenMetadataIndexSchema.tableName}`);
-
-	topPoolsTokenMetadataData.meta = {
-		count: topPoolsTokenMetadataData.data.length,
-		offset: params.offset,
-		total,
-	};
-
-	if (topPoolsTokenMetadataData.data.length == 0){
-		topPoolsTokenMetadataData=[{
+	if(topPoolsData.length == 0){
+		topPoolsData=[{
 			poolName:"DEX-BTC",
 			poolTVL:"118413665423",
 			poolVolume24H:"1252065",
@@ -116,11 +87,23 @@ const getTopPoolsFromDatabase = async params => {
 			poolVolume24H:"9756",
 			poolFees24H:"9.5619",
 			poolAPY:"9.8480"
-		}
-	]
+		}]
 	}
 
-	return topPoolsTokenMetadataData;
+	topPoolsData.forEach(topPool => {
+		topPoolsMetadataData.data.push({
+			...topPool,
+		});
+	});
+
+
+	topPoolsMetadataData.meta = {
+		count: topPoolsMetadataData.data.length,
+		offset: params.offset,
+	};
+
+	
+	return topPoolsMetadataData;
 };
 
 

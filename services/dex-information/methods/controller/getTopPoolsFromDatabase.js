@@ -16,15 +16,16 @@
 
 const dataService = require('../../shared/dataService');
 
-const getTransactionsByTokenID = async params => {
+const getTopPoolsFromDatabase = async params => {
 	try {
-		const response = await dataService.getTransactionsByTokenID(params);
+		const response = await dataService.getTopPoolsFromDatabase(params);
 
 		return {
 			data: {
-				transactionsByTokenID:response.data.transactionsByTokenID,
+				topPoolsFromDatabase:response.data,
+				meta: response.data.meta
 			},
-			meta: {}
+			
 		};
 	} catch (err) {
 		// TODO: throwing caught error
@@ -34,5 +35,5 @@ const getTransactionsByTokenID = async params => {
 
 
 module.exports = {
-	getTransactionsByTokenID,
+	getTopPoolsFromDatabase,
 };

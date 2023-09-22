@@ -18,16 +18,16 @@ const dataService = require('../../shared/dataService');
 const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
 
 
-const getTopPoolsMetadataIndex = () => getTableInstance(
+const getTopTokensPoolsMetadataIndex = () => getTableInstance(
 	topTokensMetadataIndexSchema.tableName,
 	topTokensMetadataIndexSchema,
 	MYSQL_ENDPOINT,
 );
 
-const getTopPoolsFromDatabase = async params => {
+const getTopTokensFromDatabase = async params => {
 	const { dataDir } = config;
 	const repo = config.gitHub.appRegistryRepoName;
-	const topTokensTokenMetadataTable = await getTopPoolsMetadataIndex();
+	const topTokensTokenMetadataTable = await getTopTokensPoolsMetadataIndex();
 
 	const topPoolsTokenMetadataData = {
 		data: [],
@@ -125,5 +125,5 @@ const getTopPoolsFromDatabase = async params => {
 
 
 module.exports = {
-	getTopPoolsFromDatabase,
+	getTopTokensFromDatabase,
 };

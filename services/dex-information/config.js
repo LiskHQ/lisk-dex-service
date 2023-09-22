@@ -17,11 +17,13 @@ const packageJson = require('./package.json');
 
 const config = {
 	endpoints: {},
+	dataDir:`${__dirname}/data`,
 };
 
 // Moleculer broker config
 config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 5; // in seconds
+config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
 
 // Logging
 config.log = {

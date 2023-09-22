@@ -14,8 +14,11 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
+
+const { getTableInstance } = require('lisk-service-framework/src/mysql');
+const config = require('../../config');
 const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
+const MYSQL_ENDPOINT = config.endpoints.mysql;
 
 
 const getTopTokensPoolsMetadataIndex = () => getTableInstance(
@@ -25,57 +28,18 @@ const getTopTokensPoolsMetadataIndex = () => getTableInstance(
 );
 
 const getTopTokensFromDatabase = async params => {
-	const { dataDir } = config;
-	const repo = config.gitHub.appRegistryRepoName;
-	const topTokensTokenMetadataTable = await getTopTokensPoolsMetadataIndex();
+	
+	const topTokensTokenTable = await getTopTokensPoolsMetadataIndex();
 
-	const topPoolsTokenMetadataData = {
+	const topTokensFromDatabase = {
 		data: [],
 		meta: {},
 	};
 
-	// Initialize DB params
-	params.whereIn = [];
-
-	const tokensResultSet = await topTokensTokenMetadataTable.findAll();
-
-	const uniqueChainMap = {};
-	tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);
-	const uniqueChainList = Object.values(uniqueChainMap);
-
-	await BluebirdPromise.map(
-		uniqueChainList,
-		async (topPoolsMetaData) => {
-
-			const [{ topPoolsData }] = await topTokensTokenMetadataTable.rawQuery(` SELECT * FROM ${topTokensMetadataIndexSchema.tableName}`);
-
-			const appPathInClonedRepo = `${dataDir}/${repo}/${topPoolsMetaData.network}/${topPoolsData}`;
-			const tokenMetaString = await read(`${appPathInClonedRepo}/${config.FILENAME.NATIVETOKENS_JSON}`);
-			const parsedTokenMeta = JSON.parse(tokenMetaString);
-
-			parsedTokenMeta.tokens.forEach(token => {
-				topPoolsTokenMetadataData.data.push({
-					...token,
-					chainID: topPoolsMetaData.chainID,
-					chainName: topPoolsMetaData.chainName,
-					network: topPoolsMetaData.network,
-				});
-			});
-		},
-		{ concurrency: uniqueChainList.length },
-	);
-
-	// TODO: Use count method directly once support for custom column-based count added https://github.com/LiskHQ/lisk-service/issues/1188
-	const [{ total }] = await tokenMetadataTable.rawQuery(`SELECT COUNT(tokenName) as total from ${tokenMetadataIndexSchema.tableName}`);
-
-	topPoolsTokenMetadataData.meta = {
-		count: topPoolsTokenMetadataData.data.length,
-		offset: params.offset,
-		total,
-	};
-
-	if (topPoolsTokenMetadataData.data.length == 0){
-		topPoolsTokenMetadataData=[{
+	let topTokensData = await topTokensTokenTable.rawQuery(` SELECT * FROM ${topTokensMetadataIndexSchema.tableName}`);
+	
+	if(topTokensData.length == 0){
+		topTokensData=[{
 			name:"Lisk",
             price:"1.23",
 			priceChange:"+3.24",
@@ -116,11 +80,22 @@ const getTopTokensFromDatabase = async params => {
 			priceChange:"-4.54",
 			volume24H:"1.23",
 			liquidity:"7.2",			
-		}
-	]
+		}]
 	}
 
-	return topPoolsTokenMetadataData;
+	topTokensData.forEach(topTokens => {
+		topTokensFromDatabase.data.push({
+			...topTokens,
+		});
+	});
+
+	
+	topTokensFromDatabase.meta = {
+		count: topTokensFromDatabase.data.length,
+		offset: params.offset,
+	};
+
+	return topTokensFromDatabase;
 };
 
 

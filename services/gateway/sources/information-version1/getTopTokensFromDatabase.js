@@ -22,7 +22,8 @@ module.exports = {
 	},
 	definition: {
 		data: {
-			topPoolsFromDatabase:'='
+			topTokensFromDatabase:'=',
+			meta: '='
 		},
 		meta: {},
 	},

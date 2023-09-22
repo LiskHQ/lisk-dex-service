@@ -27,23 +27,14 @@ const getTopPoolsMetadataIndex = () => getTableInstance(
 );
 
 const getTopPoolsFromDatabase = async params => {
-	const topPoolsTokenMetadataTable = await getTopPoolsMetadataIndex();
+	const topPoolsTokenTable = await getTopPoolsMetadataIndex();
 
-	const topPoolsMetadataData = {
+	const topPoolsFromDatabase = {
 		data: [],
 		meta: {},
 	};
 
-	// Initialize DB params
-	params.whereIn = [];
-
-	//const tokensResultSet = await topPoolsTokenMetadataTable.find(params, ['poolName', 'poolTVL', 'chainName']);
-
-	// const uniqueChainMap = {};
-	// tokensResultSet.forEach(item => uniqueChainMap[item.chainID] = item);
-	// const uniqueChainList = Object.values(uniqueChainMap);
-
-	let topPoolsData = await topPoolsTokenMetadataTable.rawQuery(` SELECT * FROM ${topPoolsMetadataIndexSchema.tableName}`);
+	let topPoolsData = await topPoolsTokenTable.rawQuery(` SELECT * FROM ${topPoolsMetadataIndexSchema.tableName}`);
 
 	if(topPoolsData.length == 0){
 		topPoolsData=[{
@@ -91,19 +82,19 @@ const getTopPoolsFromDatabase = async params => {
 	}
 
 	topPoolsData.forEach(topPool => {
-		topPoolsMetadataData.data.push({
+		topPoolsFromDatabase.data.push({
 			...topPool,
 		});
 	});
 
 
-	topPoolsMetadataData.meta = {
-		count: topPoolsMetadataData.data.length,
+	topPoolsFromDatabase.meta = {
+		count: topPoolsFromDatabase.data.length,
 		offset: params.offset,
 	};
 
 	
-	return topPoolsMetadataData;
+	return topPoolsFromDatabase;
 };
 
 

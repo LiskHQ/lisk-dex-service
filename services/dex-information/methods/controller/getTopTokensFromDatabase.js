@@ -22,9 +22,9 @@ const getTopTokensFromDatabase = async params => {
 
 		return {
 			data: {
-				topTokensFromDatabase:response.data.getTopTokensFromDatabase,
+				topTokensFromDatabase:response.data,
+				meta: response.data.meta
 			},
-			meta: {}
 		};
 	} catch (err) {
 		// TODO: throwing caught error

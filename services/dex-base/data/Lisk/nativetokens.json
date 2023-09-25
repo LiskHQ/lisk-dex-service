@@ -30,7 +30,7 @@
             }
         },
         {
-            "tokenID": "0DEX00000000000000",
+            "tokenID": "0DEX00000000000001",
             "tokenName": "Lisk",
             "description": "Default token for the entire Lisk ecosystem",
             "denomUnits": [

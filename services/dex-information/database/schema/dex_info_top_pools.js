@@ -13,22 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
 module.exports = {
-	type: 'moleculer',
-	method: 'information.getTransactionsByTokenID',
-	params: {
-		poolID: '=,string',
-		tokenID: '=,string',
-		command: '=,string',
-		account: '=,string',
-		limit: '=,number',
-		offset: '=,string',
+	tableName: 'dex_info_top_pools',
+	primaryKey: ['poolName', 'poolTVL', 'poolVolume24H'],
+	schema: {
+		poolName: { type: 'string' },
+		poolTVL: { type: 'string' },
+		poolVolume24H: { type: 'string' },
+		poolFees24H: { type: 'string' },
+		poolAPY: { type: 'string' },
 	},
-	definition: {
-		data: {
-			transactionsByTokenID:'='
-		},
-		meta: {},
+	indexes: {
+		poolName: { type: 'key' },
+		poolTVL: { type: 'key' },
+		poolVolume24H: { type: 'key' },
+		poolFees24H: { type: 'key' },
+		poolAPY: { type: 'key' },
 	},
+	purge: {},
 };

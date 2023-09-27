@@ -15,15 +15,15 @@
  */
 
 const {
-	getVotes,
-} = require('./controller/votes');
+	getTransactionsByTokenID,
+} = require('./controller/getTransactionsByTokenID');
 
 const regex = require('../shared/regex');
 
 module.exports = [
 	{
-		name: 'votes',
-		controller: getVotes,
+		name: 'getTransactionsByTokenID',
+		controller: getTransactionsByTokenID,
 		params: {
 			poolID: { optional: false, type: 'string', min: 16, max: 40, pattern: regex.POOL_ID },
 			tokenID: { optional: false, type: 'string', min: 16, max: 40, pattern: regex.TOKEN_ID },

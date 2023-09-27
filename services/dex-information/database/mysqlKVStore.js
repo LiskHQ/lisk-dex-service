@@ -15,7 +15,7 @@
  */
 const { MySQL: { getTableInstance } } = require('lisk-service-framework');
 
-const config = require('../../config');
+const config = require('../../dex-base/config');
 
 const keyValueStoreSchema = require('./schema/kvStore');
 

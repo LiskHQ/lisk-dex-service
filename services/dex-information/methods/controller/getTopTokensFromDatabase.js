@@ -14,21 +14,25 @@
  *
  */
 
+const dataService = require('../../shared/dataService');
+
+const getTopTokensFromDatabase = async params => {
+	try {
+		const response = await dataService.getTopTokensFromDatabase(params);
+
+		return {
+			data: {
+				topTokensFromDatabase:response.data,
+				meta: response.data.meta
+			},
+		};
+	} catch (err) {
+		// TODO: throwing caught error
+		throw err;
+	}
+};
+
+
 module.exports = {
-	type: 'moleculer',
-	method: 'information.getTransactionsByTokenID',
-	params: {
-		poolID: '=,string',
-		tokenID: '=,string',
-		command: '=,string',
-		account: '=,string',
-		limit: '=,number',
-		offset: '=,string',
-	},
-	definition: {
-		data: {
-			transactionsByTokenID:'='
-		},
-		meta: {},
-	},
+	getTopTokensFromDatabase,
 };

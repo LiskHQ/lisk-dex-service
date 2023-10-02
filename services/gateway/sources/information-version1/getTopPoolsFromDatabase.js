@@ -16,19 +16,16 @@
 
 module.exports = {
 	type: 'moleculer',
-	method: 'information.getTransactionsByTokenID',
+	method: 'information.getTopPoolsFromDatabase',
 	params: {
-		poolID: '=,string',
-		tokenID: '=,string',
-		command: '=,string',
-		account: '=,string',
 		limit: '=,number',
-		offset: '=,string',
 	},
 	definition: {
 		data: {
-			transactionsByTokenID:'='
+			topPoolsFromDatabase: '=',
+			meta:'=' 
 		},
+		
 		meta: {},
 	},
 };

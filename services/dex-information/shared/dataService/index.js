@@ -15,9 +15,19 @@
  */
 
 const {
-    getVotes
-} = require ('./votes')
+    getTransactionsByTokenID
+} = require ('./getTransactionsByTokenID')
+
+const {
+    getTopPoolsFromDatabase
+} = require ('./getTopPoolsFromDatabase')
+
+const {
+    getTopTokensFromDatabase
+} = require ('./getTopTokensFromDatabase')
 
 module.exports = {
-    getVotes
+    getTransactionsByTokenID,
+    getTopPoolsFromDatabase,
+    getTopTokensFromDatabase
 }

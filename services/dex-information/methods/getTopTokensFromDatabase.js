@@ -14,21 +14,18 @@
  *
  */
 
-module.exports = {
-	type: 'moleculer',
-	method: 'information.getTransactionsByTokenID',
-	params: {
-		poolID: '=,string',
-		tokenID: '=,string',
-		command: '=,string',
-		account: '=,string',
-		limit: '=,number',
-		offset: '=,string',
-	},
-	definition: {
-		data: {
-			transactionsByTokenID:'='
+const {
+	getTopTokensFromDatabase,
+} = require('./controller/getTopTokensFromDatabase');
+
+const regex = require('../shared/regex');
+
+module.exports = [
+	{
+		name: 'getTopTokensFromDatabase',
+		controller: getTopTokensFromDatabase,
+		params: {
+			limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
 		},
-		meta: {},
 	},
-};
+];

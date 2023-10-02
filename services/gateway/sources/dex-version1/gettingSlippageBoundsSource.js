@@ -28,6 +28,9 @@ module.exports = {
         data: {
             minimum: '=,string',
             maximum: '=,string',
+            unit: "=",
+            symbol: "=",
+				
         },
         meta: {}
     }

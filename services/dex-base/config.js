@@ -31,6 +31,8 @@ config.endpoints = {
 	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
 };
 
+
+
 const packageJson = require('./package.json');
 
 // Moleculer broker config

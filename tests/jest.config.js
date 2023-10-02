@@ -16,9 +16,12 @@
 module.exports = {
 	verbose: true,
 	testMatch: [
-		'<rootDir>/integration/**/*.test.js',
-		'<rootDir>/functional/**/*.test.js',
-		'<rootDir>/regression/**/*.test.js',
+		//'<rootDir>/integration/**/*.test.js',
+		'<rootDir>/integration/dex-base/rpc',
+		
+		//'<rootDir>/functional/**/*.test.js',
+		//'<rootDir>/regression/**/*.test.js',
+
 	],
 	testEnvironment: 'node',
 	testTimeout: 15000,

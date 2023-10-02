@@ -14,23 +14,15 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
+const regex = require('./regex.js');
 
-const getPopularPairings = async params => {
-	try {
-		const response = await dataService.getPopularPairings(params);
-		return {
-			data: { popularPairings: response.data.popularPairings, },
-			meta: response.meta,
-			links: {},
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+import Joi from 'joi';
+
+const priceConvertTokenSchema = {
+	credibleDirectPriceToken2ToToken1: Joi.string().pattern(regex.CONVERTED_PRICE).required(),
+	credibleDirectPriceToken1ToToken2: Joi.string().pattern(regex.CONVERTED_PRICE).required(),
 };
 
-
 module.exports = {
-	getPopularPairings,
+	priceConvertTokenSchema: Joi.object(priceConvertTokenSchema).required(),
 };

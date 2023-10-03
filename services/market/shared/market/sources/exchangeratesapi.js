@@ -109,7 +109,7 @@ const reload = async () => {
 		conversionRatesFromCache.length === 0
 		|| validateEntries(conversionRatesFromCache, allowRefreshAfter)
 	) {
-		const currencyConversionRates = await fetchAllCurrencyConversionRates();
+		// const currencyConversionRates = await fetchAllCurrencyConversionRates();
 		//const transformedRates = standardizeCurrencyConversionRates(currencyConversionRates);
 
 		// Serialize individual price item and write to the cache

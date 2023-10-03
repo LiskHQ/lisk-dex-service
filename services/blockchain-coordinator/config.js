@@ -27,13 +27,13 @@ const config = {
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6381/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 /**
  * External endpoints
  */
-config.endpoints.messageQueue =	process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://127.0.0.1:6379/4';
+config.endpoints.messageQueue =	process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://127.0.0.1:6381/4';
 
 /**
  * LOGGING

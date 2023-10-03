@@ -110,11 +110,11 @@ const reload = async () => {
 		|| validateEntries(conversionRatesFromCache, allowRefreshAfter)
 	) {
 		const currencyConversionRates = await fetchAllCurrencyConversionRates();
-		const transformedRates = standardizeCurrencyConversionRates(currencyConversionRates);
+		//const transformedRates = standardizeCurrencyConversionRates(currencyConversionRates);
 
 		// Serialize individual price item and write to the cache
-		await BluebirdPromise.all(transformedRates
-			.map(item => exchangeratesapiCache.set(`exchangeratesapi_${item.code}`, JSON.stringify(item), expireMilliseconds)));
+		// await BluebirdPromise.all(transformedRates
+		// 	.map(item => exchangeratesapiCache.set(`exchangeratesapi_${item.code}`, JSON.stringify(item), expireMilliseconds)));
 	}
 };
 

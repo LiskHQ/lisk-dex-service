@@ -34,8 +34,7 @@ config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in s
 /**
  * External endpoints
  */
-config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
-config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
+config.endpoints.liskWs = process.env.LISK_APP_WS || 'ws://127.0.0.1:7887';
 config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json';
 
 /**
@@ -112,5 +111,8 @@ config.job = {
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PEERS || '',
 	},
 };
+
+// Every n number of blocks, verify if client connection is alive
+config.connectionVerifyBlockInterval = process.env.CONN_VERIFY_BLOCK_INTERVAL || 10;
 
 module.exports = config;

@@ -49,7 +49,7 @@ const getSchemas = async () => {
 const getRegisteredEndpoints = async () => {
 	try {
 		if (!registeredEndpoints) {
-			registeredEndpoints = await invokeEndpoint('app_getRegisteredEndpoints');
+			registeredEndpoints = await invokeEndpoint('app_getRegisteredActions');
 		}
 		return registeredEndpoints;
 	} catch (err) {

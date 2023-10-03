@@ -77,6 +77,7 @@ config.api.versions = {
 	'/api/v3': ['http-version3', 'http-exports'],
 	'/api/dex/v1': ['http-dex-version1'],
 	'/api/dex-governance/v1': ['http-governance-version1'],
+	'/api/dex-information/v1': ['http-information-version1']
 };
 
 /**

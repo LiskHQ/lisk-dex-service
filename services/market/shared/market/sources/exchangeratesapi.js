@@ -27,7 +27,7 @@ const exchangeratesapiCache = CacheRedis('exchangeratesapi_prices', config.endpo
 const accessKey = config.access_key.exchangeratesapi;
 
 const baseCurrencies = config.market.supportedFiatCurrencies.split(',').concat('BTC');
-const expireMilliseconds = config.ttl.exchangeratesapi;
+// const expireMilliseconds = config.ttl.exchangeratesapi;
 const { apiEndpoint, allowRefreshAfter } = config.market.sources.exchangeratesapi;
 
 const symbolMap = (() => {
@@ -61,27 +61,27 @@ const fetchAllCurrencyConversionRates = async () => {
 	}
 };
 
-const standardizeCurrencyConversionRates = (rawConversionRates) => {
-	const [transformedConversionRates] = Object.entries(rawConversionRates).map(
-		([baseCur, conversionRates]) => Object.getOwnPropertyNames(conversionRates)
-			.map(targetCur => ({ symbol: `${baseCur}_${targetCur}`, price: conversionRates[targetCur] })),
-	);
-	const standardizedConversionRates = (Array.isArray(transformedConversionRates))
-		? transformedConversionRates.map(conversionRate => {
-			const [from, to] = conversionRate.symbol.split('_');
-			const price = {
-				code: conversionRate.symbol,
-				from,
-				to,
-				rate: conversionRate.price,
-				updateTimestamp: Math.floor(Date.now() / 1000),
-				sources: ['exchangeratesapi'],
-			};
-			return price;
-		})
-		: [];
-	return standardizedConversionRates;
-};
+// const standardizeCurrencyConversionRates = (rawConversionRates) => {
+// 	const [transformedConversionRates] = Object.entries(rawConversionRates).map(
+// 		([baseCur, conversionRates]) => Object.getOwnPropertyNames(conversionRates)
+// 			.map(targetCur => ({ symbol: `${baseCur}_${targetCur}`, price: conversionRates[targetCur] })),
+// 	);
+// 	const standardizedConversionRates = (Array.isArray(transformedConversionRates))
+// 		? transformedConversionRates.map(conversionRate => {
+// 			const [from, to] = conversionRate.symbol.split('_');
+// 			const price = {
+// 				code: conversionRate.symbol,
+// 				from,
+// 				to,
+// 				rate: conversionRate.price,
+// 				updateTimestamp: Math.floor(Date.now() / 1000),
+// 				sources: ['exchangeratesapi'],
+// 			};
+// 			return price;
+// 		})
+// 		: [];
+// 	return standardizedConversionRates;
+// };
 
 const getFromCache = async () => {
 	// Read individual price item from cache and deserialize

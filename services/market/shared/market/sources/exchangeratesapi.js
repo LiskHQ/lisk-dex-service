@@ -13,11 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { HTTP, Logger, CacheRedis } = require('lisk-service-framework');
+const { CacheRedis } = require('lisk-service-framework');
 const BluebirdPromise = require('bluebird');
 
-const requestLib = HTTP.request;
-const logger = Logger();
+// const requestLib = HTTP.request;
+// const logger = Logger();
 
 const { validateEntries } = require('./common');
 const config = require('../../../config');
@@ -28,7 +28,7 @@ const accessKey = config.access_key.exchangeratesapi;
 
 const baseCurrencies = config.market.supportedFiatCurrencies.split(',').concat('BTC');
 // const expireMilliseconds = config.ttl.exchangeratesapi;
-const { apiEndpoint, allowRefreshAfter } = config.market.sources.exchangeratesapi;
+const {  allowRefreshAfter } = config.market.sources.exchangeratesapi;
 
 const symbolMap = (() => {
 	// Dynamically generates a map of type '{ "LSK_USD": "LSKUSD" }' based on baseCurrencies
@@ -43,23 +43,23 @@ const symbolMap = (() => {
 	return map;
 })();
 
-const fetchAllCurrencyConversionRates = async () => {
-	try {
-		const allMarketConversionRates = {};
-		await BluebirdPromise.all(
-			baseCurrencies.map(async (baseCurrency) => {
-				const remainingCurrencies = baseCurrencies.filter(c => c !== baseCurrency);
-				const response = await requestLib(`${apiEndpoint}/latest?access_key=${accessKey}&base=${baseCurrency}&symbols=${remainingCurrencies.join(',')}`);
-				if (response) allMarketConversionRates[baseCurrency] = response.data.rates;
-			}),
-		);
-		return allMarketConversionRates;
-	} catch (err) {
-		logger.error(err.message);
-		logger.error(err.stack);
-		return err;
-	}
-};
+// const fetchAllCurrencyConversionRates = async () => {
+// 	try {
+// 		const allMarketConversionRates = {};
+// 		await BluebirdPromise.all(
+// 			baseCurrencies.map(async (baseCurrency) => {
+// 				const remainingCurrencies = baseCurrencies.filter(c => c !== baseCurrency);
+// 				const response = await requestLib(`${apiEndpoint}/latest?access_key=${accessKey}&base=${baseCurrency}&symbols=${remainingCurrencies.join(',')}`);
+// 				if (response) allMarketConversionRates[baseCurrency] = response.data.rates;
+// 			}),
+// 		);
+// 		return allMarketConversionRates;
+// 	} catch (err) {
+// 		logger.error(err.message);
+// 		logger.error(err.stack);
+// 		return err;
+// 	}
+// };
 
 // const standardizeCurrencyConversionRates = (rawConversionRates) => {
 // 	const [transformedConversionRates] = Object.entries(rawConversionRates).map(

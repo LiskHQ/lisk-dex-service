@@ -16,13 +16,6 @@
 
 const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
-
-const {
-	Logger,
-} = require('lisk-service-framework');
-
-const logger = Logger();
-
 const getProposal = async (params) => {
 
 	let proposalsList; 
@@ -30,8 +23,11 @@ const getProposal = async (params) => {
     try {
         proposalsList = await invokeEndpoint('dexGovernance_getProposal',params); 
         if(proposalsList.error != null){
-            logger.warn(`Error returned when invoking 'dexGovernance_getProposal'.\n${proposalsList.error}`);
-            throw proposalsList.error;
+            return {
+                data: {},
+                meta: {},
+            };
+
         }
         return {
             data: {

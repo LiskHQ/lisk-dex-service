@@ -16,13 +16,6 @@
 
 const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
 
-
-const {
-	Logger,
-} = require('lisk-service-framework');
-
-const logger = Logger();
-
 const getProposal = async (params) => {
 
 	let proposalsList; 

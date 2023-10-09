@@ -22,14 +22,14 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/blockchain/apps/meta/tokens',
 	rpcMethod: 'get.blockchain.apps.meta.tokens',
-	tags: ['Interoperability'],
+	tags: ['Application Off-Chain Metadata'],
 	params: {
 		chainName: { optional: true, type: 'string', pattern: regex.NAME },
 		chainID: { optional: true, type: 'string', pattern: regex.CHAIN_ID },
 		tokenName: { optional: true, type: 'string', pattern: regex.NAME_CSV },
 		tokenID: { optional: true, type: 'string', pattern: regex.TOKEN_ID_CSV, altSwaggerKey: 'tokenIDCSV' },
 		network: { optional: true, type: 'string', pattern: regex.NETWORK_CSV },
-		search: { optional: true, type: 'string' },
+		search: { optional: true, type: 'string', pattern: regex.PARTIAL_SEARCH_NAME, altSwaggerKey: 'searchByChainName' },
 		limit: { optional: true, type: 'number', min: 1, max: 100, default: 10 },
 		offset: { optional: true, type: 'number', min: 0, default: 0 },
 		sort: {

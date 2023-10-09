@@ -19,7 +19,6 @@ const {
 	Logger,
 	LoggerConfig,
 	Libs,
-	Exceptions: { ValidationException },
 } = require('lisk-service-framework');
 
 const config = require('./config');
@@ -39,7 +38,7 @@ const { getReady, getIndexStatus } = require('./shared/ready');
 const { genDocs } = require('./shared/generateDocs');
 const { setAppContext } = require('./shared/appContext');
 
-const mapper = require('./shared/customMapper');
+const { mapper } = require('./shared/customMapper');
 const { definition: blocksDefinition } = require('./sources/version3/blocks');
 const { definition: feesDefinition } = require('./sources/version3/fees');
 const { definition: generatorsDefinition } = require('./sources/version3/generators');
@@ -95,6 +94,16 @@ tempApp.run().then(async () => {
 		transporter: config.transporter,
 		mixins: [ApiService, SocketIOService],
 		name: 'gateway',
+		created() {
+			if (config.rateLimit.numKnownProxies > 0 || config.api.isReverseProxyPresent) {
+				// Ensure all inactive connections are terminated by the ALB,
+				// by setting this a few seconds higher than the ALB idle timeout
+				this.server.keepAliveTimeout = config.api.httpKeepAliveTimeout;
+				// Ensure the headersTimeout is set higher than the keepAliveTimeout
+				// due to this nodejs regression bug: https://github.com/nodejs/node/issues/27363
+				this.server.headersTimeout = config.api.httpHeadersTimeout;
+			}
+		},
 		actions: {
 			ready() { return getReady(); },
 			async spec(ctx) { return genDocs(ctx, registeredModuleNames); },
@@ -109,7 +118,7 @@ tempApp.run().then(async () => {
 			use: [],
 
 			cors: {
-				origin: '*',
+				origin: config.cors.allowedOrigin,
 				methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
 				allowedHeaders: [
 					'Content-Type',
@@ -142,14 +151,12 @@ tempApp.run().then(async () => {
 			},
 
 			onError(req, res, err) {
-				if (err instanceof ValidationException === false) {
-					res.setHeader('Content-Type', 'application/json');
-					res.writeHead(err.code || 500);
-					res.end(JSON.stringify({
-						error: true,
-						message: `Server error: ${err.message}`,
-					}));
-				}
+				res.setHeader('Content-Type', 'application/json');
+				res.writeHead(err.code || 500);
+				res.end(JSON.stringify({
+					error: true,
+					message: `Server error: ${err.message}`,
+				}));
 			},
 			io: {
 				namespaces: socketNamespaces,
@@ -176,7 +183,7 @@ tempApp.run().then(async () => {
 			'swapped': (payload) => sendSocketIoEvent('swapped', payload),
 			'swap.failed': (payload) => sendSocketIoEvent('swapFailed', payload),
 		},
-		dependencies: [],
+		dependencies: config.brokerDependencies,
 	};
 
 	if (config.rateLimit.enable) {
@@ -187,10 +194,23 @@ tempApp.run().then(async () => {
 			limit: config.rateLimit.connectionLimit || 200,
 			headers: true,
 
-			key: (req) => req.headers['x-forwarded-for']
-				|| req.connection.remoteAddress
-				|| req.socket.remoteAddress
-				|| req.connection.socket.remoteAddress,
+			key: (req) => {
+				if (config.rateLimit.enableXForwardedFor) {
+					const xForwardedFor = req.headers['x-forwarded-for'];
+					const { numKnownProxies } = config.rateLimit;
+
+					if (xForwardedFor && numKnownProxies > 0) {
+						const clientIPs = xForwardedFor.split(',').map(ip => ip.trim());
+						const clientIndex = Math.max(clientIPs.length - numKnownProxies - 1, 0);
+
+						return clientIPs[clientIndex];
+					}
+				}
+
+				return req.connection.remoteAddress
+					|| req.socket.remoteAddress
+					|| req.connection.socket.remoteAddress;
+			},
 		};
 	}
 
@@ -199,9 +219,9 @@ tempApp.run().then(async () => {
 
 	// Run the application
 	app.run(gatewayConfig).then(() => {
-		logger.info(`Started Gateway API on ${host}:${port}`);
+		logger.info(`Started Gateway API on ${host}:${port}.`);
 	}).catch(err => {
-		logger.fatal(`Could not start the service ${packageJson.name} + ${err.message}`);
+		logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}.`);
 		logger.fatal(err.stack);
 		process.exit(1);
 	});

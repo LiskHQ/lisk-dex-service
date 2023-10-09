@@ -22,11 +22,11 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/export/transactions',
 	rpcMethod: 'get.export.transactions',
-	tags: ['Transaction Export'],
+	tags: ['Account History Export'],
 	params: {
 		address: { optional: true, type: 'string', min: 3, max: 41, pattern: regex.ADDRESS_LISK32 },
 		publicKey: { optional: true, type: 'string', min: 64, max: 64, pattern: regex.PUBLIC_KEY },
-		interval: { optional: true, type: 'string', min: 10, max: 21, pattern: regex.INTERVAL },
+		interval: { optional: true, type: 'string', min: 10, max: 21, pattern: regex.DATE_INTERVAL },
 	},
 	paramsRequired: true,
 	validParamPairings: [
@@ -59,11 +59,6 @@ module.exports = {
 				description: 'Schedule transaction history export',
 				schema: {
 					$ref: '#/definitions/ExportScheduledWithEnvelope',
-				},
-			},
-			404: {
-				schema: {
-					$ref: '#/responses/notFound',
 				},
 			},
 		};

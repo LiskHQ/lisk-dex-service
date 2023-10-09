@@ -15,9 +15,10 @@
  */
 const {
 	getMissingBlocks,
-	isGenesisBlockIndexed,
 	getIndexVerifiedHeight,
 	setIndexVerifiedHeight,
+	isGenesisBlockIndexed,
+	getLiveIndexingJobCount,
 } = require('../../shared/indexer/blockchainIndex');
 
 const {
@@ -33,11 +34,6 @@ module.exports = [
 			from: { optional: false, type: 'any' },
 			to: { optional: false, type: 'any' },
 		},
-	},
-	{
-		name: 'isGenesisBlockIndexed',
-		controller: isGenesisBlockIndexed,
-		params: {},
 	},
 	{
 		name: 'getCurrentHeight',
@@ -60,5 +56,15 @@ module.exports = [
 		params: {
 			height: { optional: false, type: 'number' },
 		},
+	},
+	{
+		name: 'isGenesisBlockIndexed',
+		controller: isGenesisBlockIndexed,
+		params: {},
+	},
+	{
+		name: 'getLiveIndexingJobCount',
+		controller: getLiveIndexingJobCount,
+		params: {},
 	},
 ];

@@ -13,24 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-
-const dataService = require('../../shared/dataService');
-
-const getPopularPairings = async params => {
-	try {
-		const response = await dataService.getPopularPairings(params);
-		return {
-			data: { popularPairings: response.data.popularPairings, },
-			meta: response.meta,
-			links: {},
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
-};
-
-
 module.exports = {
-	getPopularPairings,
+	tableName: 'dex_info_top_pools',
+	primaryKey: ['poolName', 'poolTVL', 'poolVolume24H'],
+	schema: {
+		poolName: { type: 'string' },
+		poolTVL: { type: 'string' },
+		poolVolume24H: { type: 'string' },
+		poolFees24H: { type: 'string' },
+		poolAPY: { type: 'string' },
+	},
+	indexes: {
+		poolName: { type: 'key' },
+		poolTVL: { type: 'key' },
+		poolVolume24H: { type: 'key' },
+		poolFees24H: { type: 'key' },
+		poolAPY: { type: 'key' },
+	},
+	purge: {},
 };

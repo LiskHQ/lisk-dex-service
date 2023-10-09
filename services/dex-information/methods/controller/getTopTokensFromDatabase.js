@@ -16,13 +16,15 @@
 
 const dataService = require('../../shared/dataService');
 
-const getPopularPairings = async params => {
+const getTopTokensFromDatabase = async params => {
 	try {
-		const response = await dataService.getPopularPairings(params);
+		const response = await dataService.getTopTokensFromDatabase(params);
+
 		return {
-			data: { popularPairings: response.data.popularPairings, },
-			meta: response.meta,
-			links: {},
+			data: {
+				topTokensFromDatabase:response.data,
+				meta: response.data.meta
+			},
 		};
 	} catch (err) {
 		// TODO: throwing caught error
@@ -32,5 +34,5 @@ const getPopularPairings = async params => {
 
 
 module.exports = {
-	getPopularPairings,
+	getTopTokensFromDatabase,
 };

@@ -14,23 +14,18 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
-
-const getPopularPairings = async params => {
-	try {
-		const response = await dataService.getPopularPairings(params);
-		return {
-			data: { popularPairings: response.data.popularPairings, },
-			meta: response.meta,
-			links: {},
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
-};
-
-
 module.exports = {
-	getPopularPairings,
+	type: 'moleculer',
+	method: 'information.getTopPoolsFromDatabase',
+	params: {
+		limit: '=,number',
+	},
+	definition: {
+		data: {
+			topPoolsFromDatabase: '=',
+			meta:'=' 
+		},
+		
+		meta: {},
+	},
 };

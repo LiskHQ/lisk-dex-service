@@ -14,25 +14,18 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
+const {
+	getTopPoolsFromDatabase,
+} = require('./controller/getTopPoolsFromDatabase');
 
-const getVotes = async params => {
-	try {
-		const response = await dataService.getVotes(params);
+const regex = require('../shared/regex');
 
-		return {
-			data: {
-				transactionsByTokenID:response.data.transactionsByTokenID,
-			},
-			meta: {}
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
-};
-
-
-module.exports = {
-	getVotes,
-};
+module.exports = [
+	{
+		name: 'getTopPoolsFromDatabase',
+		controller: getTopPoolsFromDatabase,
+		params: {
+            limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
+        },
+	},
+];

@@ -14,7 +14,9 @@
  *
  */
 const config = {
-    endpoints: {},
+    endpoints: {
+		mysql:process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk',
+	},
 };
 
 config.dataDir = `${__dirname}/data`;
@@ -28,6 +30,8 @@ config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk
 config.endpoints = {
 	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6381/0',
 };
+
+
 
 const packageJson = require('./package.json');
 

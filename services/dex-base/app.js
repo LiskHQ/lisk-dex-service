@@ -27,6 +27,7 @@ const config = require('./config');
 const packageJson = require('./package.json');
 const { setAppContext } = require('./shared/utils/request');
 
+
 // Configure logger
 const loggerConf = {
 	...config.log,

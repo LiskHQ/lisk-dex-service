@@ -16,7 +16,7 @@
 
 module.exports = {
 	type: 'moleculer',
-	method: 'information.votes',
+	method: 'information.getTransactionsByTokenID',
 	params: {
 		poolID: '=,string',
 		tokenID: '=,string',

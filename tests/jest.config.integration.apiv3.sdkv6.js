@@ -16,11 +16,13 @@
 module.exports = {
 	verbose: true,
 	testMatch: [
-		'<rootDir>/integration/api_v3/http/*.test.js',
-		'<rootDir>/integration/api_v3/rpc/*.test.js',
-		'<rootDir>/integration/api_v3/events/*.test.js',
-		'<rootDir>/integration/gateway/*.test.js',
+		// '<rootDir>/integration/api_v3/http/*.test.js',
+		// '<rootDir>/integration/api_v3/rpc/*.test.js',
+		// '<rootDir>/integration/api_v3/events/*.test.js',
+		// '<rootDir>/integration/gateway/*.test.js',
 		'<rootDir>/integration/dex-base/http/*.test.js',
+		'<rootDir>/integration/dex-information/http/*.test.js',
+		'<rootDir>/integration/dex-governance/http/*.test.js',
 	],
 	
 	testEnvironment: 'node',

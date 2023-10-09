@@ -17,16 +17,18 @@ const BluebirdPromise = require('bluebird');
 
 const {
 	Logger,
-	MySQL: { getTableInstance },
+	MySQL: {		
+		getTableInstance,		
+	},
 } = require('lisk-service-framework');
 
 const logger = Logger();
 
-const config = require('../../config');
+const config = require('../../dex-base/config');
 
 const indexSchemas = {
-	application_metadata: require('./schema/application_metadata'),
-	token_metadata: require('./schema/token_metadata'),
+	token_metadata: require('./schema/dex_info_top_tokens'),
+	pool_metadata: require('./schema/dex_info_top_pools')
 };
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
@@ -60,7 +62,7 @@ const truncateAllTables = async () => {
 };
 
 const initDatabase = async () => {
-	if (config.isRebuildIndexAtInit) await truncateAllTables();
+	await truncateAllTables();	
 	await initializeSearchIndex();
 };
 

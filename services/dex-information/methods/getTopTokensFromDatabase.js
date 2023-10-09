@@ -14,23 +14,18 @@
  *
  */
 
-const dataService = require('../../shared/dataService');
+const {
+	getTopTokensFromDatabase,
+} = require('./controller/getTopTokensFromDatabase');
 
-const getPopularPairings = async params => {
-	try {
-		const response = await dataService.getPopularPairings(params);
-		return {
-			data: { popularPairings: response.data.popularPairings, },
-			meta: response.meta,
-			links: {},
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
-};
+const regex = require('../shared/regex');
 
-
-module.exports = {
-	getPopularPairings,
-};
+module.exports = [
+	{
+		name: 'getTopTokensFromDatabase',
+		controller: getTopTokensFromDatabase,
+		params: {
+			limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
+		},
+	},
+];

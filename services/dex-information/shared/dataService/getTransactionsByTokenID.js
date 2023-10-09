@@ -16,7 +16,7 @@
 
 const { requestIndexer } = require('../utils/request');
 
-const getVotes = async (params) => {
+const getTransactionsByTokenID = async (params) => {
 
     let transactionsByTokenID = [];
 
@@ -50,5 +50,5 @@ const getVotes = async (params) => {
 };
 
 module.exports = {
-    getVotes,
+    getTransactionsByTokenID,
 };

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2023 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,21 +14,21 @@
  *
  */
 module.exports = {
-	tableName: 'token_metadata',
-	primaryKey: ['network', 'chainName', 'localID'],
+	tableName: 'dex_info_top_tokens',
+	primaryKey: ['tokenName', 'tokenPrice', 'volume24H'],
 	schema: {
-		chainID: { type: 'string' },
-		chainName: { type: 'string' },
-		network: { type: 'string' },
-		localID: { type: 'string' },
 		tokenName: { type: 'string' },
+		tokenPrice: { type: 'string' },
+		priceChange: { type: 'string' },
+		volume24H: { type: 'string' },
+		liquidity: { type: 'string' },
 	},
 	indexes: {
-		chainID: { type: 'key' },
-		chainName: { type: 'key' },
-		localID: { type: 'key' },
 		tokenName: { type: 'key' },
-		network: { type: 'key' },
+		tokenPrice: { type: 'key' },
+		priceChange: { type: 'key' },
+		volume24H: { type: 'key' },
+		liquidity: { type: 'key' },
 	},
 	purge: {},
 };

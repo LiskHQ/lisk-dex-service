@@ -14,14 +14,15 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+
+const { requestConnector } = require("../utils/request");
 
 const getProposal = async (params) => {
 
 	let proposalsList; 
 
     try {
-        proposalsList = await invokeEndpoint('dexGovernance_getProposal',params); 
+        proposalsList = await requestConnector('invokeEndpoint',{endpoint:"dexGovernance_getProposal", params}); 
         if(proposalsList.error != null){
             return {
                 data: {},

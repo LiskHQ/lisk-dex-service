@@ -18,12 +18,12 @@ RUN yarn install --frozen-lockfile
 
 FROM node:18-alpine
 
-RUN mkdir -p /home/lisk/lisk-service/dex-base/data && \
+RUN mkdir -p /home/lisk/lisk-service/dex-governance/data && \
     adduser -D lisk && \
     chown -R lisk:lisk /home/lisk/
 
 USER lisk
-WORKDIR /home/lisk/lisk-service/dex-base
+WORKDIR /home/lisk/lisk-service/dex-governance
 
 COPY --chown=lisk:lisk ./ .
 COPY --chown=lisk:lisk --from=builder /home/builder/build/node_modules/ ./node_modules/

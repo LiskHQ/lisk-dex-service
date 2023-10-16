@@ -17,8 +17,8 @@
 
 const topPoolsMetadataIndexSchema = require('../../database/schema/dex_info_top_pools');
 const config = require('../../config');
-const { getTableInstance } = require('lisk-service-framework/src/mysql');
 const MYSQL_ENDPOINT = config.endpoints.mysql;
+const { DB: { MySQL: { getTableInstance } } } = require('lisk-service-framework');
 
 const getTopPoolsMetadataIndex = () => getTableInstance(
 	topPoolsMetadataIndexSchema.tableName,

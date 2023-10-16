@@ -14,12 +14,12 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+const { requestConnector } = require("../utils/request");
 
 const gettingSlippageBounds = async (params) => {
       
 	try {
-		const swapResponse = await invokeEndpoint('dex_dryRunSwapExactOut', params);
+		const swapResponse = await requestConnector('invokeEndpoint',{endpoint:"dex_dryRunSwapExactOut", params}); 
         if(swapResponse.error!=null){
            return{
 			data:{

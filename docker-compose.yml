@@ -159,6 +159,33 @@ services:
     networks:
       - services_network
     restart: always
+  
+  dex-governance:
+    image: lisk/service_dex_governance
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    restart: always
+  
+  dex-information:
+    image: lisk/service_dex_information
+    depends_on:
+      nats:
+        condition: service_started
+      redis_persistent:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - services_network
+    restart: always
+
   fee-estimator:
     image: lisk/service_fee_estimator
     depends_on:

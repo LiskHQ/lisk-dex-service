@@ -14,7 +14,7 @@
  *
  */
 
-const { invokeEndpoint } = require("../sdk/client");
+const { requestConnector } = require("../utils/request");
 
 const gettingCurrentsqrtprice = async (params) => {
 
@@ -26,7 +26,7 @@ const gettingCurrentsqrtprice = async (params) => {
   }
   
   try {
-    currentsqrtprice = await invokeEndpoint('dex_getCurrentSqrtPrice', methodContext);
+    currentsqrtprice = await requestConnector('invokeEndpoint',{endpoint:"dex_getCurrentSqrtPrice", methodContext});         
     if (currentsqrtprice.error != null) {
       return {
         data: {

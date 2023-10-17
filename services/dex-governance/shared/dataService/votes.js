@@ -14,14 +14,14 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+const { requestConnector } = require("../utils/request");
 
 const getVotes = async (params) => {
 
 	let voteInfos;
 
     try {
-        voteInfos = await invokeEndpoint('dexGovernance_getUserVotes',params);
+        voteInfos = await requestConnector('invokeEndpoint',{endpoint:"dexGovernance_getUserVotes", params}); 
          return {
             data: {
                 voteInfos,

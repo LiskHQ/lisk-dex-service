@@ -15,11 +15,10 @@
  */
 
 
-const { getTableInstance } = require('lisk-service-framework/src/mysql');
 const config = require('../../config');
 const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
 const MYSQL_ENDPOINT = config.endpoints.mysql;
-
+const { DB: { MySQL: { getTableInstance } } } = require('lisk-service-framework');
 
 const getTopTokensPoolsMetadataIndex = () => getTableInstance(
 	topTokensMetadataIndexSchema.tableName,

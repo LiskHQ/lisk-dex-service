@@ -16,16 +16,18 @@
 import Joi from 'joi';
 import regex from './regex';
 
-const validStatuses = ['registered', 'active', 'terminated', 'unregistered'];
+const EMPTY_STRING = '';
+const validStatuses = ['registered', 'activated', 'terminated', 'unregistered'];
 
 const logo = {
-	png: Joi.string().optional(),
-	svg: Joi.string().optional(),
+	png: Joi.string().required(),
+	svg: Joi.string().allow(EMPTY_STRING).required(),
 };
 
 const serviceURL = {
 	http: Joi.string().required(),
 	ws: Joi.string().required(),
+	apiCertificatePublicKey: Joi.string().optional(),
 };
 
 const explorer = {
@@ -36,17 +38,21 @@ const explorer = {
 const appNode = {
 	url: Joi.string().required(),
 	maintainer: Joi.string().required(),
+	apiCertificatePublicKey: Joi.string().optional(),
 };
 
 const blockchainAppMetadataSchema = {
-	chainName: Joi.string().pattern(regex.NAME).required(),
+	chainName: Joi.string().pattern(regex.CHAIN_NAME).required(),
+	displayName: Joi.string().pattern(regex.NAME).required(),
 	chainID: Joi.string().required(),
-	status: Joi.string().valid(...validStatuses).required(),
+	status: Joi.string()
+		.valid(...validStatuses)
+		.required(),
 	networkType: Joi.string().pattern(regex.NETWORK).required(),
 	isDefault: Joi.boolean().required(),
 	title: Joi.string().optional(),
 	description: Joi.string().optional(),
-	genesisURL: Joi.string().required(),
+	genesisURL: Joi.string().allow(EMPTY_STRING).required(),
 	projectPage: Joi.string().required(),
 	appPage: Joi.string().optional(),
 	serviceURLs: Joi.array().items(serviceURL).required(),

@@ -1,6 +1,6 @@
 {
 	"name": "lisk-service-export",
-	"version": "0.7.0-rc.0",
+	"version": "0.7.0-rc.5",
 	"description": "Lisk Service Export",
 	"keywords": [
 		"lisk",
@@ -31,12 +31,12 @@
 		"watch": "supervisor -w . -i ./node_modules app.js"
 	},
 	"dependencies": {
-		"@liskhq/lisk-cryptography": "4.0.0-rc.0",
+		"@liskhq/lisk-cryptography": "4.0.0",
 		"bluebird": "^3.7.2",
 		"bull": "^3.29.2",
 		"exceljs": "^4.3.0",
 		"json2csv": "^5.0.6",
-		"lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/b3646b1215a5abcca3e75f6b36074438ae42b238/framework/dist/lisk-service-framework-1.4.23.tgz",
+		"lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/14b3f0b281b9c5af57085677d66b6c83f6fc3cd8/framework/dist/lisk-service-framework-1.6.6.tgz",
 		"minio": "^7.0.21",
 		"moment": "^2.29.4",
 		"moment-range": "^4.0.2",
@@ -44,6 +44,6 @@
 		"node-xlsx": "^0.23.0"
 	},
 	"devDependencies": {
-		"jest": "^27.3.0"
+		"jest": "^29.7.0"
 	}
 }

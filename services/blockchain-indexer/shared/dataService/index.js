@@ -27,6 +27,7 @@ const {
 	normalizeTransaction,
 	getEventsByHeight,
 	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
 	getEventsByBlockID,
 	deleteEventsFromCache,
 	isMainchain,
@@ -37,6 +38,7 @@ const {
 } = require('./business');
 
 const {
+	formatBlock,
 	getBlocks,
 	getBlocksAssets,
 	setLastBlock,
@@ -108,6 +110,7 @@ const { invokeEndpoint } = require('./invoke');
 
 module.exports = {
 	// Blocks
+	formatBlock,
 	getBlocks,
 	getBlocksAssets,
 	setLastBlock,
@@ -198,6 +201,7 @@ module.exports = {
 	getPosLockedRewards,
 	getEventsByHeight,
 	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
 	getEventsByBlockID,
 	deleteEventsFromCache,
 

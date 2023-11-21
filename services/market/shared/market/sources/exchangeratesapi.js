@@ -13,11 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { CacheRedis } = require('lisk-service-framework');
+const { HTTP, Logger, CacheRedis } = require('lisk-service-framework');
 const BluebirdPromise = require('bluebird');
 
-// const requestLib = HTTP.request;
-// const logger = Logger();
+const requestLib = HTTP.request;
+const logger = Logger();
 
 const { validateEntries } = require('./common');
 const config = require('../../../config');
@@ -27,8 +27,8 @@ const exchangeratesapiCache = CacheRedis('exchangeratesapi_prices', config.endpo
 const accessKey = config.access_key.exchangeratesapi;
 
 const baseCurrencies = config.market.supportedFiatCurrencies.split(',').concat('BTC');
-// const expireMilliseconds = config.ttl.exchangeratesapi;
-const {  allowRefreshAfter } = config.market.sources.exchangeratesapi;
+const expireMilliseconds = config.ttl.exchangeratesapi;
+const { apiEndpoint, allowRefreshAfter } = config.market.sources.exchangeratesapi;
 
 const symbolMap = (() => {
 	// Dynamically generates a map of type '{ "LSK_USD": "LSKUSD" }' based on baseCurrencies
@@ -36,58 +36,66 @@ const symbolMap = (() => {
 	const map = {};
 	baseCurrencies.forEach((baseCurrency, index) => {
 		const targetCurrencies = baseCurrencies.slice(index + 1);
-		targetCurrencies.forEach((targetCurrency) => {
+		targetCurrencies.forEach(targetCurrency => {
 			map[`${baseCurrency}_${targetCurrency}`] = `${baseCurrency}${targetCurrency}`;
 		});
 	});
 	return map;
 })();
 
-// const fetchAllCurrencyConversionRates = async () => {
-// 	try {
-// 		const allMarketConversionRates = {};
-// 		await BluebirdPromise.all(
-// 			baseCurrencies.map(async (baseCurrency) => {
-// 				const remainingCurrencies = baseCurrencies.filter(c => c !== baseCurrency);
-// 				const response = await requestLib(`${apiEndpoint}/latest?access_key=${accessKey}&base=${baseCurrency}&symbols=${remainingCurrencies.join(',')}`);
-// 				if (response) allMarketConversionRates[baseCurrency] = response.data.rates;
-// 			}),
-// 		);
-// 		return allMarketConversionRates;
-// 	} catch (err) {
-// 		logger.error(err.message);
-// 		logger.error(err.stack);
-// 		return err;
-// 	}
-// };
+const fetchAllCurrencyConversionRates = async () => {
+	try {
+		const allMarketConversionRates = {};
+		await BluebirdPromise.all(
+			baseCurrencies.map(async baseCurrency => {
+				const remainingCurrencies = baseCurrencies.filter(c => c !== baseCurrency);
+				const response = await requestLib(
+					`${apiEndpoint}/latest?access_key=${accessKey}&base=${baseCurrency}&symbols=${remainingCurrencies.join(
+						',',
+					)}`,
+				);
+				if (response) allMarketConversionRates[baseCurrency] = response.data.rates;
+			}),
+		);
+		return allMarketConversionRates;
+	} catch (err) {
+		logger.error(err.message);
+		logger.error(err.stack);
+		return err;
+	}
+};
 
-// const standardizeCurrencyConversionRates = (rawConversionRates) => {
-// 	const [transformedConversionRates] = Object.entries(rawConversionRates).map(
-// 		([baseCur, conversionRates]) => Object.getOwnPropertyNames(conversionRates)
-// 			.map(targetCur => ({ symbol: `${baseCur}_${targetCur}`, price: conversionRates[targetCur] })),
-// 	);
-// 	const standardizedConversionRates = (Array.isArray(transformedConversionRates))
-// 		? transformedConversionRates.map(conversionRate => {
-// 			const [from, to] = conversionRate.symbol.split('_');
-// 			const price = {
-// 				code: conversionRate.symbol,
-// 				from,
-// 				to,
-// 				rate: conversionRate.price,
-// 				updateTimestamp: Math.floor(Date.now() / 1000),
-// 				sources: ['exchangeratesapi'],
-// 			};
-// 			return price;
-// 		})
-// 		: [];
-// 	return standardizedConversionRates;
-// };
+const standardizeCurrencyConversionRates = rawConversionRates => {
+	const [transformedConversionRates] = Object.entries(rawConversionRates)
+		.filter(([, conversionRates]) => !!conversionRates)
+		.map(([baseCur, conversionRates]) =>
+			Object.getOwnPropertyNames(conversionRates).map(targetCur => ({
+				symbol: `${baseCur}_${targetCur}`,
+				price: conversionRates[targetCur],
+			})),
+		);
+	const standardizedConversionRates = Array.isArray(transformedConversionRates)
+		? transformedConversionRates.map(conversionRate => {
+				const [from, to] = conversionRate.symbol.split('_');
+				const price = {
+					code: conversionRate.symbol,
+					from,
+					to,
+					rate: conversionRate.price,
+					updateTimestamp: Math.floor(Date.now() / 1000),
+					sources: ['exchangeratesapi'],
+				};
+				return price;
+		  })
+		: [];
+	return standardizedConversionRates;
+};
 
 const getFromCache = async () => {
 	// Read individual price item from cache and deserialize
 	const conversionRates = await BluebirdPromise.map(
 		Object.getOwnPropertyNames(symbolMap),
-		async (itemCode) => {
+		async itemCode => {
 			const serializedPrice = await exchangeratesapiCache.get(`exchangeratesapi_${itemCode}`);
 			if (serializedPrice) return JSON.parse(serializedPrice);
 			return null;
@@ -106,15 +114,22 @@ const reload = async () => {
 
 	// Check if prices exists in cache
 	if (
-		conversionRatesFromCache.length === 0
-		|| validateEntries(conversionRatesFromCache, allowRefreshAfter)
+		conversionRatesFromCache.length === 0 ||
+		validateEntries(conversionRatesFromCache, allowRefreshAfter)
 	) {
-		// const currencyConversionRates = await fetchAllCurrencyConversionRates();
-		//const transformedRates = standardizeCurrencyConversionRates(currencyConversionRates);
+		const currencyConversionRates = await fetchAllCurrencyConversionRates();
+		const transformedRates = standardizeCurrencyConversionRates(currencyConversionRates);
 
 		// Serialize individual price item and write to the cache
-		// await BluebirdPromise.all(transformedRates
-		// 	.map(item => exchangeratesapiCache.set(`exchangeratesapi_${item.code}`, JSON.stringify(item), expireMilliseconds)));
+		await BluebirdPromise.all(
+			transformedRates.map(item =>
+				exchangeratesapiCache.set(
+					`exchangeratesapi_${item.code}`,
+					JSON.stringify(item),
+					expireMilliseconds,
+				),
+			),
+		);
 	}
 };
 

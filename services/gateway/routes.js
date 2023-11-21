@@ -17,9 +17,7 @@ const config = require('./config');
 const { registerApi } = require('./shared/registerHttpApi');
 
 const defaultConfig = {
-	whitelist: [
-		'$node.*',
-	],
+	whitelist: [],
 
 	aliases: {},
 
@@ -55,19 +53,18 @@ const filterApis = (requiredApis, registeredModuleNames) => {
 	const filteredApis = [];
 
 	// Filter the APIs to be registered on the gateway based on 'requiredApis' config
-	const apisToRegister = Object.keys(PATH_API_MAPPINGS)
-		.reduce((acc, path) => {
-			requiredApis.forEach(api => {
-				if (PATH_API_MAPPINGS[path].includes(api)) {
-					if (Array.isArray(acc[path])) {
-						acc[path].push(api);
-					} else {
-						acc[path] = [api];
-					}
+	const apisToRegister = Object.keys(PATH_API_MAPPINGS).reduce((acc, path) => {
+		requiredApis.forEach(api => {
+			if (PATH_API_MAPPINGS[path].includes(api)) {
+				if (Array.isArray(acc[path])) {
+					acc[path].push(api);
+				} else {
+					acc[path] = [api];
 				}
-			});
-			return acc;
-		}, {});
+			}
+		});
+		return acc;
+	}, {});
 
 	// Generate the final routes to be registered at the gateway in moleculer-web
 	Object.entries(apisToRegister).forEach(([path, apis]) => {
@@ -77,7 +74,7 @@ const filterApis = (requiredApis, registeredModuleNames) => {
 	return filteredApis;
 };
 
-const getHttpRoutes = (registeredModuleNames) => filterApis(config.api.http, registeredModuleNames);
+const getHttpRoutes = registeredModuleNames => filterApis(config.api.http, registeredModuleNames);
 
 module.exports = {
 	getHttpRoutes,

@@ -75,41 +75,36 @@ const subscribeToAllRegisteredEvents = async () => {
 	const registeredEvents = await getRegisteredEvents();
 	const allEvents = registeredEvents.concat(events);
 	allEvents.forEach(event => {
-		apiClient.subscribe(
-			event,
-			async payload => {
-				// Force update necessary caches on new chain events
-				if (event.startsWith('chain_')) {
-					eventsCounter++; // Increase counter with every newBlock/deleteBlock
+		apiClient.subscribe(event, async payload => {
+			// Force update necessary caches on new chain events
+			if (event.startsWith('chain_')) {
+				eventsCounter++; // Increase counter with every newBlock/deleteBlock
 
-					await getNodeInfo(true).catch(err => logError('getNodeInfo', err));
-					await updateTokenInfo().catch(err => logError('updateTokenInfo', err));
-				}
+				await getNodeInfo(true).catch(err => logError('getNodeInfo', err));
+				await updateTokenInfo().catch(err => logError('updateTokenInfo', err));
+			}
 
-				logger.debug(`Received event: ${event} with payload:\n${util.inspect(payload)}`);
-				Signals.get(event).dispatch(payload);
-			},
-		);
+			logger.debug(`Received event: ${event} with payload:\n${util.inspect(payload)}`);
+			Signals.get(event).dispatch(payload);
+		});
 		logger.info(`Subscribed to the API client event: ${event}.`);
 	});
 };
 
-const getEventsByHeightFormatted = async (height) => {
+const getEventsByHeightFormatted = async height => {
 	const chainEvents = await getEventsByHeight(height);
-	const formattedEvents = chainEvents.map((event) => formatEvent(event));
+	const formattedEvents = chainEvents.map(event => formatEvent(event));
 	return formattedEvents;
 };
 
 // To ensure API Client is alive and receiving chain events
-getNodeInfo().then(nodeInfo => {
-	setInterval(() => {
-		if (eventsCounter === 0) {
-			Signals.get('resetApiClient').dispatch();
-		} else {
-			eventsCounter = 0;
-		}
-	}, config.connectionVerifyBlockInterval * nodeInfo.genesis.blockTime * 1000);
-});
+setInterval(() => {
+	if (eventsCounter === 0) {
+		Signals.get('resetApiClient').dispatch();
+	} else if (eventsCounter > 0) {
+		eventsCounter = 0;
+	}
+}, config.clientConnVerifyInterval);
 
 module.exports = {
 	events,

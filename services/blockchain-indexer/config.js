@@ -17,12 +17,11 @@ const packageJson = require('./package.json');
 
 const config = {
 	endpoints: {},
-	jobs: {},
+	job: {},
 	log: {
 		name: packageJson.name,
 		version: packageJson.version,
 	},
-	db: {},
 };
 
 /**
@@ -35,13 +34,16 @@ config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in s
  * External endpoints
  */
 config.endpoints.cache = process.env.SERVICE_INDEXER_CACHE_REDIS || 'redis://127.0.0.1:6379/2';
-config.endpoints.volatileRedis = process.env.SERVICE_INDEXER_REDIS_VOLATILE || 'redis://127.0.0.1:6379/3';
-config.endpoints.messageQueue = process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://127.0.0.1:6379/4';
+config.endpoints.volatileRedis =
+	process.env.SERVICE_INDEXER_REDIS_VOLATILE || 'redis://127.0.0.1:6379/3';
+config.endpoints.messageQueue =
+	process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://127.0.0.1:6379/4';
 // Primary database. Used for both read-write operations.
-config.endpoints.mysql = process.env.SERVICE_INDEXER_MYSQL || 'mysql://lisk:password@127.0.0.1:3306/lisk';
+config.endpoints.mysql =
+	process.env.SERVICE_INDEXER_MYSQL || 'mysql://lisk:password@127.0.0.1:3306/lisk';
 // DB replicas against the primary. Used for read-only operations.
-config.endpoints.mysqlReplica = process.env.SERVICE_INDEXER_MYSQL_READ_REPLICA
-	|| config.endpoints.mysql;
+config.endpoints.mysqlReplica =
+	process.env.SERVICE_INDEXER_MYSQL_READ_REPLICA || config.endpoints.mysql;
 config.endpoints.mainchainServiceUrl = process.env.MAINCHAIN_SERVICE_URL; // For custom deployments
 config.endpoints.liskStatic = process.env.LISK_STATIC || 'https://static-data.lisk.com';
 
@@ -78,10 +80,6 @@ config.queue = {
 	event: { name: 'Event' },
 
 	// Intra-microservice job queues
-	accountBalanceIndex: {
-		name: 'AccountBalanceIndex',
-		concurrency: 1,
-	},
 	accountQueueByAddress: {
 		name: 'AccountQueueByAddress',
 		concurrency: 1,
@@ -110,9 +108,12 @@ config.queue = {
 		name: 'PendingAccountAddressUpdates',
 		concurrency: 64,
 	},
-	updateBlockIndex: {
-		name: 'UpdateBlockIndexQueue',
-		concurrency: 1,
+};
+
+config.set = {
+	accountBalanceUpdate: {
+		name: 'AccountBalanceUpdate',
+		batchSize: Number(process.env.ACCOUNT_BALANCE_UPDATE_BATCH_SIZE) || 1000,
 	},
 };
 
@@ -153,9 +154,10 @@ config.networks = Object.freeze({
 	],
 });
 
-config.db.isPersistEvents = Boolean(
-	String(process.env.ENABLE_PERSIST_EVENTS).toLowerCase() === 'true',
-);
+config.db = {
+	isPersistEvents: Boolean(String(process.env.ENABLE_PERSIST_EVENTS).toLowerCase() === 'true'),
+	durabilityVerifyFrequency: Number(process.env.DURABILITY_VERIFY_FREQUENCY) || 1, // In millisecs
+};
 
 config.snapshot = {
 	enable: Boolean(String(process.env.ENABLE_APPLY_SNAPSHOT).toLowerCase() === 'true'), // Disabled by default
@@ -198,6 +200,10 @@ config.job = {
 	triggerAccountUpdates: {
 		interval: process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_UPDATES || 0,
 		schedule: process.env.JOB_SCHEDULE_TRIGGER_ACCOUNT_UPDATES || '*/15 * * * *',
+	},
+	triggerAccountBalanceUpdates: {
+		interval: process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_BALANCE_UPDATES || 10,
+		schedule: process.env.JOB_SCHEDULE_TRIGGER_ACCOUNT_BALANCE_UPDATES || '',
 	},
 };
 

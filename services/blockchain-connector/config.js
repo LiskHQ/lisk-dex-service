@@ -49,8 +49,8 @@ config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-cor
  * Network-related settings
  */
 config.constants.GENESIS_BLOCK_URL_DEFAULT = '';
-config.genesisBlockUrl = process.env.GENESIS_BLOCK_URL
-	|| config.constants.GENESIS_BLOCK_URL_DEFAULT;
+config.genesisBlockUrl =
+	process.env.GENESIS_BLOCK_URL || config.constants.GENESIS_BLOCK_URL_DEFAULT;
 config.networks = {
 	LISK: [
 		{
@@ -112,7 +112,20 @@ config.job = {
 	},
 };
 
-// Every n number of blocks, verify if client connection is alive
-config.connectionVerifyBlockInterval = process.env.CONN_VERIFY_BLOCK_INTERVAL || 10;
+// Every n milliseconds, verify if client connection is alive
+config.clientConnVerifyInterval = Number(
+	process.env.CLIENT_CONNECTION_VERIFY_INTERVAL || 30 * 1000,
+); // in millisecs
+
+config.apiClient = {
+	instantiation: {
+		maxWaitTime: Number(process.env.CLIENT_INSTANTIATION_MAX_WAIT_TIME || 100), // in millisecs
+		retryInterval: Number(process.env.CLIENT_INSTANTIATION_RETRY_INTERVAL || 1), // in millisecs
+	},
+	request: {
+		maxRetries: Number(process.env.ENDPOINT_INVOKE_MAX_RETRIES || 5),
+		retryDelay: Number(process.env.ENDPOINT_INVOKE_RETRY_DELAY || 10), // in millisecs
+	},
+};
 
 module.exports = config;

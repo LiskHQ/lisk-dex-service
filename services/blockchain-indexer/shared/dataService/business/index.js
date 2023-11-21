@@ -13,13 +13,10 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	getGenerators,
-	getNumberOfGenerators,
-	reloadGeneratorsCache,
-} = require('./generators');
+const { getGenerators, getNumberOfGenerators, reloadGeneratorsCache } = require('./generators');
 
 const {
+	formatBlock,
 	getBlocks,
 	getFinalizedHeight,
 	normalizeBlocks,
@@ -37,10 +34,7 @@ const {
 	normalizeTransaction,
 } = require('./transactions');
 
-const {
-	getPendingTransactions,
-	loadAllPendingTransactions,
-} = require('./pendingTransactions');
+const { getPendingTransactions, loadAllPendingTransactions } = require('./pendingTransactions');
 
 const {
 	getBlockchainApps,
@@ -90,6 +84,7 @@ const {
 	getEvents,
 	getEventsByHeight,
 	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
 	getEventsByBlockID,
 	deleteEventsFromCache,
 } = require('./events');
@@ -114,6 +109,7 @@ module.exports = {
 	reloadGeneratorsCache,
 
 	// Blocks
+	formatBlock,
 	getBlocks,
 	getFinalizedHeight,
 	normalizeBlocks,
@@ -138,6 +134,7 @@ module.exports = {
 	getEvents,
 	getEventsByHeight,
 	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
 	getEventsByBlockID,
 	deleteEventsFromCache,
 

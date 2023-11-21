@@ -15,6 +15,7 @@
  */
 const {
 	Exceptions: { TimeoutException },
+	Signals,
 } = require('lisk-service-framework');
 const { invokeEndpoint } = require('./client');
 
@@ -49,7 +50,7 @@ const getSchemas = async () => {
 const getRegisteredEndpoints = async () => {
 	try {
 		if (!registeredEndpoints) {
-			registeredEndpoints = await invokeEndpoint('app_getRegisteredActions');
+			registeredEndpoints = await invokeEndpoint('app_getRegisteredEndpoints');
 		}
 		return registeredEndpoints;
 	} catch (err) {
@@ -78,6 +79,7 @@ const getNodeInfo = async (isForceUpdate = false) => {
 	try {
 		if (isForceUpdate || !nodeInfo) {
 			nodeInfo = await invokeEndpoint('system_getNodeInfo');
+			Signals.get('systemNodeInfo').dispatch(nodeInfo);
 		}
 		return nodeInfo;
 	} catch (err) {

@@ -20,12 +20,19 @@ const { eventsIncludingTokenModule } = require('../../../../constants/events');
 const mockedBlockID = '89a9f8dd0e9d15e54268f952b2e9430e799968169376273f715480d058a67dc4';
 const mockedEvents = eventsIncludingTokenModule;
 
-const mockEventsFilePath = path.resolve(`${__dirname}/../../../../../shared/dataService/business/events`);
+const mockEventsFilePath = path.resolve(
+	`${__dirname}/../../../../../shared/dataService/business/events`,
+);
 
 const mockBlocksTableSchema = require('../../../../../shared/database/schema/blocks');
 const mockEventsTableSchema = require('../../../../../shared/database/schema/events');
 const mockEventTopicsTableSchema = require('../../../../../shared/database/schema/eventTopics');
-const { mockEventTopics, mockEventsForEventTopics, getEventsResult } = require('../../constants/events');
+const {
+	mockEventTopics,
+	mockEventsForEventTopics,
+	getEventsResult,
+	mockEventTopicsQueryParams,
+} = require('../../constants/events');
 
 describe('getEventsByBlockID', () => {
 	beforeEach(() => {
@@ -39,7 +46,7 @@ describe('getEventsByBlockID', () => {
 			return {
 				...actual,
 				CacheLRU: jest.fn(() => ({
-					get: (key) => {
+					get: key => {
 						expect(key).toEqual(mockedBlockID);
 						return JSON.stringify(mockedEvents);
 					},
@@ -64,7 +71,7 @@ describe('getEventsByBlockID', () => {
 			return {
 				...actual,
 				CacheLRU: jest.fn(() => ({
-					get: (key) => {
+					get: key => {
 						expect(key).toEqual(mockedBlockID);
 						return undefined;
 					},
@@ -73,7 +80,7 @@ describe('getEventsByBlockID', () => {
 				DB: {
 					MySQL: {
 						getTableInstance: () => ({
-							find: (params) => {
+							find: params => {
 								expect(params).toEqual({ blockID: mockedBlockID });
 								const dbResp = [];
 
@@ -101,7 +108,7 @@ describe('getEventsByBlockID', () => {
 			return {
 				...actual,
 				CacheLRU: jest.fn(() => ({
-					get: (key) => {
+					get: key => {
 						expect(key).toEqual(mockedBlockID);
 						return undefined;
 					},
@@ -110,7 +117,7 @@ describe('getEventsByBlockID', () => {
 				DB: {
 					MySQL: {
 						getTableInstance: () => ({
-							find: (params) => {
+							find: params => {
 								expect(params).toEqual({ blockID: mockedBlockID });
 								return [];
 							},
@@ -187,6 +194,8 @@ describe('getEvents', () => {
 	});
 
 	it('should retrieve events successfully', async () => {
+		const blockID = '793acee22acea7f4f474e2f8e9e24cb9220da2fc2405026214b5d72a152cb55d';
+
 		jest.mock('../../../../../config', () => {
 			const actual = jest.requireActual('../../../../../config');
 			return {
@@ -204,19 +213,35 @@ describe('getEvents', () => {
 				...actual,
 				DB: {
 					MySQL: {
-						getTableInstance: jest.fn((schema) => {
+						getTableInstance: jest.fn(schema => {
 							if (schema.tableName === mockBlocksTableSchema.tableName) {
 								return {
-									find: jest.fn(() => []),
+									find: jest.fn(queryParams => {
+										if (queryParams.id) {
+											expect(queryParams.id).toBe(blockID);
+										}
+
+										return [
+											{
+												blockID,
+												height: 123,
+											},
+										];
+									}),
 								};
-							} if (schema.tableName === mockEventsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventsTableSchema.tableName) {
 								return {
 									find: jest.fn(() => mockEventsForEventTopics),
 									count: jest.fn(() => 10),
 								};
-							} if (schema.tableName === mockEventTopicsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventTopicsTableSchema.tableName) {
 								return {
-									find: jest.fn(() => mockEventsForEventTopics),
+									find: jest.fn(queryParams => {
+										expect(queryParams).toEqual(mockEventTopicsQueryParams);
+										return mockEventsForEventTopics;
+									}),
 									count: jest.fn(() => 10),
 								};
 							}
@@ -228,6 +253,12 @@ describe('getEvents', () => {
 		});
 
 		const params = {
+			blockID,
+			topic: '03',
+			senderAddress: 'lskw68y3kyus7ota9mykr726aby44mw574m8dkngu',
+			transactionID: 'c8ee3933cc841287d834f74f278ac12f145f320d0593a612e11b67b4a58cd17b',
+			timestamp: '1:1000000000',
+			height: '1:1000',
 			sort: 'timestamp:desc',
 			order: 'index:asc',
 			limit: 10,
@@ -253,20 +284,22 @@ describe('getEvents', () => {
 				...actual,
 				DB: {
 					MySQL: {
-						getTableInstance: jest.fn((schema) => {
+						getTableInstance: jest.fn(schema => {
 							if (schema.tableName === mockBlocksTableSchema.tableName) {
 								return {
-									find: jest.fn((params) => {
+									find: jest.fn(params => {
 										expect(params.id).toEqual(mockInvalidBlockID);
 										return [];
 									}),
 								};
-							} if (schema.tableName === mockEventsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventsTableSchema.tableName) {
 								return {
 									find: jest.fn(() => mockEventsForEventTopics),
 									count: jest.fn(() => 10),
 								};
-							} if (schema.tableName === mockEventTopicsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventTopicsTableSchema.tableName) {
 								return {
 									find: jest.fn(() => mockEventTopics),
 									count: jest.fn(() => 10),
@@ -280,9 +313,11 @@ describe('getEvents', () => {
 		});
 
 		const { getEvents } = require(mockEventsFilePath);
-		await expect(getEvents({
-			blockID: mockInvalidBlockID,
-		})).rejects.toThrow(NotFoundException);
+		await expect(
+			getEvents({
+				blockID: mockInvalidBlockID,
+			}),
+		).rejects.toThrow(NotFoundException);
 	});
 
 	it('should throw a NotFoundException for an invalid combination of blockID and height', async () => {
@@ -298,20 +333,22 @@ describe('getEvents', () => {
 				...actual,
 				DB: {
 					MySQL: {
-						getTableInstance: jest.fn((schema) => {
+						getTableInstance: jest.fn(schema => {
 							if (schema.tableName === mockBlocksTableSchema.tableName) {
 								return {
-									find: jest.fn((queryParams) => {
+									find: jest.fn(queryParams => {
 										expect(queryParams.id).toEqual(mockValidBlockID);
 										return [{ height: 123 }];
 									}),
 								};
-							} if (schema.tableName === mockEventsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventsTableSchema.tableName) {
 								return {
 									find: jest.fn(() => mockEventsForEventTopics),
 									count: jest.fn(() => 10),
 								};
-							} if (schema.tableName === mockEventTopicsTableSchema.tableName) {
+							}
+							if (schema.tableName === mockEventTopicsTableSchema.tableName) {
 								return {
 									find: jest.fn(() => mockEventTopics),
 									count: jest.fn(() => 10),
@@ -325,9 +362,11 @@ describe('getEvents', () => {
 		});
 
 		const { getEvents } = require(mockEventsFilePath);
-		await expect(getEvents({
-			blockID: mockValidBlockID,
-			height: 456,
-		})).rejects.toThrow(NotFoundException);
+		await expect(
+			getEvents({
+				blockID: mockValidBlockID,
+				height: 456,
+			}),
+		).rejects.toThrow(NotFoundException);
 	});
 });

@@ -1,12 +1,12 @@
 {
   "name": "lisk-dex-service-base",
-  "version": "0.7.0-alpha.7",
+  "version": "1.0.0-beta.1",
   "description": "Lisk DEX Service Base",
   "keywords": [
     "lisk",
     "blockchain"
   ],
-  "homepage": "https://github.com/LiskHQ/lisk-service",
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
   "repository": {
     "type": "git",
     "url": "git@github.com:LiskHQ/lisk-service.git"

@@ -1,19 +1,19 @@
 {
-	"name": "lisk-service-blockchain-indexer",
-	"version": "0.7.0-rc.5",
-	"description": "Lisk Service Blockchain Indexer",
+	"name": "lisk-dex-service-blockchain-indexer",
+	"version": "1.0.0-beta.1",
+	"description": "Lisk Dex Service Blockchain Indexer",
 	"keywords": [
 		"lisk",
 		"blockchain"
 	],
-	"homepage": "https://github.com/LiskHQ/lisk-service",
+	"homepage": "https://github.com/LiskHQ/lisk-dex-service",
 	"repository": {
-		"type": "git",
-		"url": "git@github.com:LiskHQ/lisk-service.git"
-	},
-	"bugs": {
-		"url": "https://github.com/LiskHQ/lisk-service/issues"
-	},
+    "type": "git",
+    "url": "git+https://github.com/LiskHQ/lisk-dex-service.git"
+  },
+	 "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+  },
 	"private": true,
 	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
 	"license": "Apache-2.0",

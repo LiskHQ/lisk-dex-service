@@ -6,7 +6,7 @@
     "lisk",
     "blockchain"
   ],
-  "homepage": "https://github.com/LiskHQ/lisk-service",
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
   "repository": {
     "type": "git",
     "url": "git@github.com:LiskHQ/lisk-service.git"

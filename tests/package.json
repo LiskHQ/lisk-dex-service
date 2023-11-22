@@ -1,20 +1,20 @@
 {
-	"name": "lisk-service-tests",
-	"version": "0.6.4",
-	"description": "Lisk Service Test Package",
+	"name": "lisk-dex-service-tests",
+	"version": "1.0.0-beta.1",
+	"description": "Lisk Dex Service Test Package",
 	"keywords": [
 		"lisk",
 		"service",
 		"blockchain"
 	],
-	"homepage": "https://github.com/LiskHQ/lisk-service",
+	"homepage": "https://github.com/LiskHQ/lisk-dex-service",
 	"repository": {
-		"type": "git",
-		"url": "git@github.com:LiskHQ/lisk-service.git"
-	},
-	"bugs": {
-		"url": "https://github.com/LiskHQ/lisk-service/issues"
-	},
+    "type": "git",
+    "url": "git+https://github.com/LiskHQ/lisk-dex-service.git"
+  },
+	 "bugs": {
+    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+  },
 	"private": true,
 	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
 	"license": "Apache-2.0",

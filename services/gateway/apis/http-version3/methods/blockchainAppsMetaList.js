@@ -22,11 +22,16 @@ module.exports = {
 	version: '2.0',
 	swaggerApiPath: '/blockchain/apps/meta/list',
 	rpcMethod: 'get.blockchain.apps.meta.list',
-	tags: ['Interoperability'],
+	tags: ['Application Off-Chain Metadata'],
 	params: {
-		chainName: { optional: true, type: 'string', min: 1, max: 20, pattern: regex.NAME },
-		network: { optional: true, type: 'string', min: 1, pattern: regex.NETWORK_CSV },
-		search: { optional: true, type: 'string' },
+		chainName: { optional: true, type: 'string', pattern: regex.CHAIN_NAME },
+		network: { optional: true, type: 'string', pattern: regex.NETWORK_CSV },
+		search: {
+			optional: true,
+			type: 'string',
+			pattern: regex.PARTIAL_SEARCH_NAME,
+			altSwaggerKey: 'searchByChainName',
+		},
 		limit: { optional: true, type: 'number', min: 1, max: 100, default: 10 },
 		offset: { optional: true, type: 'number', min: 0, default: 0 },
 		sort: {
@@ -40,15 +45,21 @@ module.exports = {
 		const blockchainAppsMetaListSchema = {};
 		blockchainAppsMetaListSchema[this.swaggerApiPath] = { get: {} };
 		blockchainAppsMetaListSchema[this.swaggerApiPath].get.tags = this.tags;
-		blockchainAppsMetaListSchema[this.swaggerApiPath].get.summary = 'Requests list of blockchain applications for which the off-chain metadata is available';
+		blockchainAppsMetaListSchema[this.swaggerApiPath].get.summary =
+			'Requests list of blockchain applications for which the off-chain metadata is available';
 		blockchainAppsMetaListSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Returns a list of blockchain applications for which the off-chain metadata is available',
+			description:
+				'Returns a list of blockchain applications for which the off-chain metadata is available',
 		});
-		blockchainAppsMetaListSchema[this.swaggerApiPath].get.parameters = transformParams('blockchainAppsMetaList', this.params);
+		blockchainAppsMetaListSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'blockchainAppsMetaList',
+			this.params,
+		);
 		blockchainAppsMetaListSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Returns a list of blockchain applications for which the off-chain metadata is available',
+				description:
+					'Returns a list of blockchain applications for which the off-chain metadata is available',
 				schema: {
 					$ref: '#/definitions/BlockchainAppsMetaListWithEnvelope',
 				},

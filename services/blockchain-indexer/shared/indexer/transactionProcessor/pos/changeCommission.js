@@ -15,23 +15,23 @@
  */
 const {
 	Logger,
-	MySQL: { getTableInstance },
+	DB: {
+		MySQL: { getTableInstance },
+	},
 } = require('lisk-service-framework');
 
-const { getLisk32AddressFromPublicKey } = require('../../../utils/accountUtils');
+const { getLisk32AddressFromPublicKey } = require('../../../utils/account');
 
 const config = require('../../../../config');
+
+const { TRANSACTION_STATUS } = require('../../../constants');
 
 const logger = Logger();
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
 const commissionsTableSchema = require('../../../database/schema/commissions');
 
-const getCommissionsTable = () => getTableInstance(
-	commissionsTableSchema.tableName,
-	commissionsTableSchema,
-	MYSQL_ENDPOINT,
-);
+const getCommissionsTable = () => getTableInstance(commissionsTableSchema, MYSQL_ENDPOINT);
 
 // Command specific constants
 const COMMAND_NAME = 'changeCommission';
@@ -49,23 +49,35 @@ const getCommissionIndexingInfo = (blockHeader, tx) => {
 };
 
 const applyTransaction = async (blockHeader, tx, events, dbTrx) => {
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
+
 	const commissionsTable = await getCommissionsTable();
 
 	const commissionInfo = getCommissionIndexingInfo(blockHeader, tx);
 
-	logger.trace(`Indexing commission update for address ${commissionInfo.address} at height ${commissionInfo.height}.`);
+	logger.trace(
+		`Indexing commission update for address ${commissionInfo.address} at height ${commissionInfo.height}.`,
+	);
 	await commissionsTable.upsert(commissionInfo, dbTrx);
-	logger.debug(`Indexed commission update for address ${commissionInfo.address} at height ${commissionInfo.height}.`);
+	logger.debug(
+		`Indexed commission update for address ${commissionInfo.address} at height ${commissionInfo.height}.`,
+	);
 };
 
 const revertTransaction = async (blockHeader, tx, events, dbTrx) => {
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
+
 	const commissionsTable = await getCommissionsTable();
 
 	const commissionInfo = getCommissionIndexingInfo(blockHeader, tx);
 
-	logger.trace(`Remove commission entry for address ${commissionInfo.address} at height ${commissionInfo.height}.`);
+	logger.trace(
+		`Remove commission entry for address ${commissionInfo.address} at height ${commissionInfo.height}.`,
+	);
 	await commissionsTable.delete(commissionInfo, dbTrx);
-	logger.debug(`Remove commission entry for address ${commissionInfo.address} at height ${commissionInfo.height}.`);
+	logger.debug(
+		`Remove commission entry for address ${commissionInfo.address} at height ${commissionInfo.height}.`,
+	);
 };
 
 module.exports = {

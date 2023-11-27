@@ -1,6 +1,6 @@
 {
   "name": "lisk-dex-governance-service",
-  "version": "0.7.0-alpha.10",
+  "version": "1.0.0-beta.1",
   "description": "Lisk DEX Governance Template",
   "keywords": [
     "lisk",
@@ -19,8 +19,8 @@
   "license": "Apache-2.0",
   "main": "app.js",
   "engines": {
-    "node": ">=16.15.0 <=16",
-    "npm": ">=8.5.0"
+		"node": ">=18.16 <=18",
+		"npm": ">=8.5.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -30,8 +30,8 @@
     "watch": "supervisor -w . -i ./node_modules app.js"
   },
   "dependencies": {
-    "@liskhq/lisk-api-client": "^6.0.0-beta.1",
-    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/91a641edc62f4829105c49280b0bfa80aad5f732/framework/dist/lisk-service-framework-1.4.11.tgz",
-    "node-cron": "=2.0.3"
+    "@liskhq/lisk-api-client": "^6.0.0-beta.3",
+    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/bf8048b920f61a2b27d7c28535dfefed5bd679cb/framework/dist/lisk-service-framework-1.5.1.tgz",
+		"node-cron": "=2.0.3"
   }
 }

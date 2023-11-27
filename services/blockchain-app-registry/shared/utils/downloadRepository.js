@@ -13,23 +13,39 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const BluebirdPromise = require('bluebird');
 const path = require('path');
+const BluebirdPromise = require('bluebird');
 const { Octokit } = require('octokit');
 
 const {
+	Utils: {
+		fs: { exists, mkdir, getDirectories, rmdir, rm, mv },
+	},
 	Logger,
+	DB: {
+		MySQL: {
+			getDBConnection,
+			startDBTransaction,
+			commitDBTransaction,
+			rollbackDBTransaction,
+			KVStore: { configureKeyValueTable, getKeyValueTable },
+		},
+	},
 	Signals,
 } = require('lisk-service-framework');
 
-const { resolveChainNameByNetworkAppDir } = require('./chainUtils');
-const { downloadAndExtractTarball, downloadFile } = require('./downloadUtils');
-const { exists, mkdir, getDirectories, rename, rmdir } = require('./fsUtils');
+const { resolveChainNameByNetworkAppDir } = require('./chain');
+const { downloadAndExtractTarball, downloadFile } = require('./download');
 
-const keyValueTable = require('../database/mysqlKVStore');
-const { indexMetadataFromFile } = require('../metadataIndex');
+const { indexMetadataFromFile, deleteIndexedMetadataFromFile } = require('../metadataIndex');
 
 const config = require('../../config');
+
+const MYSQL_ENDPOINT = config.endpoints.mysql;
+
+configureKeyValueTable(MYSQL_ENDPOINT);
+
+const keyValueTable = getKeyValueTable();
 
 const { KV_STORE_KEY } = require('../constants');
 
@@ -39,9 +55,18 @@ const logger = Logger();
 
 const octokit = new Octokit({ auth: config.gitHub.accessToken });
 
-const getRepoInfoFromURL = (url) => {
-	const urlInput = url || '';
-	const [, , , owner, repo] = urlInput.split('/');
+const GITHUB_FILE_STATUS = Object.freeze({
+	ADDED: 'added',
+	REMOVED: 'removed',
+	MODIFIED: 'modified',
+	RENAMED: 'renamed',
+	COPIED: 'copied',
+	CHANGED: 'changed',
+	UNCHANGED: 'unchanged',
+});
+
+const getRepoInfoFromURL = (url = '') => {
+	const [, , , owner, repo] = url.split('/');
 	return { owner, repo };
 };
 
@@ -62,13 +87,16 @@ const getLatestCommitHash = async () => {
 	} catch (error) {
 		let errorMsg = error.message;
 		if (Array.isArray(error)) errorMsg = error.map(e => e.message).join('\n');
-		logger.error(`Unable to get latest commit hash due to: ${errorMsg}`);
+		logger.error(`Unable to get latest commit hash due to: ${errorMsg}.`);
 		throw error;
 	}
 };
 
-const getCommitInfo = async () => {
-	const lastSyncedCommitHash = await keyValueTable.get(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC);
+const getCommitInfo = async (dbTrx = null) => {
+	const lastSyncedCommitHash = await keyValueTable.get(
+		KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC,
+		dbTrx,
+	);
 	const latestCommitHash = await getLatestCommitHash();
 	return { lastSyncedCommitHash, latestCommitHash };
 };
@@ -88,27 +116,35 @@ const getRepoDownloadURL = async () => {
 	} catch (error) {
 		let errorMsg = error.message;
 		if (Array.isArray(error)) errorMsg = error.map(e => e.message).join('\n');
-		logger.error(`Unable to access the repository due to: ${errorMsg}`);
+		logger.error(`Unable to access the repository due to: ${errorMsg}.`);
 		throw error;
 	}
 };
 
-const getFileDownloadURL = async (file) => {
-	try {
-		const result = await octokit.request(
-			`GET /repos/${owner}/${repo}/contents/${file}`,
-			{
-				owner,
-				repo,
-				ref: `${config.gitHub.branch}`,
-			},
-		);
+const getFileDownloadURLAndHeaders = async file => {
+	if (!file) {
+		throw new Error('getFileDownloadURLAndHeaders requires a filename as a parameter.');
+	}
 
-		return result;
+	try {
+		const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file}?ref=${config.gitHub.branch}`;
+		const headers = {
+			'User-Agent': 'GitHub-File-Downloader',
+		};
+
+		// Add Authorization header if accessing a private repo
+		if (config.gitHub.accessToken) {
+			headers.Authorization = `token ${config.gitHub.accessToken}`;
+		}
+
+		return {
+			url,
+			headers,
+		};
 	} catch (error) {
 		let errorMsg = error.message;
 		if (Array.isArray(error)) errorMsg = error.map(e => e.message).join('\n');
-		logger.error(`Unable to access the file due to: ${errorMsg}`);
+		logger.error(`Unable to access the file due to: ${errorMsg}.`);
 		throw error;
 	}
 };
@@ -116,14 +152,11 @@ const getFileDownloadURL = async (file) => {
 const getDiff = async (lastSyncedCommitHash, latestCommitHash) => {
 	const url = `GET /repos/${owner}/${repo}/compare/${lastSyncedCommitHash}...${latestCommitHash}`;
 	try {
-		const result = await octokit.request(
-			url,
-			{
-				owner,
-				repo,
-				ref: `${config.gitHub.branch}`,
-			},
-		);
+		const result = await octokit.request(url, {
+			owner,
+			repo,
+			ref: `${config.gitHub.branch}`,
+		});
 
 		return result;
 	} catch (error) {
@@ -138,13 +171,14 @@ const getDiff = async (lastSyncedCommitHash, latestCommitHash) => {
 const filterMetaConfigFilesByNetwork = async (network, filesChanged) => {
 	const filesChangedInput = filesChanged || [];
 	const filesUpdated = filesChangedInput.filter(
-		file => file.startsWith(network)
-			&& (file.endsWith(FILENAME.APP_JSON) || file.endsWith(FILENAME.NATIVETOKENS_JSON)),
+		file =>
+			file.startsWith(network) &&
+			(file.endsWith(FILENAME.APP_JSON) || file.endsWith(FILENAME.NATIVETOKENS_JSON)),
 	);
 	return filesUpdated;
 };
 
-const getUniqueNetworkAppDirPairs = async (files) => {
+const getUniqueNetworkAppDirPairs = async files => {
 	const filesInput = files || [];
 	const map = new Map();
 
@@ -157,13 +191,12 @@ const getUniqueNetworkAppDirPairs = async (files) => {
 	return [...map.values()];
 };
 
-const buildEventPayload = async (allFilesModified) => {
+const buildEventPayload = async allFilesModified => {
 	const eventPayload = {};
-
 	const { supportedNetworks } = config;
 	const numSupportedNetworks = supportedNetworks.length;
+
 	for (let index = 0; index < numSupportedNetworks; index++) {
-		/* eslint-disable no-await-in-loop */
 		const networkType = supportedNetworks[index];
 		const filesUpdated = await filterMetaConfigFilesByNetwork(networkType, allFilesModified);
 
@@ -174,66 +207,210 @@ const buildEventPayload = async (allFilesModified) => {
 		);
 
 		eventPayload[networkType] = appsUpdated;
-		/* eslint-enable no-await-in-loop */
 	}
 
 	return eventPayload;
 };
 
-const syncWithRemoteRepo = async () => {
+const isMetadataFile = filePath =>
+	!!(
+		filePath &&
+		(filePath.endsWith(FILENAME.APP_JSON) || filePath.endsWith(FILENAME.NATIVETOKENS_JSON))
+	);
+
+/* Sorts the passed array and groups files by the network and app. Returns following structure:
+{
+	network: {
+		app: [
+			file,
+		]
+	}
+}
+*/
+const groupFilesByNetworkAndApp = fileInfos => {
+	// Stores an map of {networkName} -> {appName} -> [files]
+	const groupedFiles = {};
+
+	// Sorting is necessary to ensure app.json is processed before nativetokens.json file
+	// Otherwise the indexing may fail as token metadata indexing is dependant on app metadata
+	fileInfos.sort((first, second) => first.filename.localeCompare(second.filename));
+
+	fileInfos.forEach(fileInfo => {
+		const [network, appName, fileName] = fileInfo.filename.split('/').slice(-3);
+
+		// Only process metadata files
+		if (!config.supportedNetworks.includes(network) || !isMetadataFile(fileName)) return;
+
+		if (!(network in groupedFiles)) groupedFiles[network] = {};
+		if (!(appName in groupedFiles[network])) groupedFiles[network][appName] = [];
+		groupedFiles[network][appName].push(fileInfo);
+	});
+	return groupedFiles;
+};
+
+const getModifiedFileNames = groupedFiles => {
+	const fileNames = [];
+
+	Object.keys(groupedFiles).forEach(network => {
+		const appsInNetwork = groupedFiles[network];
+
+		Object.keys(appsInNetwork).forEach(appName => {
+			const appFiles = appsInNetwork[appName];
+			appFiles.forEach(file => fileNames.push(file.filename));
+		});
+	});
+	return fileNames;
+};
+
+const syncWithRemoteRepo = async (_dbTrx = null) => {
+	let isCustomDBTrx = false;
+	const dbTrx =
+		_dbTrx ||
+		(await (async () => {
+			const connection = await getDBConnection(MYSQL_ENDPOINT);
+			const newDBTrx = await startDBTransaction(connection);
+			isCustomDBTrx = true;
+			return newDBTrx;
+		})());
+
 	try {
 		const dataDirectory = config.dataDir;
 		const appDirPath = path.join(dataDirectory, repo);
+		const { lastSyncedCommitHash, latestCommitHash } = await getCommitInfo(dbTrx);
 
-		const { lastSyncedCommitHash, latestCommitHash } = await getCommitInfo();
-
+		// Skip if there is no new commit
 		if (lastSyncedCommitHash === latestCommitHash) {
-			logger.info('Database is already up-to-date');
-		} else {
-			const diffInfo = await getDiff(lastSyncedCommitHash, latestCommitHash);
-			// TODO: Add a check to filter out non-blockchain apps related files
-			const filesChanged = diffInfo.data.files.map(file => file.filename);
+			logger.info('Database is already up-to-date.');
+			if (isCustomDBTrx) await rollbackDBTransaction(dbTrx);
+			return;
+		}
 
-			await BluebirdPromise.map(
-				filesChanged,
-				async file => {
-					const result = await getFileDownloadURL(file);
-					const filePath = path.join(appDirPath, file);
-					await downloadFile(result.data.download_url, filePath);
-					logger.debug(`Successfully downloaded: ${file}`);
+		// Create a temp dir in respective repo dir to download files and move after processing app
+		// This helps to avoid partially updating an app's files when DB update was not successful
+		// Ex: app.json(v2) is downloaded but indexing failed and transaction was not committed
+		// Next time, the job will fail to delete app.json(v1) info as it was replaced by app.json(v2)
+		const TEMP_DOWNLOAD_DIR_NAME = 'temp-downloads';
+		const tempDownloadDir = path.join(appDirPath, TEMP_DOWNLOAD_DIR_NAME);
+		if (await exists(tempDownloadDir)) await rmdir(tempDownloadDir);
+		await mkdir(tempDownloadDir);
 
-					if (file.endsWith(FILENAME.APP_JSON) || file.endsWith(FILENAME.NATIVETOKENS_JSON)) {
-						const [network, appName, filename] = file.split('/').slice(-3);
-						await indexMetadataFromFile(network, appName, filename);
-						logger.debug('Successfully updated the database with the latest changes');
-					}
-				},
-				{ concurrency: filesChanged.length },
-			);
+		const fileUpdatedStatuses = [
+			GITHUB_FILE_STATUS.REMOVED,
+			GITHUB_FILE_STATUS.MODIFIED,
+			GITHUB_FILE_STATUS.CHANGED,
+		];
+		const diffInfo = await getDiff(lastSyncedCommitHash, latestCommitHash);
+		const groupedFiles = groupFilesByNetworkAndApp(diffInfo.data.files);
 
-			await keyValueTable.set(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC, latestCommitHash);
+		const filesToBeDeleted = [];
+		const filesToBeMoved = [];
 
-			if (filesChanged.length) {
-				const eventPayload = await buildEventPayload(filesChanged);
-				Signals.get('metadataUpdated').dispatch(eventPayload);
-			}
+		await BluebirdPromise.map(
+			Object.keys(groupedFiles),
+			async networkName => {
+				const appsInNetwork = groupedFiles[networkName];
+
+				await BluebirdPromise.map(
+					Object.keys(appsInNetwork),
+					async appName => {
+						const appFiles = appsInNetwork[appName];
+
+						// Should process app files sequentially as nativetokens.json is dependant on app.json
+						// eslint-disable-next-line no-restricted-syntax
+						for (const modifiedFile of appFiles) {
+							const remoteFilePath = modifiedFile.filename;
+							const localFilePath = path.join(appDirPath, remoteFilePath);
+
+							// Delete indexed information if a meta file is updated/deleted
+							if (fileUpdatedStatuses.includes(modifiedFile.status)) {
+								await deleteIndexedMetadataFromFile(localFilePath, dbTrx);
+							}
+
+							// Skip download and indexing for deleted file.
+							// The file should be deleted only after processing of the app is done.
+							// As app.json file is required to delete indexed info of nativetokens.json
+							if (modifiedFile.status === GITHUB_FILE_STATUS.REMOVED) {
+								filesToBeDeleted.push(localFilePath);
+								// eslint-disable-next-line no-continue
+								continue;
+							}
+
+							// Create directory and download latest file
+							const tempFilePath = path.join(tempDownloadDir, remoteFilePath);
+							const dirPath = path.dirname(tempFilePath);
+							await mkdir(dirPath, { recursive: true });
+
+							const { url, headers } = await getFileDownloadURLAndHeaders(remoteFilePath);
+							await downloadFile(url, headers, tempFilePath);
+							logger.debug(`Successfully downloaded: ${tempFilePath}.`);
+
+							// Update DB with latest metadata file information
+							await indexMetadataFromFile(tempFilePath, dbTrx);
+							logger.debug(
+								`Successfully updated the database with the latest changes of file: ${remoteFilePath}.`,
+							);
+
+							// Schedule files to be moved once db transaction is committed
+							filesToBeMoved.push({
+								from: tempFilePath,
+								to: localFilePath,
+							});
+						}
+					},
+					{ concurrency: Object.keys(appsInNetwork).length },
+				);
+			},
+			{ concurrency: Object.keys(groupedFiles).length },
+		);
+
+		await keyValueTable.set(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC, latestCommitHash, dbTrx);
+		if (isCustomDBTrx) await commitDBTransaction(dbTrx);
+
+		// Delete files which are removed from remote
+		await BluebirdPromise.map(filesToBeDeleted, async filePath => rm(filePath), {
+			concurrency: filesToBeDeleted.length,
+		});
+
+		// Move downloaded files
+		await BluebirdPromise.map(
+			filesToBeMoved,
+			async filePathInfo => {
+				// Create directory to move file
+				await mkdir(path.dirname(filePathInfo.to));
+				await mv(filePathInfo.from, filePathInfo.to);
+			},
+			{ concurrency: filesToBeMoved.length },
+		);
+
+		// Remove temporary file download directory
+		await rmdir(tempDownloadDir);
+
+		if (Object.keys(groupedFiles).length) {
+			const modifiedFileNames = getModifiedFileNames(groupedFiles);
+			const eventPayload = await buildEventPayload(modifiedFileNames);
+			Signals.get('metadataUpdated').dispatch(eventPayload);
 		}
 	} catch (error) {
+		if (isCustomDBTrx) await rollbackDBTransaction(dbTrx);
 		let errorMsg = error.message;
 		if (Array.isArray(error)) errorMsg = error.map(e => e.message).join('\n');
-		logger.error(`Unable to sync changes due to: ${errorMsg}`);
+		logger.error(`Unable to sync changes due to: ${errorMsg}.`);
 		throw error;
 	}
 };
 
-const downloadRepositoryToFS = async () => {
+const downloadRepositoryToFS = async dbTrx => {
 	const dataDirectory = config.dataDir;
 	const appDirPath = path.join(dataDirectory, repo);
-	const lastSyncedCommitHash = await keyValueTable.get(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC);
 
-	if (lastSyncedCommitHash && await exists(appDirPath)) {
+	const lastSyncedCommitHash = await keyValueTable.get(
+		KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC,
+		dbTrx,
+	);
+
+	if (lastSyncedCommitHash && (await exists(appDirPath))) {
 		logger.trace('Synchronizing with the remote repository.');
-		await syncWithRemoteRepo();
+		await syncWithRemoteRepo(dbTrx);
 		logger.info('Finished synchronizing with the remote repository successfully.');
 	} else {
 		if (!(await exists(dataDirectory))) {
@@ -249,10 +426,10 @@ const downloadRepositoryToFS = async () => {
 		await downloadAndExtractTarball(url, dataDirectory);
 
 		const [oldDir] = await getDirectories(dataDirectory);
-		await rename(oldDir, appDirPath);
+		await mv(oldDir, appDirPath);
 
 		const latestCommitHash = await getLatestCommitHash();
-		await keyValueTable.set(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC, latestCommitHash);
+		await keyValueTable.set(KV_STORE_KEY.COMMIT_HASH_UNTIL_LAST_SYNC, latestCommitHash, dbTrx);
 	}
 };
 
@@ -260,6 +437,7 @@ module.exports = {
 	downloadRepositoryToFS,
 	getRepoInfoFromURL,
 	syncWithRemoteRepo,
+	isMetadataFile,
 
 	// For testing
 	getRepoDownloadURL,
@@ -267,7 +445,10 @@ module.exports = {
 	getCommitInfo,
 	getUniqueNetworkAppDirPairs,
 	filterMetaConfigFilesByNetwork,
-	getFileDownloadURL,
+	getFileDownloadURLAndHeaders,
 	getDiff,
 	buildEventPayload,
+	getModifiedFileNames,
 };
+
+// deleteIndexedMetadataFromFile

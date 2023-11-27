@@ -14,10 +14,13 @@
  *
  */
 const fs = require('fs');
-const json = require('big-json');
 const path = require('path');
+const json = require('big-json');
 
-const { Logger } = require('lisk-service-framework');
+const {
+	Logger,
+	Exceptions: { NotFoundException },
+} = require('lisk-service-framework');
 
 const { getNodeInfo } = require('./endpoints_1');
 const { formatBlock } = require('./formatter');
@@ -33,9 +36,11 @@ let genesisBlockUrl;
 let genesisBlockFilePath;
 let genesisBlock = { header: {} };
 
+let isGenesisBlockURLNotFound = false;
+
 const parseStream = json.createParseStream();
 
-const setGenesisBlock = (block) => genesisBlock = block;
+const setGenesisBlock = block => (genesisBlock = block);
 
 const getGenesisBlock = () => genesisBlock;
 
@@ -63,7 +68,9 @@ const loadConfig = async () => {
 			genesisBlockFilePath = `./data/${chainID}/genesis_block.json`;
 			logger.info(`genesisBlockFilePath set to ${genesisBlockFilePath}`);
 		} else {
-			logger.info(`Network is neither defined in the config, nor in the environment variable (${chainID})`);
+			logger.info(
+				`Network is neither defined in the config, nor in the environment variable (${chainID})`,
+			);
 			return;
 		}
 	}
@@ -84,7 +91,6 @@ const downloadAndValidateGenesisBlock = async (retries = 2) => {
 	const checksumFilePath = `${genesisFilePath}.SHA256`;
 
 	do {
-		/* eslint-disable no-await-in-loop */
 		try {
 			if (!(await exists(directoryPath))) await mkdir(directoryPath, { recursive: true });
 
@@ -98,7 +104,8 @@ const downloadAndValidateGenesisBlock = async (retries = 2) => {
 
 			if (isValidGenesisBlock) {
 				// Extract if downloaded file is a tar archive
-				if (genesisFilePath.endsWith('.tar.gz')) await extractTarBall(genesisFilePath, directoryPath);
+				if (genesisFilePath.endsWith('.tar.gz'))
+					await extractTarBall(genesisFilePath, directoryPath);
 
 				return true;
 			}
@@ -106,18 +113,25 @@ const downloadAndValidateGenesisBlock = async (retries = 2) => {
 			// Delete all previous files including the containing directory if genesis block is not valid
 			await rm(directoryPath, { recursive: true, force: true });
 		} catch (err) {
-			logger.error('Error while downloading and validating genesis block');
+			logger.error('Error while downloading and validating genesis block.');
 			logger.error(err.message);
+			if (err instanceof NotFoundException) {
+				isGenesisBlockURLNotFound = true;
+				throw err;
+			}
 		}
-		/* eslint-enable no-await-in-loop */
 	} while (retries-- > 0);
 
-	logger.fatal(`Unable to verify the integrity of the downloaded genesis block from ${genesisBlockUrl}`);
-	logger.fatal('Exiting the application');
+	logger.fatal(
+		`Unable to verify the integrity of the downloaded genesis block from ${genesisBlockUrl}.`,
+	);
+	logger.fatal('Exiting the application.');
 	process.exit(1);
 };
 
 const getGenesisBlockFromFS = async () => {
+	if (isGenesisBlockURLNotFound) throw new NotFoundException();
+
 	if (!genesisBlockUrl || !genesisBlockFilePath) await loadConfig();
 	if (!getGenesisBlockId()) {
 		if (!(await exists(genesisBlockFilePath))) {
@@ -126,8 +140,8 @@ const getGenesisBlockFromFS = async () => {
 		}
 
 		const block = await new Promise((resolve, reject) => {
-			readStream.pipe(parseStream.on('data', (data) => resolve(data)));
-			parseStream.on('error', (err) => reject(err));
+			readStream.pipe(parseStream.on('data', data => resolve(data)));
+			parseStream.on('error', err => reject(err));
 		});
 
 		const formattedBlock = await formatBlock(block);

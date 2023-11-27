@@ -22,23 +22,7 @@ module.exports = {
 	},
 	definition: {
 		data: {
-			proposalID: '=,string',
-            creationHeight: '=,string',
-            votesYes: '=,string',
-            votesNo: '=,string',
-            votesPass: '=,string',
-            type: '=,string',
-            content: {
-                text: '=,string',
-                poolID: '=,string',
-                multiplier: '=,string',
-                metadata: {
-                    title: '=,string',
-                    author: '=,string',
-                    summary: '=,string',
-                    discussionsTo: '=,string',
-                }
-            },
+			proposal: '=,string',
 		},
 		meta: {},
 	},

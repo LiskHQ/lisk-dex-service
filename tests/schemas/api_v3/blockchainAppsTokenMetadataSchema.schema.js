@@ -16,9 +16,11 @@
 import Joi from 'joi';
 import regex from './regex';
 
+const EMPTY_STRING = '';
+
 const logo = {
-	png: Joi.string().optional(),
-	svg: Joi.string().optional(),
+	png: Joi.string().required(),
+	svg: Joi.string().allow(EMPTY_STRING).required(),
 };
 
 const denomUnit = {
@@ -28,7 +30,7 @@ const denomUnit = {
 };
 
 const blockchainAppsTokenMetadataSchema = {
-	chainName: Joi.string().pattern(regex.NAME).required(),
+	chainName: Joi.string().pattern(regex.CHAIN_NAME).required(),
 	chainID: Joi.string().required(),
 	tokenName: Joi.string().pattern(regex.NAME).required(),
 	tokenID: Joi.string().required(),

@@ -38,8 +38,11 @@ module.exports = {
 					$ref: '#/definitions/NetworkStatistics',
 				},
 			},
-			404: {
-				$ref: '#/responses/notFound',
+			503: {
+				description: 'Service Unavailable',
+				schema: {
+					$ref: '#/definitions/serviceUnavailable',
+				},
 			},
 		};
 		return networkSchema;

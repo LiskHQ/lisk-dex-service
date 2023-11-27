@@ -15,10 +15,12 @@
  */
 const {
 	Logger,
-	MySQL: { getTableInstance },
+	DB: {
+		MySQL: { getTableInstance },
+	},
 } = require('lisk-service-framework');
 
-const { getLisk32AddressFromPublicKey } = require('../../../utils/accountUtils');
+const { getLisk32AddressFromPublicKey } = require('../../../utils/account');
 
 const config = require('../../../../config');
 
@@ -27,28 +29,24 @@ const logger = Logger();
 const MYSQL_ENDPOINT = config.endpoints.mysql;
 const blockchainAppsTableSchema = require('../../../database/schema/blockchainApps');
 const { TRANSACTION_STATUS } = require('../../../constants');
-const { getChainStatus } = require('./registerMainchain');
+const { getChainInfo } = require('./registerMainchain');
 
-const getBlockchainAppsTable = () => getTableInstance(
-	blockchainAppsTableSchema.tableName,
-	blockchainAppsTableSchema,
-	MYSQL_ENDPOINT,
-);
+const getBlockchainAppsTable = () => getTableInstance(blockchainAppsTableSchema, MYSQL_ENDPOINT);
 
 // Command specific constants
 const COMMAND_NAME = 'registerSidechain';
 
 const applyTransaction = async (blockHeader, tx, events, dbTrx) => {
-	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESS) return;
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
 
 	const blockchainAppsTable = await getBlockchainAppsTable();
-	const chainStatus = await getChainStatus(tx.params.chainID);
+	const chainInfo = await getChainInfo(tx.params.chainID);
 
 	logger.trace(`Indexing sidechain (${tx.params.chainID}) registration information.`);
 	const appInfo = {
 		chainID: tx.params.chainID,
-		name: tx.params.name,
-		status: chainStatus,
+		chainName: tx.params.name,
+		status: chainInfo.status,
 		address: getLisk32AddressFromPublicKey(tx.senderPublicKey),
 		lastUpdated: blockHeader.timestamp,
 		lastCertificateHeight: blockHeader.height,
@@ -59,7 +57,7 @@ const applyTransaction = async (blockHeader, tx, events, dbTrx) => {
 };
 
 const revertTransaction = async (blockHeader, tx, events, dbTrx) => {
-	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESS) return;
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
 
 	const blockchainAppsTable = await getBlockchainAppsTable();
 

@@ -23,16 +23,14 @@ const {
 
 const schemas = require('../../../schemas/api_v3/constants/schemas');
 
-const {
-	badRequestSchema,
-} = require('../../../schemas/httpGenerics.schema');
+const { badRequestSchema } = require('../../../schemas/httpGenerics.schema');
 
 const baseUrl = config.SERVICE_ENDPOINT;
 const baseUrlV3 = `${baseUrl}/api/v3`;
 const endpoint = `${baseUrlV3}/schemas`;
 
 describe('Schemas API', () => {
-	it('returns list of all available schemas', async () => {
+	it('should return list of all available schemas', async () => {
 		const response = await api.get(endpoint);
 		expect(response).toMap(goodRequestSchema);
 		expect(response.data).toMap(allSchemasSchema);
@@ -41,13 +39,15 @@ describe('Schemas API', () => {
 		expect(response.data.asset.schema).toStrictEqual(schemas.assetSchema);
 		expect(response.data.transaction.schema).toStrictEqual(schemas.transactionSchema);
 		expect(response.data.event.schema).toStrictEqual(schemas.eventSchema);
+		expect(response.data.ccm.schema).toStrictEqual(schemas.ccmSchema);
 		expect(response.data.standardEvent.schema).toStrictEqual(schemas.standardEventSchema);
 
-		response.data.messages
-			.forEach(message => expect(message.schema).toStrictEqual(schemas.messageSchema));
+		response.data.messages.forEach(message =>
+			expect(message.schema).toStrictEqual(schemas.messageSchema),
+		);
 	});
 
-	it('invalid param -> 400', async () => {
+	it('should return bad request for invalid param', async () => {
 		const response = await api.get(`${endpoint}?invalid_param=invalid_param`, 400);
 		expect(response).toMap(badRequestSchema);
 	});

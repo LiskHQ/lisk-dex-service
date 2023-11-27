@@ -14,8 +14,12 @@
  *
  */
 const config = {
-    endpoints: {},
+    endpoints: {
+		mysql:process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk',
+	},
 };
+
+config.dataDir = `${__dirname}/data`;
 
 /**
  * External endpoints
@@ -24,13 +28,15 @@ config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7
 config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
 config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
 config.endpoints = {
-	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6379/0',
+	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6381/0',
 };
+
+
 
 const packageJson = require('./package.json');
 
 // Moleculer broker config
-config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://localhost:6381/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 // Logging

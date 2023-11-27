@@ -14,7 +14,7 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+const { requestConnector } = require("../utils/request");
 
 
 const getPoolsAvailable = async () => {
@@ -22,7 +22,8 @@ const getPoolsAvailable = async () => {
     let poolsAvailable;
 	
     try {
-      poolsAvailable = await invokeEndpoint('dex_getAllPoolIDs');
+      poolsAvailable = await requestConnector('invokeEndpoint',{endpoint:"dex_getAllPoolIDs"}); 
+		
           return {
               data: {
                 poolsAvailable,

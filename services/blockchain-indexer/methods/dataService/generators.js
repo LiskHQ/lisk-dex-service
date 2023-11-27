@@ -13,17 +13,16 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	getGenerators,
-} = require('./controllers/generators');
+const { getGenerators } = require('./controllers/generators');
 
 module.exports = [
 	{
 		name: 'generators',
 		controller: getGenerators,
 		params: {
-			limit: { type: 'any', optional: true },
-			offset: { type: 'any', optional: true },
+			search: { type: 'string', optional: true },
+			limit: { type: 'number', optional: true },
+			offset: { type: 'number', optional: true },
 		},
 	},
 ];

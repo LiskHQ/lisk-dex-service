@@ -15,14 +15,18 @@
  */
 const {
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 } = require('./token');
 
 module.exports = {
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 };

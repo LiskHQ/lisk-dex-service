@@ -14,6 +14,7 @@
  *
  */
 const blockchainAppsStatsSchemaSource = require('../../../sources/version3/blockchainAppsStatsSchema');
+const envelope = require('../../../sources/version3/mappings/stdEnvelope');
 const { getSwaggerDescription } = require('../../../shared/utils');
 
 module.exports = {
@@ -26,7 +27,8 @@ module.exports = {
 		const blockchainAppsStatsSchema = {};
 		blockchainAppsStatsSchema[this.swaggerApiPath] = { get: {} };
 		blockchainAppsStatsSchema[this.swaggerApiPath].get.tags = this.tags;
-		blockchainAppsStatsSchema[this.swaggerApiPath].get.summary = 'Requests blockchain application statistics';
+		blockchainAppsStatsSchema[this.swaggerApiPath].get.summary =
+			'Requests blockchain application statistics';
 		blockchainAppsStatsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Returns blockchain applications statistics',
@@ -38,11 +40,9 @@ module.exports = {
 					$ref: '#/definitions/blockchainAppsStatsEnvelope',
 				},
 			},
-			404: {
-				$ref: '#/responses/notFound',
-			},
 		};
 		return blockchainAppsStatsSchema;
 	},
 	source: blockchainAppsStatsSchemaSource,
+	envelope,
 };

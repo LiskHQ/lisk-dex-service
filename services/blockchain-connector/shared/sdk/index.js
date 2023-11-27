@@ -18,6 +18,8 @@ const {
 	getGenesisBlockID,
 	getGenesisBlock,
 	getGenesisConfig,
+	getGenesisAssets,
+	getGenesisAssetsLength,
 } = require('./genesisBlock');
 
 const {
@@ -25,11 +27,12 @@ const {
 	getGeneratorStatus,
 	updateGeneratorStatus,
 	getSchemas,
-	getRegisteredActions,
+	getRegisteredEndpoints,
 	getRegisteredEvents,
 	getRegisteredModules,
 	getNodeInfo,
 	getSystemMetadata,
+	getEngineEndpoints,
 } = require('./endpoints');
 
 const {
@@ -49,21 +52,16 @@ const {
 } = require('./transactions');
 
 const {
-	getPeers,
-	getConnectedPeers,
-	getDisconnectedPeers,
-	getPeersStatistics,
-} = require('./peers');
-
-const {
 	tokenHasUserAccount,
+	tokenHasEscrowAccount,
 	getTokenBalance,
 	getTokenBalances,
 	getEscrowedAmounts,
 	getSupportedTokens,
 	getTotalSupply,
 	getTokenInitializationFees,
-} = require('./tokens');
+	updateTokenInfo,
+} = require('./token');
 
 const {
 	getAllPosValidators,
@@ -85,19 +83,15 @@ const {
 	cacheRegisteredRewardModule,
 } = require('./dynamicReward');
 
-const {
-	getFeeTokenID,
-	getMinFeePerByte,
-	cacheFeeConstants,
-} = require('./fee');
+const { getFeeTokenID, getMinFeePerByte, cacheFeeConstants } = require('./fee');
 
-const {
-	getAuthAccount,
-	getAuthMultiSigRegMsgSchema,
-} = require('./auth');
+const { getAuthAccount, getAuthMultiSigRegMsgSchema } = require('./auth');
 
 const {
 	getChainAccount,
+	getMainchainID,
+	getChannel,
+	getRegistrationFee,
 } = require('./interoperability');
 
 const { getLegacyAccount } = require('./legacy');
@@ -105,17 +99,31 @@ const { getEventsByHeight } = require('./events');
 const { invokeEndpointProxy } = require('./invoke');
 const { setSchemas, setMetadata } = require('./schema');
 const { getValidator, validateBLSKey } = require('./validators');
-const { refreshNetworkStatus, getNetworkStatus } = require('./network');
+const {
+	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
+} = require('./network');
+
+const { cacheCleanup } = require('./cache');
+const { formatTransaction } = require('./formatter');
+const { encodeCCM } = require('./encoder');
 
 const init = async () => {
-	// Initialize the local cache
-	await refreshNetworkStatus();
-	await cacheRegisteredRewardModule();
-	await cacheFeeConstants();
-
 	// Cache all the schemas
 	setSchemas(await getSchemas());
 	setMetadata(await getSystemMetadata());
+
+	// Initialize the local cache
+	await getNodeInfo(true);
+	await cacheRegisteredRewardModule();
+	await cacheFeeConstants();
+	await updateTokenInfo();
+	await getTokenInitializationFees();
+	await getRewardTokenID();
+	await getPosConstants();
 
 	// Download the genesis block, if applicable
 	await getGenesisBlock();
@@ -129,17 +137,20 @@ module.exports = {
 	getGenesisBlockID,
 	getGenesisBlock,
 	getGenesisConfig,
+	getGenesisAssets,
+	getGenesisAssetsLength,
 
 	// Endpoints
 	getGenerators,
 	getGeneratorStatus,
 	updateGeneratorStatus,
 	getSchemas,
-	getRegisteredActions,
+	getRegisteredEndpoints,
 	getRegisteredEvents,
 	getRegisteredModules,
 	getNodeInfo,
 	getSystemMetadata,
+	getEngineEndpoints,
 
 	// Blocks
 	getLastBlock,
@@ -154,15 +165,11 @@ module.exports = {
 	getTransactionsFromPool,
 	postTransaction,
 	dryRunTransaction,
-
-	// Peers
-	getPeers,
-	getConnectedPeers,
-	getDisconnectedPeers,
-	getPeersStatistics,
+	formatTransaction,
 
 	// Tokens
 	tokenHasUserAccount,
+	tokenHasEscrowAccount,
 	getTokenBalance,
 	getTokenBalances,
 	getEscrowedAmounts,
@@ -198,6 +205,9 @@ module.exports = {
 
 	// Interoperability
 	getChainAccount,
+	getMainchainID,
+	getChannel,
+	getChainRegistrationFee: getRegistrationFee,
 
 	// Legacy
 	getLegacyAccount,
@@ -217,6 +227,15 @@ module.exports = {
 	validateBLSKey,
 
 	// Network
-	refreshNetworkStatus,
 	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
+
+	// CCM
+	encodeCCM,
+
+	// Cache
+	cacheCleanup,
 };

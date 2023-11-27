@@ -15,6 +15,7 @@
  */
 module.exports = {
 	chainName: '=,string',
+	displayName: '=,string',
 	chainID: '=,string',
 	title: '=,string',
 	description: '=,string',
@@ -24,21 +25,32 @@ module.exports = {
 	genesisURL: '=,string',
 	projectPage: '=,string',
 	appPage: '=,string',
-	serviceURLs: ['serviceURLs', {
-		http: '=,string',
-		ws: '=,string',
-	}],
+	serviceURLs: [
+		'serviceURLs',
+		{
+			http: '=,string',
+			ws: '=,string',
+			apiCertificatePublicKey: '=,string',
+		},
+	],
 	logo: {
 		png: '=,string',
 		svg: '=,string',
 	},
-	explorers: ['explorers', {
-		url: '=,string',
-		txnPage: '=,string',
-	}],
-	appNodes: ['appNodes', {
-		url: '=,string',
-		maintainer: '=,string',
-	}],
+	explorers: [
+		'explorers',
+		{
+			url: '=,string',
+			txnPage: '=,string',
+		},
+	],
+	appNodes: [
+		'appNodes',
+		{
+			url: '=,string',
+			apiCertificatePublicKey: '=,string',
+			maintainer: '=,string',
+		},
+	],
 	backgroundColor: '=,string',
 };

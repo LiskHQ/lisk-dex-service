@@ -14,7 +14,7 @@
  *
  */
 
-const { invokeEndpoint } = require("../../../blockchain-connector/shared/sdk/client");
+const { requestConnector } = require("../utils/request");
 
 const getPriceImpactExactIn = async (params) => {
 	const moduleEndpointContext = {
@@ -25,7 +25,7 @@ const getPriceImpactExactIn = async (params) => {
 		swapRoute: params.swapRoute,
 	}
 	try {
-		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactIn', moduleEndpointContext);
+		const priceImpact = await requestConnector('invokeEndpoint',{endpoint:"dex_dryRunSwapExactIn", moduleEndpointContext}); 
 		return {
 			data: {
 				priceImpact,

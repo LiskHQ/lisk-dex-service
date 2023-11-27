@@ -36,15 +36,11 @@ const blockSchema = {
 			fieldNumber: 3,
 		},
 	},
-	required: [
-		'header',
-		'transactions',
-		'assets',
-	],
+	required: ['header', 'transactions', 'assets'],
 };
 
 const headerSchema = {
-	$id: '/block/header/3',
+	$id: '/block/header/3/without-id',
 	type: 'object',
 	properties: {
 		version: {
@@ -103,11 +99,7 @@ const headerSchema = {
 		aggregateCommit: {
 			type: 'object',
 			fieldNumber: 14,
-			required: [
-				'height',
-				'aggregationBits',
-				'certificateSignature',
-			],
+			required: ['height', 'aggregationBits', 'certificateSignature'],
 			properties: {
 				height: {
 					dataType: 'uint32',
@@ -150,10 +142,7 @@ const headerSchema = {
 const assetSchema = {
 	$id: '/block/asset/3',
 	type: 'object',
-	required: [
-		'module',
-		'data',
-	],
+	required: ['module', 'data'],
 	properties: {
 		module: {
 			dataType: 'string',
@@ -169,14 +158,7 @@ const assetSchema = {
 const transactionSchema = {
 	$id: '/lisk/transaction',
 	type: 'object',
-	required: [
-		'module',
-		'command',
-		'nonce',
-		'fee',
-		'senderPublicKey',
-		'params',
-	],
+	required: ['module', 'command', 'nonce', 'fee', 'senderPublicKey', 'params'],
 	properties: {
 		module: {
 			dataType: 'string',
@@ -221,14 +203,7 @@ const transactionSchema = {
 const eventSchema = {
 	$id: '/block/event',
 	type: 'object',
-	required: [
-		'module',
-		'name',
-		'data',
-		'topics',
-		'height',
-		'index',
-	],
+	required: ['module', 'name', 'data', 'topics', 'height', 'index'],
 	properties: {
 		module: {
 			dataType: 'string',
@@ -249,6 +224,7 @@ const eventSchema = {
 		topics: {
 			type: 'array',
 			fieldNumber: 4,
+			maxItems: 4,
 			items: {
 				dataType: 'bytes',
 			},
@@ -260,6 +236,7 @@ const eventSchema = {
 		index: {
 			dataType: 'uint32',
 			fieldNumber: 6,
+			maximum: 1073741823,
 		},
 	},
 };
@@ -267,9 +244,7 @@ const eventSchema = {
 const standardEventSchema = {
 	$id: '/block/event/standard',
 	type: 'object',
-	required: [
-		'success',
-	],
+	required: ['success'],
 	properties: {
 		success: {
 			dataType: 'boolean',
@@ -278,16 +253,72 @@ const standardEventSchema = {
 	},
 };
 
+const MIN_MODULE_NAME_LENGTH = 1;
+const MAX_MODULE_NAME_LENGTH = 32;
+const MIN_CROSS_CHAIN_COMMAND_NAME_LENGTH = 1;
+const MAX_CROSS_CHAIN_COMMAND_NAME_LENGTH = 32;
+const CHAIN_ID_LENGTH = 4;
+const ccmSchema = {
+	$id: '/modules/interoperability/ccm',
+	type: 'object',
+	required: [
+		'module',
+		'crossChainCommand',
+		'nonce',
+		'fee',
+		'sendingChainID',
+		'receivingChainID',
+		'params',
+		'status',
+	],
+	properties: {
+		module: {
+			dataType: 'string',
+			minLength: MIN_MODULE_NAME_LENGTH,
+			maxLength: MAX_MODULE_NAME_LENGTH,
+			fieldNumber: 1,
+		},
+		crossChainCommand: {
+			dataType: 'string',
+			minLength: MIN_CROSS_CHAIN_COMMAND_NAME_LENGTH,
+			maxLength: MAX_CROSS_CHAIN_COMMAND_NAME_LENGTH,
+			fieldNumber: 2,
+		},
+		nonce: {
+			dataType: 'uint64',
+			fieldNumber: 3,
+		},
+		fee: {
+			dataType: 'uint64',
+			fieldNumber: 4,
+		},
+		sendingChainID: {
+			dataType: 'bytes',
+			minLength: CHAIN_ID_LENGTH,
+			maxLength: CHAIN_ID_LENGTH,
+			fieldNumber: 5,
+		},
+		receivingChainID: {
+			dataType: 'bytes',
+			minLength: CHAIN_ID_LENGTH,
+			maxLength: CHAIN_ID_LENGTH,
+			fieldNumber: 6,
+		},
+		params: {
+			dataType: 'bytes',
+			fieldNumber: 7,
+		},
+		status: {
+			dataType: 'uint32',
+			fieldNumber: 8,
+		},
+	},
+};
+
 const messageSchema = {
 	$id: '/auth/command/regMultisigMsg',
 	type: 'object',
-	required: [
-		'address',
-		'nonce',
-		'numberOfSignatures',
-		'mandatoryKeys',
-		'optionalKeys',
-	],
+	required: ['address', 'nonce', 'numberOfSignatures', 'mandatoryKeys', 'optionalKeys'],
 	properties: {
 		address: {
 			dataType: 'bytes',
@@ -331,5 +362,6 @@ module.exports = {
 	transactionSchema,
 	eventSchema,
 	standardEventSchema,
+	ccmSchema,
 	messageSchema,
 };

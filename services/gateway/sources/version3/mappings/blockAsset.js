@@ -19,8 +19,11 @@ module.exports = {
 		height: '=,number',
 		timestamp: '=,number',
 	},
-	assets: ['assets', {
-		module: '=,string',
-		data: '=', // TODO: Update data schema once confirmed from sdk
-	}],
+	assets: [
+		'assets',
+		{
+			module: '=,string',
+			data: '=',
+		},
+	],
 };

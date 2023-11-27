@@ -13,13 +13,10 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	getGenerators,
-	getNumberOfGenerators,
-	reloadGeneratorsCache,
-} = require('./generators');
+const { getGenerators, getNumberOfGenerators, reloadGeneratorsCache } = require('./generators');
 
 const {
+	formatBlock,
 	getBlocks,
 	getFinalizedHeight,
 	normalizeBlocks,
@@ -37,27 +34,27 @@ const {
 	normalizeTransaction,
 } = require('./transactions');
 
-const {
-	getPendingTransactions,
-	loadAllPendingTransactions,
-} = require('./pendingTransactions');
-
-const {
-	getPeersStatistics,
-} = require('./peers');
+const { getPendingTransactions, loadAllPendingTransactions } = require('./pendingTransactions');
 
 const {
 	getBlockchainApps,
 	getBlockchainAppsStatistics,
 	getChainAccount,
+	getMainchainID,
 	reloadBlockchainAppsStats,
+	isMainchain,
+	resolveMainchainServiceURL,
+	resolveChannelInfo,
+	getCurrentChainID,
 } = require('./interoperability');
 
 const {
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 } = require('./token');
 
 const {
@@ -86,10 +83,24 @@ const { postTransactions } = require('./postTransactions');
 const {
 	getEvents,
 	getEventsByHeight,
+	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
+	getEventsByBlockID,
 	deleteEventsFromCache,
 } = require('./events');
 const { dryRunTransactions } = require('./transactionsDryRun');
 const { getValidator, validateBLSKey } = require('./validator');
+const {
+	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
+} = require('./network');
+const { estimateTransactionFees } = require('./transactionsEstimateFees');
+const { invokeEndpoint } = require('./invoke');
+
+const { setFeeEstimates, getFeeEstimates, initFeeEstimates } = require('./feeEstimates');
 
 module.exports = {
 	// Generators
@@ -98,6 +109,7 @@ module.exports = {
 	reloadGeneratorsCache,
 
 	// Blocks
+	formatBlock,
 	getBlocks,
 	getFinalizedHeight,
 	normalizeBlocks,
@@ -116,23 +128,34 @@ module.exports = {
 	loadAllPendingTransactions,
 	postTransactions,
 	dryRunTransactions,
+	estimateTransactionFees,
 
 	// Events
 	getEvents,
 	getEventsByHeight,
+	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
+	getEventsByBlockID,
 	deleteEventsFromCache,
 
 	// Interoperability
 	getBlockchainApps,
 	getChainAccount,
+	getMainchainID,
 	getBlockchainAppsStatistics,
 	reloadBlockchainAppsStats,
+	isMainchain,
+	resolveMainchainServiceURL,
+	resolveChannelInfo,
+	getCurrentChainID,
 
 	// Token
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 
 	// PoS
 	getPosValidators,
@@ -159,10 +182,22 @@ module.exports = {
 	getValidator,
 	validateBLSKey,
 
-	// Peers
-	getPeersStatistics,
-
+	// Dynamic Reward
 	getAnnualInflation,
 	getDefaultRewardAtHeight,
 	getRewardConstants,
+
+	// Fee estimates
+	initFeeEstimates,
+	setFeeEstimates,
+	getFeeEstimates,
+
+	// Network
+	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
+
+	invokeEndpoint,
 };

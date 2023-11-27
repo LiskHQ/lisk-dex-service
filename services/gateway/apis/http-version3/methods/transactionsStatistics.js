@@ -36,7 +36,10 @@ module.exports = {
 			rpcMethod: this.rpcMethod,
 			description: 'Returns transaction statistics',
 		});
-		transactionSchema[this.swaggerApiPath].get.parameters = transformParams('transactions', this.params);
+		transactionSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'transactions',
+			this.params,
+		);
 		transactionSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Returns a list of transactions statistics by date or month',
@@ -44,15 +47,21 @@ module.exports = {
 					$ref: '#/definitions/TransactionsStatisticsWithEnvelope',
 				},
 			},
+			503: {
+				description: 'Service Unavailable',
+				schema: {
+					$ref: '#/definitions/serviceUnavailable',
+				},
+			},
 		};
-		transactionSchema[this.swaggerApiPath].get.parameters = [{
+		transactionSchema[this.swaggerApiPath].get.parameters[0] = {
 			name: 'interval',
 			in: 'query',
 			description: 'interval to query statistics',
 			required: true,
 			type: 'string',
 			enum: ['day', 'month'],
-		}];
+		};
 		Object.assign(transactionSchema[this.swaggerApiPath].get.responses, response);
 		return transactionSchema;
 	},

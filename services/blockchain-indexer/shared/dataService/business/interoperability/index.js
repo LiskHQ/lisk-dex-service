@@ -15,11 +15,19 @@
  */
 const { getBlockchainApps } = require('./blockchainApps');
 const { getChainAccount } = require('./chainAccount');
+const { getMainchainID } = require('./mainchain');
 const { getBlockchainAppsStatistics, reloadBlockchainAppsStats } = require('./blockchainAppsStats');
+const { isMainchain, getCurrentChainID } = require('./chain');
+const { resolveMainchainServiceURL, resolveChannelInfo } = require('./channel');
 
 module.exports = {
 	getBlockchainApps,
 	getChainAccount,
+	getMainchainID,
 	getBlockchainAppsStatistics,
 	reloadBlockchainAppsStats,
+	isMainchain,
+	resolveMainchainServiceURL,
+	resolveChannelInfo,
+	getCurrentChainID,
 };

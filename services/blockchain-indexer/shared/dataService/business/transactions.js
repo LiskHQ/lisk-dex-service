@@ -17,39 +17,39 @@ const BluebirdPromise = require('bluebird');
 
 const {
 	Exceptions: { InvalidParamsException },
-	MySQL: { getTableInstance },
+	DB: {
+		MySQL: { getTableInstance },
+	},
 } = require('lisk-service-framework');
 
 const { getBlockByID } = require('./blocks');
+const { getEventsByHeight } = require('./events');
 
-const {
-	getLisk32AddressFromPublicKey,
-	getIndexedAccountInfo,
-} = require('../../utils/accountUtils');
+const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
-const { normalizeRangeParam } = require('../../utils/paramUtils');
-const { normalizeTransaction } = require('../../utils/transactionsUtils');
+const { normalizeRangeParam } = require('../../utils/param');
+const { normalizeTransaction, getTransactionExecutionStatus } = require('../../utils/transactions');
 const { getFinalizedHeight } = require('../../constants');
 
-const transactionsIndexSchema = require('../../database/schema/transactions');
+const transactionsTableSchema = require('../../database/schema/transactions');
 const config = require('../../../config');
+const { getLisk32AddressFromPublicKey } = require('../../utils/account');
 
-const MYSQL_ENDPOINT = config.endpoints.mysql;
+const MYSQL_ENDPOINT = config.endpoints.mysqlReplica;
 
-const getTransactionsIndex = () => getTableInstance(
-	transactionsIndexSchema.tableName,
-	transactionsIndexSchema,
-	MYSQL_ENDPOINT,
-);
+const getTransactionsTable = () => getTableInstance(transactionsTableSchema, MYSQL_ENDPOINT);
 
 const getTransactionIDsByBlockID = async blockID => {
-	const transactionsTable = await getTransactionsIndex();
-	const transactions = await transactionsTable.find({
-		whereIn: {
-			property: 'blockId',
-			values: [blockID],
+	const transactionsTable = await getTransactionsTable();
+	const transactions = await transactionsTable.find(
+		{
+			whereIn: {
+				property: 'blockID',
+				values: [blockID],
+			},
 		},
-	}, ['id']);
+		['id'],
+	);
 	const transactionsIds = transactions.map(t => t.id);
 	return transactionsIds;
 };
@@ -82,14 +82,19 @@ const validateParams = async params => {
 		params = normalizeRangeParam(params, 'timestamp');
 	}
 
-	if (params.nonce && !(params.senderAddress)) {
-		throw new InvalidParamsException('Nonce based retrieval is only possible along with senderAddress');
+	if (params.nonce && !params.senderAddress) {
+		throw new InvalidParamsException(
+			'Nonce based retrieval is only possible along with senderAddress',
+		);
 	}
 
 	if (params.executionStatus) {
 		const { executionStatus, ...remParams } = params;
 		params = remParams;
-		const executionStatuses = executionStatus.split(',').map(e => e.trim()).filter(e => e !== 'any');
+		const executionStatuses = executionStatus
+			.split(',')
+			.map(e => e.trim())
+			.filter(e => e !== 'any');
 		params.whereIn = { property: 'executionStatus', values: executionStatuses };
 	}
 
@@ -105,7 +110,7 @@ const validateParams = async params => {
 };
 
 const getTransactions = async params => {
-	const transactionsTable = await getTransactionsIndex();
+	const transactionsTable = await getTransactionsTable();
 	const transactions = {
 		data: [],
 		meta: {},
@@ -114,17 +119,21 @@ const getTransactions = async params => {
 	params = await validateParams(params);
 
 	const total = await transactionsTable.count(params);
-	const resultSet = await transactionsTable.find(
-		{ ...params, limit: params.limit || total },
-		['id', 'timestamp', 'height', 'blockID', 'executionStatus', 'index'],
-	);
+	const resultSet = await transactionsTable.find({ ...params, limit: params.limit || total }, [
+		'id',
+		'timestamp',
+		'height',
+		'blockID',
+		'executionStatus',
+		'index',
+		'minFee',
+	]);
 	params.ids = resultSet.map(row => row.id);
 
 	if (params.ids.length) {
 		const BATCH_SIZE = 25;
 		for (let i = 0; i < Math.ceil(params.ids.length / BATCH_SIZE); i++) {
 			transactions.data = transactions.data.concat(
-				// eslint-disable-next-line no-await-in-loop
 				await getTransactionsByIDs(params.ids.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)),
 			);
 		}
@@ -139,10 +148,9 @@ const getTransactions = async params => {
 		transactions.data,
 		async transaction => {
 			const senderAddress = getLisk32AddressFromPublicKey(transaction.senderPublicKey);
-			const senderAccount = await getIndexedAccountInfo(
-				{ address: senderAddress, limit: 1 },
-				['name'],
-			);
+			const senderAccount = await getIndexedAccountInfo({ address: senderAddress, limit: 1 }, [
+				'name',
+			]);
 
 			transaction.sender = {
 				address: senderAddress,
@@ -175,6 +183,7 @@ const getTransactions = async params => {
 
 			transaction.executionStatus = indexedTxInfo.executionStatus;
 			transaction.index = indexedTxInfo.index;
+			transaction.minFee = indexedTxInfo.minFee;
 
 			return transaction;
 		},
@@ -192,13 +201,12 @@ const getTransactionsByBlockID = async blockID => {
 	const block = await getBlockByID(blockID);
 	const transactions = await BluebirdPromise.map(
 		block.transactions,
-		async (transaction) => {
+		async transaction => {
 			const senderAddress = getLisk32AddressFromPublicKey(transaction.senderPublicKey);
 
-			const senderAccount = await getIndexedAccountInfo(
-				{ address: senderAddress, limit: 1 },
-				['name'],
-			);
+			const senderAccount = await getIndexedAccountInfo({ address: senderAddress, limit: 1 }, [
+				'name',
+			]);
 
 			transaction.sender = {
 				address: senderAddress,
@@ -227,13 +235,17 @@ const getTransactionsByBlockID = async blockID => {
 				timestamp: block.timestamp,
 			};
 
-			// TODO: Check - this information might not be available yet
-			const transactionsTable = await getTransactionsIndex();
-			const [indexedTxInfo = {}] = await transactionsTable.find(
-				{ id: transaction.id, limit: 1 },
-				['executionStatus'],
-			);
-			transaction.executionStatus = indexedTxInfo.executionStatus;
+			const transactionsTable = await getTransactionsTable();
+			const [indexedTxInfo = {}] = await transactionsTable.find({ id: transaction.id, limit: 1 }, [
+				'executionStatus',
+			]);
+
+			if (indexedTxInfo.executionStatus) {
+				transaction.executionStatus = indexedTxInfo.executionStatus;
+			} else {
+				const events = await getEventsByHeight(block.height);
+				transaction.executionStatus = await getTransactionExecutionStatus(transaction, events);
+			}
 
 			return transaction;
 		},
@@ -256,4 +268,7 @@ module.exports = {
 	getTransactionsByBlockID,
 	getTransactionsByIDs,
 	normalizeTransaction,
+
+	// For unit test
+	validateParams,
 };

@@ -1,12 +1,12 @@
 {
   "name": "lisk-dex-service-base",
-  "version": "0.7.0-alpha.7",
+  "version": "1.0.0-beta.1",
   "description": "Lisk DEX Service Base",
   "keywords": [
     "lisk",
     "blockchain"
   ],
-  "homepage": "https://github.com/LiskHQ/lisk-service",
+  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
   "repository": {
     "type": "git",
     "url": "git@github.com:LiskHQ/lisk-service.git"
@@ -19,8 +19,8 @@
   "license": "Apache-2.0",
   "main": "app.js",
   "engines": {
-    "node": ">=16.15.0 <=16",
-    "npm": ">=8.5.0"
+		"node": ">=18.16 <=18",
+		"npm": ">=8.5.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -33,8 +33,8 @@
     "@liskhq/lisk-api-client": "^6.0.0-beta.3",
     "bluebird": "^3.7.2",
     "joi": "^17.4.0",
-    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/97436b89082f857db2943c3eb4f1279f0693ac9c/framework/dist/lisk-service-framework-1.4.12.tgz",
-    "moment": "^2.29.4",
+    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/bf8048b920f61a2b27d7c28535dfefed5bd679cb/framework/dist/lisk-service-framework-1.5.1.tgz",
+		"moment": "^2.29.4",
     "node-cron": "=2.0.3"
   },
   "devDependencies": {

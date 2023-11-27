@@ -22,12 +22,7 @@ const getProposal = async params => {
 
 		return {
 			data: {
-				creationHeight: response.data.creationHeight,
-                votesYes: response.data.votesYes,
-                votesNo: response.data.votesNo,
-                votesPass: response.data.votesPass,
-                type: response.data.type,
-                content: response.data.content,
+				proposal:response.data
 			},
 			meta: {}
 		};

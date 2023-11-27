@@ -26,10 +26,19 @@ const {
 	getTransactionsByIDs,
 	normalizeTransaction,
 	getEventsByHeight,
+	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
+	getEventsByBlockID,
 	deleteEventsFromCache,
+	isMainchain,
+	resolveMainchainServiceURL,
+	getCurrentChainID,
+	resolveChannelInfo,
+	initFeeEstimates,
 } = require('./business');
 
 const {
+	formatBlock,
 	getBlocks,
 	getBlocksAssets,
 	setLastBlock,
@@ -40,6 +49,7 @@ const {
 
 const {
 	getPosValidators,
+	getAllValidators,
 	reloadValidatorCache,
 	getPosConstants,
 	getPosLockedRewards,
@@ -56,17 +66,12 @@ const {
 } = require('./dynamicReward');
 
 const {
-	getPeers,
-	getConnectedPeers,
-	getDisconnectedPeers,
-	getPeersStatistics,
-} = require('./peers');
-
-const {
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 } = require('./token');
 
 const {
@@ -76,26 +81,36 @@ const {
 	postTransactions,
 	getTransactionsByBlockID,
 	dryRunTransactions,
+	estimateTransactionFees,
 } = require('./transactions');
 
 const {
 	getBlockchainApps,
 	getBlockchainAppsStatistics,
 	getChainAccount,
+	getMainchainID,
 	reloadBlockchainAppsStats,
 } = require('./interoperability');
 
 const { getEvents } = require('./events');
 const { getSchemas } = require('./schemas');
 const { getAuthAccountInfo } = require('./auth');
-const { getNetworkStatus } = require('./network');
-const { getIndexStatus } = require('./indexStatus');
+const {
+	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
+} = require('./network');
+const { getIndexStatus, isBlockchainFullyIndexed } = require('./indexStatus');
 const { getLegacyAccountInfo } = require('./legacy');
 const { getValidator, validateBLSKey } = require('./validator');
 const { getGenerators } = require('./generators');
+const { invokeEndpoint } = require('./invoke');
 
 module.exports = {
 	// Blocks
+	formatBlock,
 	getBlocks,
 	getBlocksAssets,
 	setLastBlock,
@@ -105,6 +120,7 @@ module.exports = {
 
 	// PoS
 	getPosValidators,
+	getAllValidators,
 	reloadValidatorCache,
 	getPosConstants,
 	getPosUnlocks,
@@ -112,17 +128,13 @@ module.exports = {
 	getStakers,
 	getPosClaimableRewards,
 
-	// Peers
-	getPeers,
-	getConnectedPeers,
-	getDisconnectedPeers,
-	getPeersStatistics,
-
 	// Token
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getAvailableTokenIDs,
+	getTokenBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getTokenTopBalances,
 
 	// Transactions
 	getTransactions,
@@ -131,12 +143,16 @@ module.exports = {
 	postTransactions,
 	getTransactionsByBlockID,
 	dryRunTransactions,
+	estimateTransactionFees,
 
 	// Interoperability
 	getBlockchainApps,
 	getBlockchainAppsStatistics,
 	getChainAccount,
+	getMainchainID,
 	reloadBlockchainAppsStats,
+	getCurrentChainID,
+	resolveChannelInfo,
 
 	// Events
 	getEvents,
@@ -149,9 +165,14 @@ module.exports = {
 
 	// Network
 	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
 
 	// Index Status
 	getIndexStatus,
+	isBlockchainFullyIndexed,
 
 	// Legacy
 	getLegacyAccountInfo,
@@ -163,6 +184,9 @@ module.exports = {
 	// Generators
 	reloadGeneratorsCache,
 	getGenerators,
+
+	// Fee estimates
+	initFeeEstimates,
 
 	isPosModuleRegistered,
 	getNumberOfGenerators,
@@ -176,9 +200,17 @@ module.exports = {
 	normalizeTransaction,
 	getPosLockedRewards,
 	getEventsByHeight,
+	cacheEventsByBlockID,
+	deleteEventsFromCacheByBlockID,
+	getEventsByBlockID,
 	deleteEventsFromCache,
 
 	getAnnualInflation,
 	getDefaultRewardAtHeight,
 	getRewardConstants,
+
+	isMainchain,
+	resolveMainchainServiceURL,
+
+	invokeEndpoint,
 };

@@ -13,15 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const {
+	DB: {
+		MySQL: {
+			KVStore: { getKeyValueTable },
+		},
+	},
+} = require('lisk-service-framework');
 const { getPosTokenID } = require('../dataService/business/pos/constants');
-
-const keyValueTable = require('../database/mysqlKVStore');
 
 const { KV_STORE_KEY } = require('../constants');
 
-const getStakeInfo = async (keyPrefix) => {
+const keyValueTable = getKeyValueTable();
+
+const getStakeInfo = async keyPrefix => {
 	const [row] = await keyValueTable.getByPattern(keyPrefix);
-	const stakeAmount = row && row.value ? row.value.toString() : null;
+	const stakeAmount = row && row.value ? row.value.toString() : '0';
 
 	return {
 		tokenID: await getPosTokenID(),

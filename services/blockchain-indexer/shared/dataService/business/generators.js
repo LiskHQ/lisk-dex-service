@@ -17,9 +17,9 @@ const BluebirdPromise = require('bluebird');
 const { Logger } = require('lisk-service-framework');
 
 const { getPosConstants } = require('./pos');
-const { getIndexedAccountInfo } = require('../../utils/accountUtils');
+const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
-const { getNameByAddress } = require('../../utils/validatorUtils');
+const { getNameByAddress } = require('../../utils/validator');
 
 const logger = Logger();
 
@@ -27,26 +27,24 @@ let generatorsListCache = [];
 
 const getGeneratorsInfo = async () => {
 	const { list: generatorsList } = await requestConnector('getGenerators');
-	const generators = await BluebirdPromise.map(
-		generatorsList,
-		async generator => {
-			const { name, publicKey } = await getIndexedAccountInfo(
-				{ address: generator.address, limit: 1 },
-				['name', 'publicKey'],
-			);
+	const generators = await BluebirdPromise.map(generatorsList, async generator => {
+		const { name, publicKey } = await getIndexedAccountInfo(
+			{ address: generator.address, limit: 1 },
+			['name', 'publicKey'],
+		);
 
-			return {
-				...generator,
-				name: name || await getNameByAddress(generator.address),
-				publicKey,
-			};
-		});
+		return {
+			...generator,
+			name: name || (await getNameByAddress(generator.address)),
+			publicKey,
+		};
+	});
 
 	return generators;
 };
 
 const getNumberOfGenerators = async () => {
-	const constants = await getPosConstants();
+	const { data: constants } = await getPosConstants();
 	return constants.numberActiveValidators + constants.numberStandbyValidators;
 };
 
@@ -69,4 +67,7 @@ module.exports = {
 	reloadGeneratorsCache,
 	getGenerators,
 	getNumberOfGenerators,
+
+	// For unit tests
+	getGeneratorsInfo,
 };

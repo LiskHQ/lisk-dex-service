@@ -15,7 +15,9 @@
  */
 const {
 	Logger,
-	MySQL: { getTableInstance },
+	DB: {
+		MySQL: { getTableInstance },
+	},
 } = require('lisk-service-framework');
 const config = require('../../../../config');
 const { TRANSACTION_STATUS } = require('../../../constants');
@@ -24,28 +26,24 @@ const logger = Logger();
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
 const blockchainAppsTableSchema = require('../../../database/schema/blockchainApps');
-const { getChainStatus } = require('./registerMainchain');
+const { getChainInfo } = require('./registerMainchain');
 
-const getBlockchainAppsTable = () => getTableInstance(
-	blockchainAppsTableSchema.tableName,
-	blockchainAppsTableSchema,
-	MYSQL_ENDPOINT,
-);
+const getBlockchainAppsTable = () => getTableInstance(blockchainAppsTableSchema, MYSQL_ENDPOINT);
 
 // Command specific constants
 const COMMAND_NAME = 'terminateSidechainForLiveness';
 
 // eslint-disable-next-line no-unused-vars
 const applyTransaction = async (blockHeader, tx, events, dbTrx) => {
-	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESS) return;
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
 
 	const blockchainAppsTable = await getBlockchainAppsTable();
-	const chainStatus = await getChainStatus(tx.params.chainID);
+	const chainInfo = await getChainInfo(tx.params.chainID);
 
 	const { chainID } = tx.params;
 	const appInfo = {
 		chainID,
-		status: chainStatus,
+		status: chainInfo.status,
 	};
 
 	logger.trace(`Updating chain ${chainID} state.`);
@@ -55,15 +53,15 @@ const applyTransaction = async (blockHeader, tx, events, dbTrx) => {
 
 // eslint-disable-next-line no-unused-vars
 const revertTransaction = async (blockHeader, tx, events, dbTrx) => {
-	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESS) return;
+	if (tx.executionStatus !== TRANSACTION_STATUS.SUCCESSFUL) return;
 
 	const blockchainAppsTable = await getBlockchainAppsTable();
 
 	const { chainID } = tx.params;
-	const chainStatus = await getChainStatus(chainID);
+	const chainInfo = await getChainInfo(chainID);
 	const appInfo = {
 		chainID,
-		status: chainStatus,
+		status: chainInfo.status,
 	};
 
 	logger.trace(`Reverting chain ${chainID} state.`);

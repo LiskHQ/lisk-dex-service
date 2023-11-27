@@ -22,12 +22,12 @@ module.exports = {
         amountIn: '=,string',
         tokenIdOut: '=,string',
         amountOut: '=,string',
-        swapRoute: '=,string',
+        swapRoute: '=,array',
         isZeroToOne: '=,boolean',       
     },
     definition: {
         data: {
-            priceImpact: '=,string',
+            priceImpact: '=',
         },
         meta: {}
     }

@@ -19,17 +19,17 @@ const {
 
 const dataService = require('../../../shared/dataService');
 
-const getTokens = async params => {
+const getTokenBalances = async params => {
 	try {
-		const tokensInfo = {
+		const tokenBalances = {
 			data: [],
 			meta: {},
 		};
-		const response = await dataService.getTokens(params);
-		if (response.data) tokensInfo.data = response.data;
-		if (response.meta) tokensInfo.meta = response.meta;
+		const response = await dataService.getTokenBalances(params);
+		if (response.data) tokenBalances.data = response.data;
+		if (response.meta) tokenBalances.meta = response.meta;
 
-		return tokensInfo;
+		return tokenBalances;
 	} catch (error) {
 		let status;
 		if (error instanceof InvalidParamsException) status = 'INVALID_PARAMS';
@@ -38,16 +38,29 @@ const getTokens = async params => {
 	}
 };
 
-const getTokensSummary = async params => {
-	const tokensSummary = {
+const getTokenTopBalances = async params => {
+	const tokenTopBalances = {
 		data: {},
 		meta: {},
 	};
-	const response = await dataService.getTokensSummary(params);
-	if (response.data) tokensSummary.data = response.data;
-	if (response.meta) tokensSummary.meta = response.meta;
 
-	return tokensSummary;
+	const response = await dataService.getTokenTopBalances(params);
+	if (response.data) tokenTopBalances.data = response.data;
+	if (response.meta) tokenTopBalances.meta = response.meta;
+
+	return tokenTopBalances;
+};
+
+const getTokenSummary = async params => {
+	const tokenSummary = {
+		data: {},
+		meta: {},
+	};
+	const response = await dataService.getTokenSummary(params);
+	if (response.data) tokenSummary.data = response.data;
+	if (response.meta) tokenSummary.meta = response.meta;
+
+	return tokenSummary;
 };
 
 const tokenHasUserAccount = async params => {
@@ -75,9 +88,24 @@ const getTokenConstants = async () => {
 	return constants;
 };
 
+const getAvailableTokenIDs = async params => {
+	const tokenIDsResponse = {
+		data: {},
+		meta: {},
+	};
+
+	const response = await dataService.getAvailableTokenIDs(params);
+	if (response.data) tokenIDsResponse.data = response.data;
+	if (response.meta) tokenIDsResponse.meta = response.meta;
+
+	return tokenIDsResponse;
+};
+
 module.exports = {
 	tokenHasUserAccount,
-	getTokens,
-	getTokensSummary,
+	getTokenBalances,
+	getTokenTopBalances,
+	getTokenSummary,
 	getTokenConstants,
+	getAvailableTokenIDs,
 };

@@ -22,12 +22,10 @@ const {
 const logger = Logger();
 
 const { normalizeTransaction } = require('./transactions');
-const {
-	getIndexedAccountInfo,
-	getLisk32AddressFromPublicKey,
-	updateAccountPublicKey,
-} = require('../../utils/accountUtils');
+const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
+const { getLisk32AddressFromPublicKey } = require('../../utils/account');
+const { indexAccountPublicKey } = require('../../indexer/accountIndex');
 
 let pendingTransactionsList = [];
 
@@ -61,7 +59,7 @@ const getPendingTransactionsFromCore = async () => {
 				};
 			}
 
-			updateAccountPublicKey(normalizedTransaction.senderPublicKey);
+			indexAccountPublicKey(normalizedTransaction.senderPublicKey);
 			normalizedTransaction.executionStatus = 'pending';
 			return normalizedTransaction;
 		},
@@ -73,7 +71,9 @@ const getPendingTransactionsFromCore = async () => {
 const loadAllPendingTransactions = async () => {
 	try {
 		pendingTransactionsList = await getPendingTransactionsFromCore();
-		logger.info(`Updated pending transaction cache with ${pendingTransactionsList.length} transactions.`);
+		logger.info(
+			`Updated pending transaction cache with ${pendingTransactionsList.length} transactions.`,
+		);
 	} catch (err) {
 		logger.error(`Failed to update the 'pendingTransactionsList' due to:\n${err.stack}`);
 	}
@@ -81,15 +81,14 @@ const loadAllPendingTransactions = async () => {
 
 const validateParams = async params => {
 	const validatedParams = {};
-	if (params.nonce && !(params.senderAddress)) {
-		throw new ValidationException('Nonce based retrieval is only possible along with senderAddress');
+	if (params.nonce && !params.senderAddress) {
+		throw new ValidationException(
+			'Nonce based retrieval is only possible along with senderAddress',
+		);
 	}
 
 	if (params.id) validatedParams.id = params.id;
-	if (params.address) {
-		validatedParams.senderAddress = params.address;
-		validatedParams.recipientAddress = params.address;
-	}
+	if (params.address) validatedParams.address = params.address;
 	if (params.senderAddress) validatedParams.senderAddress = params.senderAddress;
 	if (params.recipientAddress) validatedParams.recipientAddress = params.recipientAddress;
 	if (params.moduleCommand) validatedParams.moduleCommand = params.moduleCommand;
@@ -107,35 +106,39 @@ const getPendingTransactions = async params => {
 	const offset = Number(params.offset) || 0;
 	const limit = Number(params.limit) || 10;
 
-	params = await validateParams(params);
+	const validatedParams = await validateParams(params);
 
-	const sortComparator = (sortParam) => {
+	const sortComparator = sortParam => {
 		const sortProp = sortParam.split(':')[0];
 		const sortOrder = sortParam.split(':')[1];
 
-		const comparator = (a, b) => (sortOrder === 'asc')
-			? Number(a[sortProp]) - Number(b[sortProp])
-			: Number(b[sortProp]) - Number(a[sortProp]);
+		const comparator = (a, b) =>
+			sortOrder === 'asc'
+				? Number(a[sortProp] || 0) - Number(b[sortProp] || 0)
+				: Number(b[sortProp] || 0) - Number(a[sortProp] || 0);
 		return comparator;
 	};
 
 	if (pendingTransactionsList.length) {
 		// Filter according to the request params
-		const filteredPendingTxs = pendingTransactionsList.filter(transaction => (
-			(!params.id
-				|| transaction.id === params.id)
-			&& (!params.senderAddress
-				|| transaction.sender.address === params.senderAddress)
-			&& (!params.recipientAddress
-				|| transaction.params.recipientAddress === params.recipientAddress)
-			&& (!params.moduleCommand
-				|| transaction.moduleCommand === params.moduleCommand)
-		));
+		const filteredPendingTxs = pendingTransactionsList.filter(
+			transaction =>
+				(!validatedParams.id || transaction.id === validatedParams.id) &&
+				(!validatedParams.senderAddress ||
+					transaction.sender.address === validatedParams.senderAddress) &&
+				(!validatedParams.recipientAddress ||
+					transaction.params.recipientAddress === validatedParams.recipientAddress) &&
+				(!validatedParams.address ||
+					transaction.sender.address === validatedParams.address ||
+					transaction.params.recipientAddress === validatedParams.address) &&
+				(!validatedParams.moduleCommand ||
+					transaction.moduleCommand === validatedParams.moduleCommand),
+		);
 
 		pendingTransactions.data = filteredPendingTxs
-			.sort(sortComparator(params.sort))
+			.sort(sortComparator(validatedParams.sort))
 			.slice(offset, offset + limit)
-			.forEach(transaction => {
+			.map(transaction => {
 				// Set the 'executionStatus'
 				transaction.executionStatus = 'pending';
 				return transaction;
@@ -153,4 +156,7 @@ const getPendingTransactions = async params => {
 module.exports = {
 	getPendingTransactions,
 	loadAllPendingTransactions,
+
+	// For unit test
+	validateParams,
 };

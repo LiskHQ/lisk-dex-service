@@ -17,7 +17,7 @@ const { Utils } = require('lisk-service-framework');
 
 let app;
 
-const setAppContext = (h) => app = h;
+const setAppContext = h => (app = h);
 
 const getAppContext = () => app;
 
@@ -31,8 +31,11 @@ const requestConnector = async (method, params) => requestRpc('connector', metho
 
 const requestAppRegistry = async (method, params) => requestRpc('app-registry', method, params);
 
+const requestFeeEstimator = async (method, params) => requestRpc('fees', method, params);
+
 module.exports = {
 	setAppContext,
 	requestConnector,
 	requestAppRegistry,
+	requestFeeEstimator,
 };

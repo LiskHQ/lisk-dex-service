@@ -1,7 +1,7 @@
 {
-  "name": "lisk-dex-base-service",
-  "version": "0.7.0-alpha.7",
-  "description": "Lisk DEX Base Service",
+  "name": "lisk-dex-service-base",
+  "version": "1.0.0-beta.1",
+  "description": "Lisk DEX Service Base",
   "keywords": [
     "lisk",
     "blockchain"
@@ -9,18 +9,18 @@
   "homepage": "https://github.com/LiskHQ/lisk-dex-service",
   "repository": {
     "type": "git",
-    "url": "git@github.com:LiskHQ/lisk-dex-service.git"
+    "url": "git@github.com:LiskHQ/lisk-service.git"
   },
   "bugs": {
-    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
+    "url": "https://github.com/LiskHQ/lisk-service/issues"
   },
   "private": true,
   "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
   "license": "Apache-2.0",
   "main": "app.js",
   "engines": {
-    "node": ">=16.15.0 <=16",
-    "npm": ">=8.5.0"
+		"node": ">=18.16 <=18",
+		"npm": ">=8.5.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -30,8 +30,16 @@
     "watch": "supervisor -w . -i ./node_modules app.js"
   },
   "dependencies": {
-    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/91a641edc62f4829105c49280b0bfa80aad5f732/framework/dist/lisk-service-framework-1.4.11.tgz",
+    "@liskhq/lisk-api-client": "^6.0.0-beta.3",
+    "bluebird": "^3.7.2",
+    "joi": "^17.4.0",
+    "lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/bf8048b920f61a2b27d7c28535dfefed5bd679cb/framework/dist/lisk-service-framework-1.5.1.tgz",
+		"moment": "^2.29.4",
     "node-cron": "=2.0.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "ioredis": "^4.27.2",
+    "jest": "^27.3.0",
+    "moleculer": "^0.14.17"
+  }
 }

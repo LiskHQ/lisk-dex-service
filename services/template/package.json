@@ -1,37 +1,34 @@
 {
-  "name": "lisk-dex-service-template-moleculer",
-  "version": "0.7.0-alpha.10",
-  "description": "Lisk DEX Service Template",
-  "keywords": [
-    "lisk",
-    "blockchain"
-  ],
-  "homepage": "https://github.com/LiskHQ/lisk-dex-service",
-  "repository": {
+	"name": "lisk-dex-service-template-moleculer",
+	"version": "1.0.0-beta.1",
+	"description": "Lisk Dex Service Template",
+	"keywords": [
+		"lisk",
+		"blockchain"
+	],
+	"homepage": "https://github.com/LiskHQ/lisk-dex-service",
+	"repository": {
     "type": "git",
-    "url": "git@github.com:LiskHQ/lisk-dex-service.git"
+    "url": "git+https://github.com/LiskHQ/lisk-dex-service.git"
   },
-  "bugs": {
+	 "bugs": {
     "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
   },
-  "private": true,
-  "author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
-  "license": "Apache-2.0",
-  "main": "app.js",
-  "engines": {
-    "node": ">=16.15.0 <=16",
-    "npm": ">=8.5.0"
-  },
-  "scripts": {
-    "start": "node app.js",
-    "eslint": "eslint . --ext .js",
-    "eslint-fix": "eslint . --fix --ext .js",
-    "clean": "rm -rf ./node_modules",
-    "watch": "supervisor -w . -i ./node_modules app.js"
-  },
-  "dependencies": {
-    "lisk-dex-service-framework": "https://github.com/LiskHQ/lisk-dex-service/raw/97436b89082f857db2943c3eb4f1279f0693ac9c/framework/dist/lisk-dex-service-framework-1.4.12.tgz",
-    "node-cron": "=2.0.3"
-  },
-  "devDependencies": {}
+	"private": true,
+	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+	"license": "Apache-2.0",
+	"main": "app.js",
+	"engines": {
+		"node": ">=18.16 <=18",
+		"npm": ">=8.5.0"
+	},
+	"scripts": {
+		"start": "node app.js",
+		"clean": "rm -rf ./node_modules",
+		"watch": "supervisor -w . -i ./node_modules app.js"
+	},
+	"dependencies": {
+		"lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/14b3f0b281b9c5af57085677d66b6c83f6fc3cd8/framework/dist/lisk-service-framework-1.6.6.tgz",
+		"node-cron": "=2.0.3"
+	}
 }

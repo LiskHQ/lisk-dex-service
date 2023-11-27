@@ -31,7 +31,7 @@ module.exports = [
 		name: 'block.new',
 		description: 'Keep the block list up-to-date',
 		controller: callback => {
-			const newBlockListener = async (payload) => {
+			const newBlockListener = async payload => {
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						const [block] = payload.data;
@@ -50,7 +50,7 @@ module.exports = [
 						logger.warn(`Incorrect payload detected for 'newBlock' signal:\n${payloadStr}`);
 					}
 				} catch (err) {
-					logger.error(`Error occured when processing 'block.new' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'block.new' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('newBlock').add(newBlockListener);
@@ -60,12 +60,14 @@ module.exports = [
 		name: 'transactions.new',
 		description: 'Keep newly added transactions list up-to-date',
 		controller: callback => {
-			const newTransactionsListener = async (payload) => {
+			const newTransactionsListener = async payload => {
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						const [block] = payload.data;
 						if (block.numberOfTransactions > 0) {
-							logger.debug(`Block (${block.id}) arrived containing ${block.numberOfTransactions} new transactions`);
+							logger.debug(
+								`Block (${block.id}) arrived containing ${block.numberOfTransactions} new transactions`,
+							);
 							const transactionData = await getTransactionsByBlockID(block.id);
 							callback(transactionData);
 						}
@@ -74,7 +76,7 @@ module.exports = [
 						logger.warn(`Incorrect payload detected for 'newBlock' signal:\n${payloadStr}`);
 					}
 				} catch (err) {
-					logger.error(`Error occured when processing 'transactions.new' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'transactions.new' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('newBlock').add(newTransactionsListener);
@@ -84,7 +86,7 @@ module.exports = [
 		name: 'block.delete',
 		description: 'Emit the deleted block.',
 		controller: callback => {
-			const deleteBlockListener = async (payload) => {
+			const deleteBlockListener = async payload => {
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						callback(payload);
@@ -93,7 +95,7 @@ module.exports = [
 						logger.warn(`Incorrect payload detected for 'deleteBlock' signal:\n${payloadStr}`);
 					}
 				} catch (err) {
-					logger.error(`Error occured when processing 'block.delete' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'block.delete' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('deleteBlock').add(deleteBlockListener);
@@ -103,16 +105,18 @@ module.exports = [
 		name: 'transactions.delete',
 		description: 'Emit the list of deleted transactions.',
 		controller: callback => {
-			const deleteTransactionsListener = async (payload) => {
+			const deleteTransactionsListener = async payload => {
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						callback(payload);
 					} else {
 						const payloadStr = JSON.stringify(payload);
-						logger.warn(`Incorrect payload detected for 'deleteTransactions' signal:\n${payloadStr}`);
+						logger.warn(
+							`Incorrect payload detected for 'deleteTransactions' signal:\n${payloadStr}`,
+						);
 					}
 				} catch (err) {
-					logger.error(`Error occured when processing 'transactions.delete' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'transactions.delete' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('deleteTransactions').add(deleteTransactionsListener);
@@ -128,7 +132,7 @@ module.exports = [
 					const generators = await getGenerators({ limit: 103, offset: 0 });
 					callback(generators);
 				} catch (err) {
-					logger.error(`Error occured when processing 'generators.change' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'generators.change' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('newBlock').add(generatorsChangeListener);
@@ -143,7 +147,7 @@ module.exports = [
 					logger.debug('Returning all forgers for the new round...');
 					callback(payload);
 				} catch (err) {
-					logger.error(`Error occured when processing 'round.change' event:\n${err.stack}`);
+					logger.error(`Error occurred when processing 'round.change' event:\n${err.stack}`);
 				}
 			};
 			Signals.get('newRound').add(newRoundListener);
@@ -153,8 +157,8 @@ module.exports = [
 		name: 'index.ready',
 		description: 'Returns true when the index is ready',
 		controller: callback => {
-			const indexStatusListener = async (payload) => {
-				logger.debug('Dispatching \'index.ready\' event over websocket');
+			const indexStatusListener = async payload => {
+				logger.debug("Dispatching 'index.ready' event over websocket");
 				callback(payload);
 			};
 			Signals.get('blockIndexReady').add(indexStatusListener);

@@ -21,14 +21,14 @@ const schema = {
 	$id: Joi.string().required(),
 	title: Joi.string().optional(),
 	type: Joi.string().required(),
-	required: Joi.array().items(Joi.string().pattern(regex.MODULE).required()).required(),
+	required: Joi.array().items(Joi.string().pattern(regex.MODULE).required()).optional(),
 	properties: Joi.object().optional(),
 	items: Joi.array().items(Joi.object().required()).optional(),
 };
 
 const commandsParamsSchemasSchema = {
 	moduleCommand: Joi.string().pattern(regex.MODULE_COMMAND).required(),
-	// TODO: Update schema to required when all schemas are avalable from sdk
+	// TODO: Update schema to required when all schemas are available from SDK
 	schema: Joi.object(schema).optional(),
 };
 
@@ -41,18 +41,22 @@ const messagesSchema = {
 const eventsSchema = {
 	module: Joi.string().pattern(regex.MODULE).required(),
 	name: Joi.string().pattern(regex.EVENT_NAME).required(),
-	// TODO: Update schema to required when all schemas are avalable from sdk
+	// TODO: Update schema to required when all schemas are available from SDK
 	schema: Joi.object(schema).optional(),
 };
 
 const assetsSchema = {
 	module: Joi.string().pattern(regex.MODULE).required(),
 	version: Joi.string().required(),
-	// TODO: Update schema to required when all schemas are avalable from sdk
+	// TODO: Update schema to required when all schemas are available from SDK
 	schema: Joi.object(schema).optional(),
 };
 
 const genericSchema = {
+	schema: Joi.object(schema).required(),
+};
+
+const ccmSchema = {
 	schema: Joi.object(schema).required(),
 };
 
@@ -63,6 +67,7 @@ const allSchemasSchema = {
 	transaction: Joi.object(genericSchema).required(),
 	event: Joi.object(genericSchema).required(),
 	standardEvent: Joi.object(genericSchema).required(),
+	ccm: Joi.object(ccmSchema).required(),
 	events: Joi.array().items(eventsSchema).required(),
 	assets: Joi.array().items(assetsSchema).required(),
 	commands: Joi.array().items(commandsParamsSchemasSchema).required(),

@@ -13,52 +13,71 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	getIndexedAccountInfo,
-	getLisk32AddressFromPublicKey,
-	updateAccountPublicKey,
-} = require('../../../utils/accountUtils');
-const { getAddressByName } = require('../../../utils/validatorUtils');
+const { getPosTokenID } = require('./constants');
+const { getBlockByID } = require('../blocks');
+const { getNetworkStatus } = require('../network');
+const { getAddressByName } = require('../../utils/validator');
+const { getIndexedAccountInfo } = require('../../utils/account');
 const { requestConnector } = require('../../../utils/request');
+const { getLisk32AddressFromPublicKey } = require('../../../utils/account');
+const { indexAccountPublicKey } = require('../../../indexer/accountIndex');
 
 const getPosUnlocks = async params => {
 	const unlocks = {
 		data: {},
-		meta: {},
+		meta: {
+			count: 0,
+			offset: 0,
+			total: 0,
+		},
 	};
 
 	if (params.name) params.address = await getAddressByName(params.name);
 	if (params.publicKey) params.address = await getLisk32AddressFromPublicKey(params.publicKey);
 
-	const { pendingUnlocks = [] } = await requestConnector(
-		'getPosPendingUnlocks',
-		{ address: params.address },
-	);
+	if (!params.address) {
+		return unlocks;
+	}
 
-	const filteredPendingUnlocks = pendingUnlocks.reduce(
-		(accumulator, pendingUnlock) => {
-			const { unlockable, ...remPendingUnlock } = pendingUnlock;
-			const isLocked = !pendingUnlock.unlockable;
+	const { pendingUnlocks = [] } = await requestConnector('getPosPendingUnlocks', {
+		address: params.address,
+	});
 
-			// Filter results based on `params.isLocked`
-			if (params.isLocked === undefined || params.isLocked === isLocked) {
-				accumulator.push({
-					...remPendingUnlock,
-					isLocked,
-				});
-			}
-			return accumulator;
+	const {
+		data: {
+			lastBlockID,
+			genesis: { blockTime },
 		},
-		[],
-	);
+	} = await getNetworkStatus();
+	const { height, timestamp } = await getBlockByID(lastBlockID);
 
-	const { publicKey, name } = await getIndexedAccountInfo(
-		{ address: params.address, limit: 1 },
-		['name', 'publicKey'],
-	);
+	const tokenID = await getPosTokenID();
+	const filteredPendingUnlocks = pendingUnlocks.reduce((accumulator, pendingUnlock) => {
+		const { unlockable, ...remPendingUnlock } = pendingUnlock;
+		const isLocked = !pendingUnlock.unlockable;
+		// Filter results based on `params.isLocked`
+		if (params.isLocked === undefined || params.isLocked === isLocked) {
+			// Calculate expected unlock time
+			const expectedUnlockTime =
+				timestamp + (remPendingUnlock.expectedUnlockableHeight - height) * blockTime;
+
+			accumulator.push({
+				...remPendingUnlock,
+				isLocked,
+				expectedUnlockTime,
+				tokenID,
+			});
+		}
+		return accumulator;
+	}, []);
+
+	const { publicKey, name } = await getIndexedAccountInfo({ address: params.address, limit: 1 }, [
+		'name',
+		'publicKey',
+	]);
 
 	// Update index if public key is not indexed asynchronously
-	if (!publicKey && params.publicKey) updateAccountPublicKey(params.publicKey);
+	if (!publicKey && params.publicKey) indexAccountPublicKey(params.publicKey);
 
 	unlocks.data = {
 		address: params.address,
@@ -68,8 +87,10 @@ const getPosUnlocks = async params => {
 	};
 
 	const total = unlocks.data.pendingUnlocks.length;
-	unlocks.data.pendingUnlocks = unlocks.data.pendingUnlocks
-		.slice(params.offset, params.offset + params.limit);
+	unlocks.data.pendingUnlocks = unlocks.data.pendingUnlocks.slice(
+		params.offset,
+		params.offset + params.limit,
+	);
 
 	unlocks.meta = {
 		count: unlocks.data.pendingUnlocks.length,

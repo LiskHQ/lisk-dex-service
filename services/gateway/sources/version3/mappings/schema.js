@@ -32,24 +32,38 @@ module.exports = {
 	standardEvent: {
 		schema: '=',
 	},
-	events: ['data.events', {
-		module: '=,string',
-		name: '=,string',
+	ccm: {
 		schema: '=',
-	}],
-	assets: ['data.assets', {
-		module: '=,string',
-		version: '=,string',
-		schema: '=',
-	}],
-	commands: ['data.commands', {
-		moduleCommand: '=,string',
-		schema: '=',
-	}],
-	messages: ['data.messages', {
-		moduleCommand: '=,string',
-		param: '=,string',
-		schema: '=',
-	}],
-
+	},
+	events: [
+		'data.events',
+		{
+			module: '=,string',
+			name: '=,string',
+			schema: '=',
+		},
+	],
+	assets: [
+		'data.assets',
+		{
+			module: '=,string',
+			version: '=,string',
+			schema: '=',
+		},
+	],
+	commands: [
+		'data.commands',
+		{
+			moduleCommand: '=,string',
+			schema: '=',
+		},
+	],
+	messages: [
+		'data.messages',
+		{
+			moduleCommand: '=,string',
+			param: '=,string',
+			schema: '=',
+		},
+	],
 };

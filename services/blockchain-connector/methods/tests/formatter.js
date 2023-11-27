@@ -15,7 +15,6 @@
  */
 const {
 	formatBlock,
-	formatTransaction,
 	formatAPIClientEventPayload,
 	formatResponse,
 	formatEvent,
@@ -29,18 +28,7 @@ module.exports = [
 		params: {
 			block: { optional: false, type: 'object' },
 		},
-		controller: ({ block }) => parseToJSONCompatObj(
-			formatBlock(block),
-		),
-	},
-	{
-		name: 'formatTransaction',
-		params: {
-			transaction: { optional: false, type: 'object' },
-		},
-		controller: ({ transaction }) => parseToJSONCompatObj(
-			formatTransaction(transaction),
-		),
+		controller: ({ block }) => parseToJSONCompatObj(formatBlock(block)),
 	},
 	{
 		name: 'formatAPIClientEventPayload',

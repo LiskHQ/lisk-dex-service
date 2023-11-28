@@ -13,26 +13,22 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { requestConnector } = require('../utils/request');
-const { getAvailableModuleCommands, getRegisteredModules } = require('../constants');
+const business = require('./business');
 
-const getNetworkStatus = async () => {
-	const status = await requestConnector('getNetworkStatus');
+const getNetworkStatus = async () => business.getNetworkStatus();
 
-	status.moduleCommands = await getAvailableModuleCommands();
-	status.registeredModules = await getRegisteredModules();
-	status.constants = { chainID: status.chainID };
+const getNetworkPeers = async params => business.getNetworkPeers(params);
 
-	return {
-		data: status,
-		meta: {
-			lastUpdate: Math.floor(Date.now() / 1000),
-			lastBlockHeight: status.height,
-			lastBlockID: status.lastBlockID,
-		},
-	};
-};
+const getNetworkConnectedPeers = async params => business.getNetworkConnectedPeers(params);
+
+const getNetworkDisconnectedPeers = async params => business.getNetworkDisconnectedPeers(params);
+
+const getNetworkPeersStatistics = async () => business.getNetworkPeersStatistics();
 
 module.exports = {
 	getNetworkStatus,
+	getNetworkPeers,
+	getNetworkConnectedPeers,
+	getNetworkDisconnectedPeers,
+	getNetworkPeersStatistics,
 };

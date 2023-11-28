@@ -18,18 +18,18 @@ const moment = require('moment');
 const config = require('../../config');
 
 const DAY_IN_MILLISEC = moment().endOf('day').valueOf() - moment().startOf('day').valueOf() + 1;
-const getDaysInMilliseconds = (days) => days * DAY_IN_MILLISEC;
+const getDaysInMilliseconds = days => days * DAY_IN_MILLISEC;
 
 const momentFromTimestamp = timestamp => moment.unix(timestamp);
 
 const dateFromTimestamp = timestamp => {
 	const dateTime = momentFromTimestamp(timestamp);
-	return dateTime.utcOffset(0).format(config.csv.dateFormat);
+	return dateTime.utcOffset(0).format(config.excel.dateFormat);
 };
 
 const timeFromTimestamp = timestamp => {
 	const dateTime = momentFromTimestamp(timestamp);
-	return dateTime.utcOffset(0).format(config.csv.timeFormat);
+	return dateTime.utcOffset(0).format(config.excel.timeFormat);
 };
 
 module.exports = {

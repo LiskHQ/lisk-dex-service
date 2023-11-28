@@ -28,8 +28,8 @@ const getLastBlockFormatted = async () => {
 	return formattedBlock;
 };
 
-const getBlockByHeightFormatted = async (height) => {
-	const block = await getBlockByHeight(height);
+const getBlockByHeightFormatted = async (height, includeGenesisAssets = false) => {
+	const block = await getBlockByHeight(height, includeGenesisAssets);
 	const formattedBlock = formatBlock(block);
 	return formattedBlock;
 };
@@ -40,13 +40,13 @@ const getBlocksByHeightBetweenFormatted = async ({ from, to }) => {
 	return formattedBlocks;
 };
 
-const getBlockByIDFormatted = async (id) => {
+const getBlockByIDFormatted = async id => {
 	const block = await getBlockByID(id);
 	const formattedBlock = formatBlock(block);
 	return formattedBlock;
 };
 
-const getBlocksByIDsFormatted = async (ids) => {
+const getBlocksByIDsFormatted = async ids => {
 	const blocks = await getBlocksByIDs(ids);
 	const formattedBlocks = blocks.map(b => formatBlock(b));
 	return formattedBlocks;

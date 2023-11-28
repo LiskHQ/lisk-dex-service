@@ -13,6 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const crypto = require('crypto');
 const { HTTP, CacheRedis, Logger } = require('lisk-service-framework');
 
 const requestLib = HTTP.request;
@@ -31,37 +32,54 @@ const freegeoAddress = config.endpoints.geoip;
 const cacheRedis = CacheRedis('geodata', config.endpoints.redis);
 
 const refreshSchedule = [];
-const getRandInt = max => Math.ceil(Math.random() * max);
+const getRandInt = max => {
+	const randomBytes = crypto.randomBytes(4); // 4 bytes for a 32-bit integer
+	const maxMultiple = 0x100000000 - (0x100000000 % max);
+
+	let randomValue;
+	do {
+		randomValue = randomBytes.readUInt32BE(0);
+	} while (randomValue >= maxMultiple);
+
+	return randomValue % max;
+};
 
 const httpTest = new RegExp('http:*');
 
-const getFromHttp = ip => new Promise((resolve, reject) => {
-	if (httpTest.test(freegeoAddress)) {
-		requestLib(`${freegeoAddress}/${ip}`)
-			.then(body => {
-				let jsonContent;
-				if (typeof body === 'string') jsonContent = JSON.parse(body);
-				else jsonContent = body;
-				return resolve(jsonContent);
-			})
-			.catch(err => {
-				reject(err);
-			});
-	}
-});
+const getFromHttp = ip =>
+	new Promise((resolve, reject) => {
+		if (httpTest.test(freegeoAddress)) {
+			requestLib(`${freegeoAddress}/${ip}`)
+				.then(body => {
+					let jsonContent;
+					if (typeof body === 'string') jsonContent = JSON.parse(body);
+					else jsonContent = body;
+					return resolve(jsonContent);
+				})
+				.catch(err => {
+					reject(err);
+				});
+		}
+	});
 
 const requestData = async requestedIp => {
 	const key = `geoip:${requestedIp}`;
 
-	const refreshData = ip => getFromHttp(ip).then(data => {
-		if (data) cacheRedis.set(key, data.data, GEOIP_TTL);
-		logger.debug(`Fetched geolocation data from online service for IP ${ip}`);
-		refreshSchedule.push(setTimeout(
-			() => refreshData(ip),
-			GEOIP_TTL - (getRandInt(SCHEDULE_INTERVAL) + REQUEST_LATENCY)));
-	}).catch(err => {
-		logger.warn(`Could not retrieve geolocation data: ${err.message}`);
-	});
+	const refreshData = ip =>
+		getFromHttp(ip)
+			.then(data => {
+				if (data) cacheRedis.set(key, data.data, GEOIP_TTL);
+				logger.debug(`Fetched geolocation data from online service for IP ${ip}`);
+				refreshSchedule.push(
+					setTimeout(
+						() => refreshData(ip),
+						GEOIP_TTL - (getRandInt(SCHEDULE_INTERVAL) + REQUEST_LATENCY),
+					),
+				);
+			})
+			.catch(err => {
+				logger.warn(`Could not retrieve geolocation data: ${err.message}`);
+			});
 
 	const geodata = await cacheRedis.get(key);
 	if (!geodata) {
@@ -70,14 +88,20 @@ const requestData = async requestedIp => {
 	return geodata;
 };
 
-const autoCleanUp = () => setInterval(() => {
-	const tooMuch = refreshSchedule.splice(0, refreshSchedule.length - SCHEDULE_MAX_LENGTH);
-	tooMuch.forEach(item => clearInterval(item));
-	logger.debug(`Cache queue: Removed ${tooMuch.length} items, ${refreshSchedule.length} last elements left`);
-}, SCHEDULE_CLEANUP_INTERVAL);
+const autoCleanUp = () =>
+	setInterval(() => {
+		const tooMuch = refreshSchedule.splice(0, refreshSchedule.length - SCHEDULE_MAX_LENGTH);
+		tooMuch.forEach(item => clearInterval(item));
+		logger.debug(
+			`Cache queue: Removed ${tooMuch.length} items, ${refreshSchedule.length} last elements left`,
+		);
+	}, SCHEDULE_CLEANUP_INTERVAL);
 
 autoCleanUp();
 
 module.exports = {
 	requestData,
+
+	// Testing
+	getRandInt,
 };

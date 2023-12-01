@@ -1,15 +1,15 @@
-# Lisk Service API Documentation
+# Lisk DEX Service API Documentation
 
-Lisk Service is a middleware web application that interacts with the entire Lisk ecosystem in various aspects, such as accessing blockchain data (both on-chain and off-chain information), retrieving and storing market data, and exporting account history.
+Lisk DEX Service is a middleware web application that interacts with the entire Lisk ecosystem in various aspects, such as accessing blockchain data (both on-chain and off-chain information), retrieving and storing market data, and exporting account history.
 
-The main focus of this project is to provide data to Lisk blockchain users by serving them in a standardized JSON format and exposing a public RESTful API. The project is split into several smaller components (microservices) each focused on serving a single specific purpose.
+The main focus of this project is to provide data to Lisk blockchain, DEX UI and DEX Core users by serving them in a standardized JSON format and exposing a public RESTful API. The project is split into several smaller components (microservices) each focused on serving a single specific purpose.
 
 As a pure backend project, it is designed to meet the requirements of front-end developers, especially Lisk Desktop and Lisk Mobile.
 
 The API is accessible at `https://service.lisk.com`.
 It is also possible to access the Testnet network at `https://testnet-service.lisk.com`.
 
-The Lisk Service API is compatible with RESTful guidelines. The specification below contains numerous examples of how to use the API in practice.
+The Lisk DEX Service API is compatible with RESTful guidelines. The specification below contains numerous examples of how to use the API in practice.
 
 ## Table of Contents
 
@@ -79,7 +79,26 @@ The Lisk Service API is compatible with RESTful guidelines. The specification be
     - [Application native token metadata details](#application-native-token-metadata-details)
     - [Application supported token metadata details](#application-supported-token-metadata-details)
   - [Market Prices](#market-prices)
-  - [Account History Export](#account-history-export)
+  - [Dex Service](#dex-service)
+    - [Get Events By Height](#get-events-by-height)
+    - [Tokens Popular Pairings](#tokens-popular-pairings)
+    - [Tokens Current Sqrt Price](#tokens-current-sqrt-price)
+    - [Tokens Supported](#tokens-supported)
+    - [Getting Slippage Bounds](#getting-slippage-bounds)
+    - [Prices Getting Statistics](#prices-getting-statistics)
+    - [Pools Available](#pools-available)
+    - [Prices Impact](#prices-impact)
+    - [Prices Convert Fiat](#prices-convert-fiat)
+    - [Prices Convert Token](#prices-convert-token)
+  - [Dex Governance](#dex-governance-service)
+    - [Governance Proposal](#governance-proposal)
+    - [Governance Votes](#governance-votes)
+  - [Dex Information](#dex-information-service)
+    - [Information GetTopPoolsFromDatabase](#information-getTopPoolsFromDatabase)
+    - [Information GetTopTokensFromDatabase](#information-getTopTokensFromDatabase)
+    - [Information GetTransactionsByTokenID](#information-getTransactionsByTokenID)
+
+  
 
 ## Endpoint Logic
 
@@ -121,6 +140,34 @@ The WS-RPC endpoints however are available to query under the `/rpc-v3` namespac
 Lisk Service offers `/status` and `/ready` endpoints to check the current deployment and high-level service readiness statuses respectively. These endpoints must be queried without the API versioning.
 <br/>*Example*: https://service.lisk.com/api/status, https://service.lisk.com/api/ready
 
+# DEX Service related endpoints
+
+#### DEX Endpoints
+
+- HTTP GET `/api/dex/v1`
+- HTTP GET `/api/dex/v1/getEventsByHeight`
+- HTTP GET `/api/dex/v1/tokens/popularPairings`
+- HTTP GET `/api/dex/v1/tokens/currentsqrtprice`
+- HTTP GET `/api/dex/v1/prices/gettingSlippageBounds`
+- HTTP GET `/api/dex/v1/gettingStatistics`
+- HTTP GET `/api/dex/v1/pools/available`
+- HTTP GET `/api/dex/v1/prices/impact`
+- HTTP GET `/api/dex/v1/prices/convert/fiat`
+- HTTP GET `/api/dex/v1/prices/convert/token`
+- HTTP GET `/api/dex/v1/tokens/supported`
+
+#### DEX Governance Endpoints
+
+- HTTP GET `/api/dex-governance/v1/proposals`
+- HTTP GET `/api/dex-governance/v1/votes`
+
+#### DEX Information Endpoints
+
+- HTTP GET `/api/dex-information/v1/getTopPoolsFromDatabase`
+- HTTP GET `/api/dex-information/v1/getTopTokensFromDatabase`
+- HTTP GET `/api/dex-information/v1/getTransactionsByTokenID`
+
+
 # Lisk Blockchain-related Endpoints
 
 ## Blocks
@@ -135,6 +182,7 @@ _Supports pagination._
 
 - HTTP GET `/api/v3/blocks`
 - RPC `get.blocks`
+
 
 #### Request parameters
 

@@ -9,8 +9,8 @@ RUN adduser -D builder && \
 USER builder
 WORKDIR /home/builder/build
 
-COPY ./yarn.lock ./package.json ./
-RUN yarn install --frozen-lockfile && \
+COPY ./package-lock.json ./package.json ./.npmrc ./
+RUN npm ci && \
     # generate build timestamp as described in https://github.com/LiskHQ/lisk-service/issues/385
     node -e 'console.log(JSON.stringify({ timestamp: new Date().toISOString() }));' > ./build.json
 

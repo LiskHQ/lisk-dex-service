@@ -1,6 +1,6 @@
 {
 	"name": "lisk-dex-service-gateway",
-	"version": "1.0.0-beta.1",
+	"version": "1.0.0-beta.2",
 	"description": "Lisk Dex Service Gateway",
 	"keywords": [
 		"lisk",

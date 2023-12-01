@@ -72,7 +72,7 @@ print-config:
 
 build: build-local build-images
 
-build-images: build-app-registry build-connector build-indexer build-coordinator build-statistics build-fees build-market build-export build-gateway
+build-images: build-app-registry build-connector build-indexer build-coordinator build-statistics build-fees build-market build-export build-gateway build-dex-base build-dex-governance build-dex-information
 
 build-all: build build-template build-tests
 
@@ -94,6 +94,15 @@ build-statistics:
 build-fees:
 	cd ./services/fee-estimator && docker buildx build --tag=lisk/service_fee_estimator ./
 
+build-dex-base:
+	cd ./services/dex-base && docker buildx build --tag=lisk/service_dex_base ./
+
+build-dex-governance:
+	cd ./services/dex-governance && docker buildx build --tag=lisk/service_dex_governance ./
+
+build-dex-information:
+	cd ./services/dex-information && docker buildx build --tag=lisk/service_dex_information ./
+
 build-market:
 	cd ./services/market && docker buildx build --tag=lisk/service_market ./
 
@@ -110,19 +119,19 @@ build-tests:
 	cd ./tests && docker buildx build --tag=lisk/service_tests ./
 
 build-local:
-	yarn install --frozen-lockfile
-	cd ./framework && yarn install --frozen-lockfile
-	cd ./services/blockchain-app-registry && yarn install --frozen-lockfile
-	cd ./services/blockchain-connector && yarn install --frozen-lockfile
-	cd ./services/blockchain-coordinator && yarn install --frozen-lockfile
-	cd ./services/blockchain-indexer && yarn install --frozen-lockfile
-	cd ./services/transaction-statistics && yarn install --frozen-lockfile
-	cd ./services/fee-estimator && yarn install --frozen-lockfile
-	cd ./services/market && yarn install --frozen-lockfile
-	cd ./services/gateway && yarn install --frozen-lockfile
-	cd ./services/export && yarn install --frozen-lockfile
-	cd ./services/template && yarn install --frozen-lockfile
-	cd ./tests && yarn install --frozen-lockfile
+	npm ci
+	cd ./framework && npm ci
+	cd ./services/blockchain-app-registry && npm ci
+	cd ./services/blockchain-connector && npm ci
+	cd ./services/blockchain-coordinator && npm ci
+	cd ./services/blockchain-indexer && npm ci
+	cd ./services/transaction-statistics && npm ci
+	cd ./services/fee-estimator && npm ci
+	cd ./services/market && npm ci
+	cd ./services/gateway && npm ci
+	cd ./services/export && npm ci
+	cd ./services/template && npm ci
+	cd ./tests && npm ci
 
 clean: clean-local clean-images
 

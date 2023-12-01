@@ -9,8 +9,8 @@ RUN adduser -D builder && \
 USER builder
 WORKDIR /home/builder/build
 
-COPY ./yarn.lock ./package.json ./.npmrc ./
-RUN yarn install --frozen-lockfile
+COPY ./package-lock.json ./package.json ./.npmrc ./
+RUN npm ci
 
 ##### Stage 2
 

@@ -1,19 +1,19 @@
 {
-	"name": "lisk-dex-service-blockchain-connector",
-	"version": "1.0.0-beta.2",
-	"description": "Lisk Dex Service Blockchain Connector",
+	"name": "lisk-service-blockchain-connector",
+	"version": "0.7.2",
+	"description": "Lisk Service Blockchain Connector",
 	"keywords": [
 		"lisk",
 		"blockchain"
 	],
-	"homepage": "https://github.com/LiskHQ/lisk-dex-service",
+	"homepage": "https://github.com/LiskHQ/lisk-service",
 	"repository": {
-    "type": "git",
-    "url": "git+https://github.com/LiskHQ/lisk-dex-service.git"
-  },
-	 "bugs": {
-    "url": "https://github.com/LiskHQ/lisk-dex-service/issues"
-  },
+		"type": "git",
+		"url": "git@github.com:LiskHQ/lisk-service.git"
+	},
+	"bugs": {
+		"url": "https://github.com/LiskHQ/lisk-service/issues"
+	},
 	"private": true,
 	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
 	"license": "Apache-2.0",
@@ -30,7 +30,7 @@
 		"test:functional": "jest --config=jest.config.functional.js --detectOpenHandles --forceExit"
 	},
 	"dependencies": {
-		"@liskhq/lisk-api-client": "6.0.0",
+		"@liskhq/lisk-api-client": "6.0.1",
 		"@liskhq/lisk-codec": "0.4.0",
 		"@liskhq/lisk-cryptography": "4.0.0",
 		"@liskhq/lisk-transactions": "6.0.0",
@@ -38,8 +38,9 @@
 		"better-sqlite3": "^7.6.2",
 		"big-json": "^3.1.0",
 		"bluebird": "^3.7.2",
+		"ioredis": "^5.3.2",
 		"knex": "^2.4.0",
-		"lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/14b3f0b281b9c5af57085677d66b6c83f6fc3cd8/framework/dist/lisk-service-framework-1.6.6.tgz",
+		"lisk-service-framework": "https://github.com/LiskHQ/lisk-service/raw/5cb6fc8e9b9798595d1a4652b9148afcbfaaed1f/framework/dist/lisk-service-framework-1.6.11.tgz",
 		"moment": "^2.29.4",
 		"signals": "^1.0.0",
 		"tar": "^6.1.11"

@@ -28,7 +28,7 @@ const config = {
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 /**
@@ -43,7 +43,7 @@ config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json'
 config.isUseLiskIPCClient = Boolean(
 	String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true',
 );
-config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
+config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-core';
 
 /**
  * Network-related settings
@@ -96,36 +96,43 @@ config.cache = {
 	isBlockCachingEnabled: Boolean(
 		String(process.env.ENABLE_BLOCK_CACHING).toLowerCase() !== 'false',
 	), // Enabled by default
-	expiryInHours: process.env.EXPIRY_IN_HOURS || 12,
+	expiryInHours: Number(process.env.EXPIRY_IN_HOURS) || 12,
 	dbDataDir: 'data/db_cache',
 };
 
 config.job = {
 	// Interval takes priority over schedule and must be greater than 0 to be valid
 	cacheCleanup: {
-		interval: process.env.JOB_INTERVAL_CACHE_CLEANUP || 0,
+		interval: Number(process.env.JOB_INTERVAL_CACHE_CLEANUP) || 0,
 		schedule: process.env.JOB_SCHEDULE_CACHE_CLEANUP || '0 */12 * * *',
 	},
 	refreshPeers: {
-		interval: process.env.JOB_INTERVAL_REFRESH_PEERS || 60,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_PEERS) || 60,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PEERS || '',
 	},
 };
 
-// Every n milliseconds, verify if client connection is alive
-config.clientConnVerifyInterval = Number(
-	process.env.CLIENT_CONNECTION_VERIFY_INTERVAL || 30 * 1000,
-); // in millisecs
-
 config.apiClient = {
+	heartbeatAckMaxWaitTime: Number(process.env.HEARTBEAT_ACK_MAX_WAIT_TIME) || 1000, // in millisecs
+	aliveAssumptionTime: Number(process.env.CLIENT_ALIVE_ASSUMPTION_TIME) || 5 * 1000, // in millisecs
+	aliveAssumptionTimeBeforeGenesis: 30 * 1000,
+	wsConnectionLimit: 10,
 	instantiation: {
-		maxWaitTime: Number(process.env.CLIENT_INSTANTIATION_MAX_WAIT_TIME || 100), // in millisecs
-		retryInterval: Number(process.env.CLIENT_INSTANTIATION_RETRY_INTERVAL || 1), // in millisecs
+		maxWaitTime: Number(process.env.CLIENT_INSTANTIATION_MAX_WAIT_TIME) || 5 * 1000, // in millisecs
+		retryInterval: Number(process.env.CLIENT_INSTANTIATION_RETRY_INTERVAL) || 1, // in millisecs
 	},
 	request: {
-		maxRetries: Number(process.env.ENDPOINT_INVOKE_MAX_RETRIES || 5),
-		retryDelay: Number(process.env.ENDPOINT_INVOKE_RETRY_DELAY || 10), // in millisecs
+		maxRetries: Number(process.env.ENDPOINT_INVOKE_MAX_RETRIES) || 3,
+		retryDelay: Number(process.env.ENDPOINT_INVOKE_RETRY_DELAY) || 10, // in millisecs
 	},
 };
+
+// Every n milliseconds, verify if client connection is alive
+config.clientConnVerifyInterval =
+	Number(process.env.CLIENT_CONNECTION_VERIFY_INTERVAL) || 30 * 1000; // in millisecs
+
+// Backdoor config to restart the connector if the stall issue pops up - disabled by default
+const exitDelay = Number(process.env.CONNECTOR_EXIT_DELAY_IN_HOURS); // in hours
+config.appExitDelay = (Number.isNaN(exitDelay) ? 0 : exitDelay) * (60 * 60 * 1000);
 
 module.exports = config;

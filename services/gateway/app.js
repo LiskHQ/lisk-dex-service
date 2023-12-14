@@ -38,6 +38,7 @@ const { definition: blocksDefinition } = require('./sources/version3/blocks');
 const { definition: feesDefinition } = require('./sources/version3/fees');
 const { definition: generatorsDefinition } = require('./sources/version3/generators');
 const { definition: transactionsDefinition } = require('./sources/version3/transactions');
+const { definition: indexStatusUpdateDefinition } = require('./sources/version3/indexStatus');
 
 const { host, port } = config;
 
@@ -182,7 +183,9 @@ tempApp.run().then(async () => {
 			'update.fee_estimates': payload =>
 				sendSocketIoEvent('update.fee_estimates', mapper(payload, feesDefinition)),
 			'metadata.change': payload => sendSocketIoEvent('update.metadata', payload),
-			'pool.created': (payload) => sendSocketIoEvent('poolCreated', payload),
+			'update.index.status': payload =>
+				sendSocketIoEvent('update.index.status', mapper(payload, indexStatusUpdateDefinition)),
+							'pool.created': (payload) => sendSocketIoEvent('poolCreated', payload),
 			'pool.creation.failed': (payload) => sendSocketIoEvent('poolCreationFailed', payload),
 			'position.created': (payload) => sendSocketIoEvent('positionCreated', payload),
 			'position.creation.failed': (payload) => sendSocketIoEvent('positionCreationFailed', payload),
@@ -198,7 +201,7 @@ tempApp.run().then(async () => {
 
 	if (config.rateLimit.enable) {
 		logger.info(
-			`Enabling rate limiter, connLimit: ${config.rateLimit.connectionLimit}, window: ${config.rateLimit.window}`,
+			`Enabling rate limiter, connLimit: ${config.rateLimit.connectionLimit}, window: ${config.rateLimit.window}.`,
 		);
 
 		gatewayConfig.settings.rateLimit = {
@@ -238,7 +241,7 @@ tempApp.run().then(async () => {
 			logger.info(`Started Gateway API on ${host}:${port}.`);
 		})
 		.catch(err => {
-			logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}.`);
+			logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}`);
 			logger.fatal(err.stack);
 			process.exit(1);
 		});

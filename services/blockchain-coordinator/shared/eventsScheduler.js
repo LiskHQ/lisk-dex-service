@@ -24,10 +24,10 @@ const eventMessageQueue = new MessageQueue(config.queue.event.name, config.endpo
 	defaultJobOptions: config.queue.defaultJobOptions,
 });
 
-const scheduleUpdatesOnNewBlock = async payload => {
-	const { header } = payload;
+const scheduleUpdatesOnNewBlock = async block => {
+	const { header } = block;
 	logger.debug(`Scheduling indexing new block at height: ${header.height}.`);
-	await eventMessageQueue.add({ header, isNewBlock: true });
+	await eventMessageQueue.add({ block, isNewBlock: true });
 	logger.info(`Finished scheduling indexing new block at height: ${header.height}.`);
 };
 

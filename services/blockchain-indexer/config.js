@@ -27,17 +27,18 @@ const config = {
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 /**
  * External endpoints
  */
-config.endpoints.cache = process.env.SERVICE_INDEXER_CACHE_REDIS || 'redis://127.0.0.1:6379/2';
+config.endpoints.cache =
+	process.env.SERVICE_INDEXER_CACHE_REDIS || 'redis://lisk:password@127.0.0.1:6379/2';
 config.endpoints.volatileRedis =
-	process.env.SERVICE_INDEXER_REDIS_VOLATILE || 'redis://127.0.0.1:6379/3';
+	process.env.SERVICE_INDEXER_REDIS_VOLATILE || 'redis://lisk:password@127.0.0.1:6379/3';
 config.endpoints.messageQueue =
-	process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://127.0.0.1:6379/4';
+	process.env.SERVICE_MESSAGE_QUEUE_REDIS || 'redis://lisk:password@127.0.0.1:6379/4';
 // Primary database. Used for both read-write operations.
 config.endpoints.mysql =
 	process.env.SERVICE_INDEXER_MYSQL || 'mysql://lisk:password@127.0.0.1:3306/lisk';
@@ -72,6 +73,8 @@ config.queue = {
 		attempts: 5,
 		timeout: 5 * 60 * 1000, // millisecs
 		removeOnComplete: true,
+		removeOnFail: true,
+		stackTraceLimit: 0,
 	},
 
 	// Inter-microservice message queues
@@ -99,14 +102,15 @@ config.queue = {
 	indexBlocks: {
 		name: 'IndexBlocks',
 		concurrency: 1,
+		scheduledJobsMaxCount: Number(process.env.INDEX_BLOCKS_QUEUE_SCHEDULED_JOB_MAX_COUNT) || 100000,
 	},
 	indexAccountPublicKey: {
-		name: 'PendingAccountPublicKeyUpdates',
-		concurrency: 64,
+		name: 'PendingPublickeyUpdates',
+		concurrency: 512,
 	},
 	indexAccountAddress: {
-		name: 'PendingAccountAddressUpdates',
-		concurrency: 64,
+		name: 'PendingAddressUpdates',
+		concurrency: 512,
 	},
 };
 
@@ -155,60 +159,69 @@ config.networks = Object.freeze({
 });
 
 config.db = {
-	isPersistEvents: Boolean(String(process.env.ENABLE_PERSIST_EVENTS).toLowerCase() === 'true'),
+	isPersistEvents: String(process.env.ENABLE_PERSIST_EVENTS).toLowerCase() === 'true',
 	durabilityVerifyFrequency: Number(process.env.DURABILITY_VERIFY_FREQUENCY) || 1, // In millisecs
 };
 
 config.snapshot = {
-	enable: Boolean(String(process.env.ENABLE_APPLY_SNAPSHOT).toLowerCase() === 'true'), // Disabled by default
+	enable: String(process.env.ENABLE_APPLY_SNAPSHOT).toLowerCase() === 'true', // Disabled by default
 	url: process.env.INDEX_SNAPSHOT_URL,
-	allowInsecureHttp: Boolean(
-		String(process.env.ENABLE_SNAPSHOT_ALLOW_INSECURE_HTTP).toLowerCase() === 'true',
-	), // Disabled by default
+	allowInsecureHttp:
+		String(process.env.ENABLE_SNAPSHOT_ALLOW_INSECURE_HTTP).toLowerCase() === 'true', // Disabled by default
 };
 
 config.job = {
 	// Interval takes priority over schedule and must be greater than 0 to be valid
 	deleteSerializedEvents: {
-		interval: process.env.JOB_INTERVAL_DELETE_SERIALIZED_EVENTS || 0,
+		interval: Number(process.env.JOB_INTERVAL_DELETE_SERIALIZED_EVENTS) || 0,
 		schedule: process.env.JOB_SCHEDULE_DELETE_SERIALIZED_EVENTS || '*/5 * * * *',
 	},
 	refreshValidators: {
-		interval: process.env.JOB_INTERVAL_REFRESH_VALIDATORS || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_VALIDATORS) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_VALIDATORS || '*/5 * * * *',
 	},
 	validateValidatorsRank: {
-		interval: process.env.JOB_INTERVAL_VALIDATE_VALIDATORS_RANK || 0,
+		interval: Number(process.env.JOB_INTERVAL_VALIDATE_VALIDATORS_RANK) || 0,
 		schedule: process.env.JOB_SCHEDULE_VALIDATE_VALIDATORS_RANK || '4-59/15 * * * *',
 	},
 	refreshLiveIndexingJobCount: {
-		interval: process.env.JOB_INTERVAL_REFRESH_INDEX_STATUS || 10,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_INDEX_STATUS) || 10,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_INDEX_STATUS || '',
 	},
 	refreshBlockchainAppsStats: {
-		interval: process.env.JOB_INTERVAL_REFRESH_BLOCKCHAIN_APPS_STATS || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_BLOCKCHAIN_APPS_STATS) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_BLOCKCHAIN_APPS_STATS || '*/15 * * * *',
 	},
 	refreshAccountsKnowledge: {
-		interval: process.env.JOB_INTERVAL_REFRESH_ACCOUNT_KNOWLEDGE || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_ACCOUNT_KNOWLEDGE) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_ACCOUNT_KNOWLEDGE || '*/15 * * * *',
 	},
 	deleteFinalizedCCUMetadata: {
-		interval: process.env.JOB_INTERVAL_DELETE_FINALIZED_CCU_METADATA || 0,
+		interval: Number(process.env.JOB_INTERVAL_DELETE_FINALIZED_CCU_METADATA) || 0,
 		schedule: process.env.JOB_SCHEDULE_DELETE_FINALIZED_CCU_METADATA || '0 2 * * *',
 	},
 	triggerAccountUpdates: {
-		interval: process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_UPDATES || 0,
+		interval: Number(process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_UPDATES) || 0,
 		schedule: process.env.JOB_SCHEDULE_TRIGGER_ACCOUNT_UPDATES || '*/15 * * * *',
 	},
 	triggerAccountBalanceUpdates: {
-		interval: process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_BALANCE_UPDATES || 10,
+		interval: Number(process.env.JOB_INTERVAL_TRIGGER_ACCOUNT_BALANCE_UPDATES) || 10,
 		schedule: process.env.JOB_SCHEDULE_TRIGGER_ACCOUNT_BALANCE_UPDATES || '',
 	},
 };
 
 config.estimateFees = {
-	bufferBytesLength: process.env.ESTIMATES_BUFFER_BYTES_LENGTH || 0,
+	bufferBytesLength: Number(process.env.ESTIMATES_BUFFER_BYTES_LENGTH) || 0,
 };
+
+config.invokeAllowedMethods = process.env.INVOKE_ALLOWED_METHODS
+	? String(process.env.INVOKE_ALLOWED_METHODS).split(',')
+	: [
+			'dynamicReward_getExpectedValidatorRewards',
+			'token_hasUserAccount',
+			'token_getInitializationFees',
+			'interoperability_getMinimumMessageFee',
+			'txpool_getTransactionsFromPool',
+	  ];
 
 module.exports = config;

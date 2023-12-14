@@ -17,9 +17,9 @@ const { Logger, Signals } = require('lisk-service-framework');
 
 const {
 	reloadAllPendingTransactions,
-	getTransactionsByBlockID,
 	reloadGeneratorsCache,
 	getGenerators,
+	formatTransactionsInBlock,
 } = require('../shared/dataService');
 
 const logger = Logger();
@@ -35,11 +35,11 @@ module.exports = [
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						const [block] = payload.data;
-						logger.debug(`New block arrived (${block.id})...`);
+						logger.debug(`Received new block (${block.id})...`);
 						// Fork detection
 						if (localPreviousBlockId) {
 							if (localPreviousBlockId !== block.previousBlockId) {
-								logger.debug(`Fork detected at block height ${localPreviousBlockId}`);
+								logger.debug(`Fork detected at block height ${localPreviousBlockId}.`);
 							}
 						}
 						localPreviousBlockId = block.id;
@@ -64,12 +64,15 @@ module.exports = [
 				try {
 					if (payload && Array.isArray(payload.data)) {
 						const [block] = payload.data;
-						if (block.numberOfTransactions > 0) {
+						const { numberOfTransactions } = block;
+
+						if (numberOfTransactions > 0) {
 							logger.debug(
-								`Block (${block.id}) arrived containing ${block.numberOfTransactions} new transactions`,
+								`Received block (${block.id}) containing ${block.numberOfTransactions} new transactions.`,
 							);
-							const transactionData = await getTransactionsByBlockID(block.id);
-							callback(transactionData);
+
+							const formattedTransactions = await formatTransactionsInBlock(block);
+							callback(formattedTransactions);
 						}
 					} else {
 						const payloadStr = JSON.stringify(payload);
@@ -158,10 +161,21 @@ module.exports = [
 		description: 'Returns true when the index is ready',
 		controller: callback => {
 			const indexStatusListener = async payload => {
-				logger.debug("Dispatching 'index.ready' event over websocket");
+				logger.debug("Dispatching 'index.ready' event to message broker.");
 				callback(payload);
 			};
 			Signals.get('blockIndexReady').add(indexStatusListener);
+		},
+	},
+	{
+		name: 'update.index.status',
+		description: 'Emit index status updates.',
+		controller: callback => {
+			const indexStatusUpdateListener = async payload => {
+				logger.debug("Dispatching 'update.index.status' event to message broker.");
+				callback(payload);
+			};
+			Signals.get('updateIndexStatus').add(indexStatusUpdateListener);
 		},
 	},
 ];

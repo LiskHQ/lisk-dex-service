@@ -50,15 +50,15 @@ const defaultBrokerConfig = {
 	logger: config.log,
 	events: {
 		chainNewBlock: async () => {
-			logger.debug("Received a 'chainNewBlock' event from connecter.");
+			logger.debug("Received a 'chainNewBlock' moleculer event from connecter.");
 			Signals.get('chainNewBlock').dispatch();
 		},
 		systemNodeInfo: async payload => {
-			logger.debug("Received a 'systemNodeInfo' event from connecter.");
+			logger.debug("Received a 'systemNodeInfo' moleculer event from connecter.");
 			Signals.get('nodeInfo').dispatch(payload);
 		},
 		'update.fee_estimates': async payload => {
-			logger.debug("Received a 'update.fee_estimates' event from fee-estimator.");
+			logger.debug("Received a 'update.fee_estimates' moleculer event from fee-estimator.");
 			await setFeeEstimates(payload);
 		},
 	},
@@ -67,7 +67,7 @@ const defaultBrokerConfig = {
 
 // Add routes, events & jobs
 const reportErrorAndExitProcess = err => {
-	logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}.`);
+	logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}`);
 	logger.fatal(err.stack);
 	process.exit(1);
 };
@@ -92,6 +92,7 @@ initDatabase()
 		}
 
 		const app = Microservice(defaultBrokerConfig);
+		setAppContext(app);
 
 		app.addMethods(path.join(__dirname, 'methods'));
 
@@ -129,8 +130,7 @@ initDatabase()
 			app.addJobs(path.join(__dirname, 'jobs', 'indexer'));
 		}
 
-		// Set the app context and start the application
-		setAppContext(app);
+		// Start the application
 		app
 			.run()
 			.then(async () => {

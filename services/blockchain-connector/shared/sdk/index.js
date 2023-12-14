@@ -13,6 +13,10 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const { Signals } = require('lisk-service-framework');
+
+const config = require('../../config');
+
 const {
 	getGenesisHeight,
 	getGenesisBlockID,
@@ -124,9 +128,16 @@ const init = async () => {
 	await getTokenInitializationFees();
 	await getRewardTokenID();
 	await getPosConstants();
+	await getAllPosValidators();
 
 	// Download the genesis block, if applicable
-	await getGenesisBlock();
+	await getGenesisBlock().then(() => {
+		Signals.get('genesisBlockDownloaded').dispatch();
+	});
+
+	if (config.appExitDelay) {
+		setTimeout(() => process.exit(0), config.appExitDelay);
+	}
 };
 
 module.exports = {

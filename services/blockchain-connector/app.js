@@ -14,7 +14,7 @@
  *
  */
 const path = require('path');
-const { Microservice, Logger, LoggerConfig } = require('lisk-service-framework');
+const { Signals, Microservice, Logger, LoggerConfig } = require('lisk-service-framework');
 
 const config = require('./config');
 
@@ -31,6 +31,12 @@ const app = Microservice({
 	transporter: config.transporter,
 	brokerTimeout: config.brokerTimeout, // in seconds
 	logger: config.log,
+	events: {
+		'update.index.status': async payload => {
+			logger.debug("Received a 'update.index.status' moleculer event from indexer.");
+			Signals.get('updateIndexStatus').dispatch(payload);
+		},
+	},
 });
 
 nodeStatus.waitForNode().then(async () => {
@@ -59,7 +65,7 @@ nodeStatus.waitForNode().then(async () => {
 				await init();
 			})
 			.catch(err => {
-				logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}.`);
+				logger.fatal(`Failed to start service ${packageJson.name} due to: ${err.message}`);
 				logger.fatal(err.stack);
 				process.exit(1);
 			});

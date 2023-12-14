@@ -25,6 +25,7 @@ const {
 const { getBlockByID } = require('./blocks');
 const { getEventsByHeight } = require('./events');
 
+const { getCurrentChainID } = require('./interoperability/chain');
 const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
 const { normalizeRangeParam } = require('../../utils/param');
@@ -63,11 +64,6 @@ const normalizeTransactions = async txs => {
 	return normalizedTransactions;
 };
 
-const getTransactionByID = async id => {
-	const response = await requestConnector('getTransactionByID', { id });
-	return normalizeTransaction(response);
-};
-
 const getTransactionsByIDs = async ids => {
 	const response = await requestConnector('getTransactionsByIDs', { ids });
 	return normalizeTransactions(response);
@@ -86,6 +82,15 @@ const validateParams = async params => {
 		throw new InvalidParamsException(
 			'Nonce based retrieval is only possible along with senderAddress',
 		);
+	}
+
+	// If recieving chainID is current chain ID then return all transactions with receivingChainID = null
+	if (params.receivingChainID) {
+		const currentChainID = await getCurrentChainID();
+
+		if (params.receivingChainID === currentChainID) {
+			params.receivingChainID = null;
+		}
 	}
 
 	if (params.executionStatus) {
@@ -136,11 +141,6 @@ const getTransactions = async params => {
 			transactions.data = transactions.data.concat(
 				await getTransactionsByIDs(params.ids.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE)),
 			);
-		}
-	} else if (params.id) {
-		transactions.data.push(await getTransactionByID(params.id));
-		if ('offset' in params && params.limit) {
-			transactions.data = transactions.data.slice(params.offset, params.offset + params.limit);
 		}
 	}
 
@@ -197,11 +197,10 @@ const getTransactions = async params => {
 	return transactions;
 };
 
-const getTransactionsByBlockID = async blockID => {
-	const block = await getBlockByID(blockID);
+const formatTransactionsInBlock = async block => {
 	const transactions = await BluebirdPromise.map(
 		block.transactions,
-		async transaction => {
+		async (transaction, index) => {
 			const senderAddress = getLisk32AddressFromPublicKey(transaction.senderPublicKey);
 
 			const senderAccount = await getIndexedAccountInfo({ address: senderAddress, limit: 1 }, [
@@ -233,6 +232,7 @@ const getTransactionsByBlockID = async blockID => {
 				id: block.id,
 				height: block.height,
 				timestamp: block.timestamp,
+				isFinal: block.isFinal,
 			};
 
 			const transactionsTable = await getTransactionsTable();
@@ -247,6 +247,7 @@ const getTransactionsByBlockID = async blockID => {
 				transaction.executionStatus = await getTransactionExecutionStatus(transaction, events);
 			}
 
+			transaction.index = index;
 			return transaction;
 		},
 		{ concurrency: block.transactions.length },
@@ -262,13 +263,20 @@ const getTransactionsByBlockID = async blockID => {
 	};
 };
 
+const getTransactionsByBlockID = async blockID => {
+	const block = await getBlockByID(blockID);
+	return formatTransactionsInBlock(block);
+};
+
 module.exports = {
 	getTransactions,
 	getTransactionIDsByBlockID,
 	getTransactionsByBlockID,
 	getTransactionsByIDs,
 	normalizeTransaction,
+	formatTransactionsInBlock,
 
 	// For unit test
 	validateParams,
+	normalizeTransactions,
 };

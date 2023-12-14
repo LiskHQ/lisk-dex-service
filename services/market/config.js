@@ -21,7 +21,7 @@ const config = {
 };
 
 // Moleculer broker config
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 // Logging
@@ -70,7 +70,8 @@ config.ttl = {
 /**
  * External endpoints
  */
-config.endpoints.redis = process.env.SERVICE_MARKET_REDIS || 'redis://127.0.0.1:6379/6';
+config.endpoints.redis =
+	process.env.SERVICE_MARKET_REDIS || 'redis://lisk:password@127.0.0.1:6379/6';
 
 /**
  * Market prices config
@@ -103,23 +104,23 @@ config.market.sources = {
 config.job = {
 	// Interval takes priority over schedule and must be greater than 0 to be valid
 	refreshPricesBinance: {
-		interval: process.env.JOB_INTERVAL_REFRESH_PRICES_BINANCE || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_PRICES_BINANCE) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PRICES_BINANCE || '* * * * *',
 	},
 	refreshPricesBittrex: {
-		interval: process.env.JOB_INTERVAL_REFRESH_PRICES_BITTREX || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_PRICES_BITTREX) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PRICES_BITTREX || '* * * * *',
 	},
 	refreshPricesExchangeratesapi: {
-		interval: process.env.JOB_INTERVAL_REFRESH_PRICES_EXCHANGERATESAPI || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_PRICES_EXCHANGERATESAPI) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PRICES_EXCHANGERATESAPI || '* * * * *',
 	},
 	refreshPricesKraken: {
-		interval: process.env.JOB_INTERVAL_REFRESH_PRICES_KRAKEN || 0,
+		interval: Number(process.env.JOB_INTERVAL_REFRESH_PRICES_KRAKEN) || 0,
 		schedule: process.env.JOB_SCHEDULE_REFRESH_PRICES_KRAKEN || '* * * * *',
 	},
 	updatePrices: {
-		interval: process.env.JOB_INTERVAL_UPDATE_PRICES || 5,
+		interval: Number(process.env.JOB_INTERVAL_UPDATE_PRICES) || 5,
 		schedule: process.env.JOB_SCHEDULE_UPDATE_PRICES || '',
 	},
 };

@@ -45,7 +45,7 @@ const APPLICATION_STATUS = /^\b(?:registered|activated|terminated|unregistered|,
 const MODULE_COMMAND = /^[0-9a-zA-Z]{0,32}:[0-9a-zA-Z]{0,32}$/;
 const CHAIN_ID = /^\b[a-fA-F0-9]{8}\b$/;
 const CHAIN_ID_CSV = /^\b(?:[a-fA-F0-9]{8}|,)+\b$/;
-const CHAIN_NAME = /^[a-z0-9!@$&_.]{1,32}$/;
+const CHAIN_NAME = /^[A-Za-z0-9!@$&_.]{1,32}$/;
 const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
 const TOKEN_ID_CSV = /^\b(?:[a-fA-F0-9]{16}|,)+\b$/;
 const BLS_KEY = /^\b[a-fA-F0-9]{96}\b$/;
@@ -55,7 +55,7 @@ const COMMAND = MODULE;
 const MODULE_CSV = /^(?:[0-9a-zA-Z]{1,32})(?:,[0-9a-zA-Z]{1,32})*$/;
 const COMMAND_CSV = MODULE_CSV;
 const TOPIC_CSV =
-	/^\b(?:(?:04|05)?[0-9a-fA-F]{2,64}|lsk[a-hjkm-z2-9]{38})(?:,(?:(?:04|05)?[0-9a-fA-F]{2,64}|lsk[a-hjkm-z2-9]{38}))*\b$/;
+	/^\b(?:(?:04|05)?[0-9a-fA-F]{64}|lsk[a-hjkm-z2-9]{38})(?:,(?:(?:04|05)?[0-9a-fA-F]{64}|lsk[a-hjkm-z2-9]{38}))*\b$/;
 const HEX_STRING = /^\b[a-fA-F0-9]+\b$/;
 const EXCEL_EXPORT_FILENAME =
 	/^\btransactions_([a-fA-F0-9]{8})_(lsk[a-hjkm-z2-9]{38})_((\d{4})-((1[012])|(0?[1-9]))-(([012][1-9])|([123]0)|31))_((\d{4})-((1[012])|(0?[1-9]))-(([012][1-9])|([123]0)|31))\.xlsx\b$/;

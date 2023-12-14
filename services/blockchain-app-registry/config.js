@@ -18,7 +18,7 @@ const packageJson = require('./package.json');
 const config = {};
 
 // Moleculer broker config
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 5; // in seconds
 
 /**
@@ -100,11 +100,11 @@ config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
 config.job = {
 	// Interval takes priority over schedule and must be greater than 0 to be valid
 	deleteNonMetadataFiles: {
-		interval: process.env.JOB_INTERVAL_DELETE_NON_METADATA_FILES || 0,
+		interval: Number(process.env.JOB_INTERVAL_DELETE_NON_METADATA_FILES) || 0,
 		schedule: process.env.JOB_SCHEDULE_DELETE_NON_METADATA_FILES || '0 0 * * *',
 	},
 	updateApplicationMetadata: {
-		interval: process.env.JOB_INTERVAL_UPDATE_METADATA || 0,
+		interval: Number(process.env.JOB_INTERVAL_UPDATE_METADATA) || 0,
 		schedule: process.env.JOB_SCHEDULE_UPDATE_METADATA || '*/10 * * * *',
 	},
 };

@@ -21,6 +21,7 @@ const {
 	DB: {
 		sqlite3: { getTableInstance },
 	},
+	Utils: { delay },
 } = require('lisk-service-framework');
 
 const logger = Logger();
@@ -58,6 +59,7 @@ const cacheBlocksFromWaitlist = async () => {
 	const blocksCache = await getBlocksCache();
 	const trxIDToBlockIDCache = await getTrxIDtoBlockIDCache();
 
+	let numErrors = 0;
 	while (blockCacheWaitlist.length) {
 		const block = blockCacheWaitlist.shift();
 		try {
@@ -72,11 +74,16 @@ const cacheBlocksFromWaitlist = async () => {
 			);
 			await blocksCache.upsert({ id: block.header.id, timestamp: block.header.timestamp, block });
 		} catch (err) {
-			logger.info(
-				`Caching block ID ${block.header.id} (height: ${block.header.height}) failed due to: ${err.message}. Will re-attempt caching.`,
+			logger.warn(
+				`Caching block ${block.header.id} (height: ${block.header.height}) failed. Will re-attempt.\nError: ${err.message}`,
 			);
 			logger.debug(err.stack);
 			blockCacheWaitlist.splice(0, 0, block);
+
+			// Skip caching if it causes errors 3 times in a row
+			if (numErrors++ > 3) break;
+
+			await delay(5 * 1000); // Delay loop to facilitate reads from cache when writes are failing due to DB locks
 		}
 	}
 
@@ -136,7 +143,6 @@ if (config.cache.isBlockCachingEnabled) cacheBlocksFromWaitlist();
 
 module.exports = {
 	cacheBlocksIfEnabled,
-	cacheBlocksFromWaitlist,
 	getBlockByIDFromCache,
 	getTransactionByIDFromCache,
 	cacheCleanup,

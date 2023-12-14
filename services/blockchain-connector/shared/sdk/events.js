@@ -17,10 +17,11 @@ const util = require('util');
 
 const { Logger, Signals } = require('lisk-service-framework');
 
+const config = require('../../config');
+
 const { getApiClient } = require('./client');
 const { formatEvent } = require('./formatter');
 const { getRegisteredEvents, getEventsByHeight, getNodeInfo } = require('./endpoints');
-const config = require('../../config');
 const { updateTokenInfo } = require('./token');
 
 const logger = Logger();
@@ -63,7 +64,7 @@ const events = [
 let eventsCounter;
 
 const logError = (method, err) => {
-	logger.warn(`Invocation for ${method} failed with error: ${err.message}.`);
+	logger.warn(`Invocation for ${method} failed with error: ${err.message}`);
 	logger.debug(err.stack);
 };
 
@@ -98,13 +99,49 @@ const getEventsByHeightFormatted = async height => {
 };
 
 // To ensure API Client is alive and receiving chain events
-setInterval(() => {
-	if (eventsCounter === 0) {
-		Signals.get('resetApiClient').dispatch();
-	} else if (eventsCounter > 0) {
-		eventsCounter = 0;
+let isNodeSynced = false;
+let isGenesisBlockDownloaded = false;
+
+const ensureAPIClientLiveness = () => {
+	if (isNodeSynced && isGenesisBlockDownloaded) {
+		setInterval(() => {
+			if (typeof eventsCounter === 'number' && eventsCounter > 0) {
+				eventsCounter = 0;
+			} else {
+				if (typeof eventsCounter !== 'number') {
+					logger.warn(
+						`eventsCounter ended up with non-numeric value: ${JSON.stringify(
+							eventsCounter,
+							null,
+							'\t',
+						)}.`,
+					);
+					eventsCounter = 0;
+				}
+
+				Signals.get('resetApiClient').dispatch();
+				logger.info("Dispatched 'resetApiClient' signal to re-instantiate the API client.");
+			}
+		}, config.clientConnVerifyInterval);
+	} else {
+		logger.info(
+			`Cannot start the events-based client liveness check yet. Either the node is not yet synced or the genesis block hasn't been downloaded yet.\nisNodeSynced: ${isNodeSynced}, isGenesisBlockDownloaded: ${isGenesisBlockDownloaded}`,
+		);
 	}
-}, config.clientConnVerifyInterval);
+};
+
+const nodeIsSyncedListener = () => {
+	isNodeSynced = true;
+	ensureAPIClientLiveness();
+};
+
+const genesisBlockDownloadedListener = () => {
+	isGenesisBlockDownloaded = true;
+	ensureAPIClientLiveness();
+};
+
+Signals.get('nodeIsSynced').add(nodeIsSyncedListener);
+Signals.get('genesisBlockDownloaded').add(genesisBlockDownloadedListener);
 
 module.exports = {
 	events,

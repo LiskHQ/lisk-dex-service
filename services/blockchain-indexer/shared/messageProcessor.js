@@ -75,28 +75,29 @@ const initQueueStatus = async () => {
 	await queueStatus(eventMessageQueue);
 };
 
-const newBlockProcessor = async header => {
-	logger.debug(`New block (${header.id}) received at height ${header.height}.`);
-	const response = await formatBlock(header);
+const newBlockProcessor = async block => {
+	logger.debug(`New block (${block.header.id}) received at height ${block.header.height}.`);
+	const response = await formatBlock(block);
 	const [newBlock] = response.data;
+
 	await indexNewBlock(newBlock);
 	await performLastBlockUpdate(newBlock);
 	Signals.get('newBlock').dispatch(response);
 	logger.info(
-		`Finished scheduling new block (${header.id}) event for the block at height ${header.height}.`,
+		`Finished scheduling new block (${block.header.id}) event for block height ${block.header.height}.`,
 	);
 };
 
 const deleteBlockProcessor = async header => {
 	try {
 		logger.debug(
-			`Scheduling the delete block (${header.id}) event for the block at height ${header.height}.`,
+			`Scheduling the delete block (${header.id}) event for block height ${header.height}.`,
 		);
-		const response = await formatBlock(header, true);
+		const response = await formatBlock({ header }, true);
 		await scheduleBlockDeletion(header);
 		Signals.get('deleteBlock').dispatch(response);
 		logger.info(
-			`Finished scheduling the delete block (${header.id}) event for the block at height ${header.height}.`,
+			`Finished scheduling the delete block (${header.id}) event for block height ${header.height}.`,
 		);
 	} catch (err) {
 		logger.warn(
@@ -112,8 +113,7 @@ const newRoundProcessor = async () => {
 	await reloadGeneratorsCache();
 	const limit = await getNumberOfGenerators();
 	const generators = await getGenerators({ limit, offset: 0 });
-	const response = { generators: generators.data.map(generator => generator.address) };
-	Signals.get('newRound').dispatch(response);
+	Signals.get('newRound').dispatch(generators);
 	logger.info(`Finished performing all updates on new round.`);
 };
 
@@ -141,8 +141,8 @@ const initMessageProcessors = async () => {
 		const { isNewBlock, isDeleteBlock, isNewRound } = job.data;
 
 		if (isNewBlock) {
-			const { header } = job.data;
-			await newBlockProcessor(header);
+			const { block } = job.data;
+			await newBlockProcessor(block);
 		} else if (isDeleteBlock) {
 			try {
 				const { header } = job.data;

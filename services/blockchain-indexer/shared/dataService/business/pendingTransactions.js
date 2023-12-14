@@ -21,6 +21,7 @@ const {
 
 const logger = Logger();
 
+const { getCurrentChainID } = require('./interoperability/chain');
 const { normalizeTransaction } = require('./transactions');
 const { getIndexedAccountInfo } = require('../utils/account');
 const { requestConnector } = require('../../utils/request');
@@ -92,6 +93,18 @@ const validateParams = async params => {
 	if (params.senderAddress) validatedParams.senderAddress = params.senderAddress;
 	if (params.recipientAddress) validatedParams.recipientAddress = params.recipientAddress;
 	if (params.moduleCommand) validatedParams.moduleCommand = params.moduleCommand;
+
+	// If receivingChainID is currentChainID then return all the transactions where receivingChainID = null
+	if (params.receivingChainID) {
+		const currentChainID = await getCurrentChainID();
+
+		if (params.receivingChainID === currentChainID) {
+			validatedParams.currentChainTransactions = true;
+		} else {
+			validatedParams.receivingChainID = params.receivingChainID;
+		}
+	}
+
 	if (params.sort) validatedParams.sort = params.sort;
 
 	return validatedParams;
@@ -132,7 +145,10 @@ const getPendingTransactions = async params => {
 					transaction.sender.address === validatedParams.address ||
 					transaction.params.recipientAddress === validatedParams.address) &&
 				(!validatedParams.moduleCommand ||
-					transaction.moduleCommand === validatedParams.moduleCommand),
+					transaction.moduleCommand === validatedParams.moduleCommand) &&
+				(!validatedParams.receivingChainID ||
+					transaction.params.receivingChainID === validatedParams.receivingChainID) &&
+				(!validatedParams.currentChainTransactions || !transaction.params.receivingChainID),
 		);
 
 		pendingTransactions.data = filteredPendingTxs

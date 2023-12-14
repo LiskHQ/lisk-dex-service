@@ -22,9 +22,9 @@ const logger = Logger();
 
 const { initEventsScheduler } = require('./eventsScheduler');
 const {
+	getIndexStatus,
 	getMissingBlocks,
 	getIndexVerifiedHeight,
-	setIndexVerifiedHeight,
 	isGenesisBlockIndexed,
 	getLiveIndexingJobCount: getLiveIndexingJobCountFromIndexer,
 } = require('./sources/indexer');
@@ -33,6 +33,7 @@ const { getAllPosValidators } = require('./sources/connector');
 
 const { getCurrentHeight, getGenesisHeight, initNodeConstants } = require('./constants');
 
+const { range } = require('./utils/array');
 const delay = require('./utils/delay');
 const config = require('../config');
 
@@ -47,8 +48,7 @@ const accountMessageQueue = new MessageQueue(
 );
 
 let intervalID;
-const REFRESH_INTERVAL = 30000;
-const MAX_BLOCKS_TO_SCHEDULE = 10000;
+const REFRESH_INTERVAL = config.job.progressRefreshInterval;
 
 const getInProgressJobCount = async queue => {
 	const jobCount = await queue.getJobCounts();
@@ -79,31 +79,35 @@ const waitForJobCountToFallBelowThreshold = async () => {
 	/* eslint-enable no-constant-condition */
 };
 
-const waitForGenesisBlockIndexing = resolve =>
-	new Promise(res => {
+const waitForGenesisBlockIndexing = (resolve, reject) =>
+	new Promise((res, rej) => {
 		if (!resolve) resolve = res;
+		if (!reject) reject = rej;
+
 		if (intervalID) {
 			clearInterval(intervalID);
 			intervalID = null;
 		}
 
 		return isGenesisBlockIndexed().then(async isIndexed => {
-			const jobCount = await getLiveIndexingJobCount();
-
 			if (isIndexed) {
 				logger.info('Genesis block is indexed.');
 				return resolve(true);
 			}
 
-			if (jobCount <= 1) {
+			const jobCount = await getLiveIndexingJobCount();
+			if (jobCount >= 1) {
 				logger.info(
 					`Genesis block indexing is still in progress. Waiting for ${REFRESH_INTERVAL}ms to re-check the genesis block indexing status.`,
 				);
-				intervalID = setInterval(waitForGenesisBlockIndexing.bind(null, resolve), REFRESH_INTERVAL);
+				intervalID = setInterval(
+					waitForGenesisBlockIndexing.bind(null, resolve, reject),
+					REFRESH_INTERVAL,
+				);
 				return false;
 			}
 
-			throw new Error('Genesis block indexing failed.');
+			return reject(new Error('Genesis block indexing failed.'));
 		});
 	});
 
@@ -122,6 +126,8 @@ const scheduleBlocksIndexing = async heights => {
 
 	const isMultiBatch = numBatches > 1;
 	for (let i = 0; i < numBatches; i++) {
+		await waitForJobCountToFallBelowThreshold();
+
 		if (isMultiBatch) logger.debug(`Scheduling batch ${i + 1}/${numBatches}.`);
 		const blockHeightsBatch = blockHeights.slice(i * MAX_BATCH_SIZE, (i + 1) * MAX_BATCH_SIZE);
 
@@ -138,7 +144,6 @@ const scheduleBlocksIndexing = async heights => {
 					0,
 				)} - ${blockHeightsBatch.at(-1)}, ${blockHeightsBatch.length} blocks).`,
 			);
-		await waitForJobCountToFallBelowThreshold();
 	}
 };
 
@@ -226,17 +231,17 @@ const scheduleMissingBlocksIndexing = async () => {
 		return;
 	}
 
-	const genesisHeight = await getGenesisHeight();
-	const currentHeight = await getCurrentHeight();
-
 	// Skip job scheduling when the jobCount is greater than the threshold
 	const jobCount = await getLiveIndexingJobCount();
 	if (jobCount > config.job.indexMissingBlocks.skipThreshold) {
 		logger.info(
-			`Skipping missing blocks job run. ${jobCount} indexing jobs (current threshold: ${config.job.indexMissingBlocks.skipThreshold}) already in the queue.`,
+			`Skipping missing blocks job run. ${jobCount} indexing jobs already in the queue. Current threshold: ${config.job.indexMissingBlocks.skipThreshold}.`,
 		);
 		return;
 	}
+
+	const genesisHeight = await getGenesisHeight();
+	const currentHeight = await getCurrentHeight();
 
 	// Missing blocks are being checked during regular interval
 	// By default they are checked from the blockchain's beginning
@@ -245,13 +250,13 @@ const scheduleMissingBlocksIndexing = async () => {
 	// Lowest and highest block heights expected to be indexed
 	const blockIndexLowerRange = lastVerifiedHeight;
 	const blockIndexHigherRange = Math.min(
-		blockIndexLowerRange + MAX_BLOCKS_TO_SCHEDULE,
+		blockIndexLowerRange + config.job.indexMissingBlocks.maxBlocksToSchedule,
 		currentHeight,
 	);
 
 	try {
 		const missingBlocksByHeight = [];
-		const MAX_QUERY_RANGE = 25000;
+		const MAX_QUERY_RANGE = 10000;
 		const NUM_BATCHES = Math.ceil((blockIndexHigherRange - blockIndexLowerRange) / MAX_QUERY_RANGE);
 
 		// Batch into smaller ranges to avoid microservice/DB query timeouts
@@ -262,32 +267,41 @@ const scheduleMissingBlocksIndexing = async () => {
 
 			if (Array.isArray(result)) {
 				missingBlocksByHeight.push(...result);
-
-				if (result.length === 0) {
-					const lastIndexVerifiedHeight = await getIndexVerifiedHeight();
-					if (batchEndHeight <= lastIndexVerifiedHeight + MAX_QUERY_RANGE) {
-						await setIndexVerifiedHeight(batchEndHeight);
-						logger.info(
-							`No missing blocks found in range ${batchStartHeight} - ${batchEndHeight}. Setting index verified height to ${batchEndHeight}.`,
-						);
-					}
-				}
+			} else {
+				logger.warn(
+					`getMissingBlocks returned '${typeof result}' type instead of an Array.\nresult: ${JSON.stringify(
+						result,
+						null,
+						'\t',
+					)}`,
+				);
 			}
 		}
 
-		if (missingBlocksByHeight.length === 0) {
-			// Update 'indexVerifiedHeight' when no missing blocks are found
-			await setIndexVerifiedHeight(blockIndexHigherRange);
-			logger.info(
-				`No missing blocks found in range ${blockIndexLowerRange} - ${blockIndexHigherRange}. Setting index verified height to ${blockIndexHigherRange}.`,
-			);
-		} else {
+		// Re-check for tiny gaps and schedule jobs accordingly
+		const indexStatus = await getIndexStatus();
+		if (indexStatus) {
+			const { chainLength, numBlocksIndexed, lastBlockHeight } = indexStatus.data;
+			const numStillMissingJobs = chainLength - numBlocksIndexed - missingBlocksByHeight.length;
+
+			if (numStillMissingJobs > 0 && numStillMissingJobs <= 100) {
+				missingBlocksByHeight.push(
+					...range(lastBlockHeight - numStillMissingJobs + 1, lastBlockHeight + 1),
+				);
+			}
+		}
+
+		if (missingBlocksByHeight.length) {
 			// Schedule indexing for the missing blocks
 			await scheduleBlocksIndexing(missingBlocksByHeight);
 			logger.info('Successfully scheduled missing blocks indexing.');
+		} else {
+			logger.info(
+				`No missing blocks found in range ${blockIndexLowerRange} - ${blockIndexHigherRange}.`,
+			);
 		}
 	} catch (err) {
-		logger.warn(`Missing blocks indexing scheduling failed due to: ${err.message}.`);
+		logger.warn(`Scheduling to index missing blocks failed due to: ${err.message}`);
 		logger.trace(err.stack);
 	}
 };
@@ -299,7 +313,7 @@ const init = async () => {
 		await initIndexingScheduler();
 		await initEventsScheduler();
 	} catch (err) {
-		logger.error(`Unable to initialize coordinator due to: ${err.message}.`);
+		logger.error(`Unable to initialize coordinator due to: ${err.message}`);
 		logger.trace(err.stack);
 		throw err;
 	}

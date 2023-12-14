@@ -13,19 +13,17 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+const range = (start = 0, end, step = 1) => {
+	if (!end) {
+		end = start;
+		start = 0;
+	}
+	const arrSize = Math.floor((end - start) / step);
+
+	// 'end' is non-inclusive
+	return new Array(arrSize).fill().map((_, index) => start + index * step);
+};
 
 module.exports = {
-	type: 'moleculer',
-	method: 'dex.prices.convert.token',
-	params: {
-		tokenSymbol: '=,string',
-		conversionTokenSymbol: '=,string',
-	},
-	definition: {
-		data: {
-			credibleDirectPriceToken2ToToken1: '=,string',
-			credibleDirectPriceToken1ToToken2: '=,string'
-		},
-		meta: {},
-	},
+	range,
 };

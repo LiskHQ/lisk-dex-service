@@ -24,6 +24,7 @@ const {
 	initFeeEstimates,
 } = require('./dataService');
 const { getFeeEstimatesFromFeeEstimator } = require('./dataService/business/feeEstimates');
+const { initBlockProcessingQueues } = require('./indexer/blockchainIndex');
 const indexStatus = require('./indexer/indexStatus');
 const messageProcessor = require('./messageProcessor');
 
@@ -46,7 +47,7 @@ const init = async () => {
 				await snapshotUtils.initSnapshot();
 				logger.info('Successfully downloaded and applied the snapshot.');
 			} catch (err) {
-				logger.warn(`Unable to apply snapshot:\n${err.message}.`);
+				logger.warn(`Unable to apply snapshot:\n${err.message}`);
 			}
 		}
 
@@ -57,6 +58,7 @@ const init = async () => {
 		await getFeeEstimatesFromFeeEstimator();
 
 		if (config.operations.isIndexingModeEnabled) {
+			await initBlockProcessingQueues();
 			await messageProcessor.init();
 		}
 	} catch (err) {

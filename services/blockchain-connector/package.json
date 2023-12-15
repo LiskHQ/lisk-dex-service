@@ -1,7 +1,7 @@
 {
-	"name": "lisk-service-blockchain-connector",
-	"version": "0.7.2",
-	"description": "Lisk Service Blockchain Connector",
+	"name": "lisk-dex-service-blockchain-connector",
+	"version": "1.0.0-beta.3",
+	"description": "Lisk Dex Service Blockchain Connector",
 	"keywords": [
 		"lisk",
 		"blockchain"

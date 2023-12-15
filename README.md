@@ -9,7 +9,7 @@
 ![GitHub issues](https://img.shields.io/github/issues-raw/liskhq/lisk-dex-service)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/liskhq/lisk-dex-service)
 
-Lisk DEX Service is a web application that allows interaction with various blockchain networks based on Lisk and Bitcoin protocols.
+Lisk DEX Service is an extended version of Lisk-Service (version-0.7.2) a web application that allows interaction with various blockchain networks based on Lisk and Bitcoin protocols.
 
 The main focus of Lisk DEX Service is to provide data to the clients such as the Lisk DEX Application. Lisk DEX Service makes it possible to access all live blockchain data in a similar manner to the regular Lisk SDK API. 
 In addition, Lisk DEX Service also provides users with much more detailed information and endpoints, such as geolocation and various statistics about network usage, etc.

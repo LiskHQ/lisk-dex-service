@@ -28,7 +28,7 @@ const config = {
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 /**
@@ -43,7 +43,7 @@ config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json'
 config.isUseLiskIPCClient = Boolean(
 	String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true',
 );
-config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-core';
+config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
 
 /**
  * Network-related settings

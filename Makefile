@@ -94,15 +94,6 @@ build-statistics:
 build-fees:
 	cd ./services/fee-estimator && docker buildx build --tag=lisk/service_fee_estimator ./
 
-build-dex-base:
-	cd ./services/dex-base && docker buildx build --tag=lisk/service_dex_base ./
-
-build-dex-governance:
-	cd ./services/dex-governance && docker buildx build --tag=lisk/service_dex_governance ./
-
-build-dex-information:
-	cd ./services/dex-information && docker buildx build --tag=lisk/service_dex_information ./
-
 build-market:
 	cd ./services/market && docker buildx build --tag=lisk/service_market ./
 
@@ -112,6 +103,15 @@ build-export:
 build-gateway:
 	cd ./services/gateway && docker buildx build --tag=lisk/service_gateway ./
 
+build-dex-base:
+	cd ./services/dex-base && docker buildx build --tag=lisk/service_dex_base ./
+
+build-dex-governance:
+	cd ./services/dex-governance && docker buildx build --tag=lisk/service_dex_governance ./
+
+build-dex-information:
+	cd ./services/dex-information && docker buildx build --tag=lisk/service_dex_information ./
+
 build-template:
 	cd ./services/template && docker buildx build --tag=lisk/service_template ./
 
@@ -119,19 +119,22 @@ build-tests:
 	cd ./tests && docker buildx build --tag=lisk/service_tests ./
 
 build-local:
-	npm ci
-	cd ./framework && npm ci
-	cd ./services/blockchain-app-registry && npm ci
-	cd ./services/blockchain-connector && npm ci
-	cd ./services/blockchain-coordinator && npm ci
-	cd ./services/blockchain-indexer && npm ci
-	cd ./services/transaction-statistics && npm ci
-	cd ./services/fee-estimator && npm ci
-	cd ./services/market && npm ci
-	cd ./services/gateway && npm ci
-	cd ./services/export && npm ci
-	cd ./services/template && npm ci
-	cd ./tests && npm ci
+	yarn install --frozen-lockfile
+	cd ./framework && yarn install --frozen-lockfile
+	cd ./services/blockchain-app-registry && yarn install --frozen-lockfile
+	cd ./services/blockchain-connector && yarn install --frozen-lockfile
+	cd ./services/blockchain-coordinator && yarn install --frozen-lockfile
+	cd ./services/blockchain-indexer && yarn install --frozen-lockfile
+	cd ./services/transaction-statistics && yarn install --frozen-lockfile
+	cd ./services/fee-estimator && yarn install --frozen-lockfile
+	cd ./services/market && yarn install --frozen-lockfile
+	cd ./services/gateway && yarn install --frozen-lockfile
+	cd ./services/export && yarn install --frozen-lockfile
+	cd ./services/dex-base && yarn install --frozen-lockfile
+	cd ./services/dex-governance && yarn install --frozen-lockfile
+	cd ./services/dex-information && yarn install --frozen-lockfile
+	cd ./services/template && yarn install --frozen-lockfile
+	cd ./tests && yarn install --frozen-lockfile
 
 clean: clean-local clean-images
 
@@ -147,6 +150,9 @@ clean-local:
 	cd ./services/market && rm -rf node_modules
 	cd ./services/gateway && rm -rf node_modules
 	cd ./services/export && rm -rf node_modules
+	cd ./services/dex-base && rm -rf node_modules
+	cd ./services/dex-governance && rm -rf node_modules
+	cd ./services/dex-information && rm -rf node_modules
 	cd ./services/template && rm -rf node_modules
 	cd ./tests && rm -rf node_modules
 
@@ -160,6 +166,9 @@ clean-images:
 	lisk/service_fee_estimator \
 	lisk/service_market \
 	lisk/service_export \
+	lisk/service_dex_base \
+	lisk/service_dex_governance \
+	lisk/service_dex_information \
 	lisk/service_template \
 	lisk/service_tests; :
 
@@ -175,6 +184,9 @@ audit:
 	cd ./services/market && yarn audit; :
 	cd ./services/gateway && yarn audit; :
 	cd ./services/export && yarn audit; :
+	cd ./services/dex-base && yarn audit; :
+	cd ./services/dex-governance && yarn audit; :
+	cd ./services/dex-information && yarn audit; :
 
 audit-fix:
 	yarn audit fix; :
@@ -188,6 +200,9 @@ audit-fix:
 	cd ./services/market && yarn audit fix; :
 	cd ./services/gateway && yarn audit fix; :
 	cd ./services/export && yarn audit fix; :
+	cd ./services/dex-base && yarn audit; :
+	cd ./services/dex-governance && yarn audit; :
+	cd ./services/dex-information && yarn audit; :
 
 tag-%:
 	yarn version --no-git-tag-version --new-version $*
@@ -200,6 +215,9 @@ tag-%:
 	cd services/fee-estimator && yarn version --no-git-tag-version --new-version $*
 	cd services/market && yarn version --no-git-tag-version --new-version $*
 	cd services/export && yarn version --no-git-tag-version --new-version $*
+	cd services/dex-base && yarn version --no-git-tag-version --new-version $*
+	cd services/dex-governance && yarn version --no-git-tag-version --new-version $*
+	cd services/dex-information && yarn version --no-git-tag-version --new-version $*
 	cd services/template && yarn version --no-git-tag-version --new-version $*
 	git add ./services/gateway/package.json
 	git add ./services/blockchain-app-registry/package.json
@@ -210,6 +228,9 @@ tag-%:
 	git add ./services/fee-estimator/package.json
 	git add ./services/market/package.json
 	git add ./services/export/package.json
+	git add ./services/dex-base/package.json
+	git add ./services/dex-governance/package.json
+	git add ./services/dex-information/package.json
 	git add ./services/template/package.json
 	git add ./package.json
 	git commit -S -m ":arrow_up: Version bump to $*"

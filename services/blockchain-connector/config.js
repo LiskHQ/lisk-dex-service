@@ -28,18 +28,21 @@ const config = {
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
 
 /**
  * External endpoints
  */
 config.endpoints.liskWs = process.env.LISK_APP_WS || 'ws://127.0.0.1:7887';
+config.endpoints.liskHttp =
+	process.env.LISK_APP_HTTP || config.endpoints.liskWs.replace('ws', 'http');
 config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json';
 
 /**
  * API Client related settings
  */
+config.isUseHttpApi = Boolean(String(process.env.USE_LISK_HTTP_API).toLowerCase() === 'true'); // Disabled by default
 config.isUseLiskIPCClient = Boolean(
 	String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true',
 );
@@ -115,17 +118,12 @@ config.job = {
 };
 
 config.apiClient = {
-	heartbeatAckMaxWaitTime: Number(process.env.HEARTBEAT_ACK_MAX_WAIT_TIME) || 1000, // in millisecs
-	aliveAssumptionTime: Number(process.env.CLIENT_ALIVE_ASSUMPTION_TIME) || 5 * 1000, // in millisecs
-	aliveAssumptionTimeBeforeGenesis: 30 * 1000,
-	wsConnectionLimit: 10,
-	instantiation: {
-		maxWaitTime: Number(process.env.CLIENT_INSTANTIATION_MAX_WAIT_TIME) || 5 * 1000, // in millisecs
-		retryInterval: Number(process.env.CLIENT_INSTANTIATION_RETRY_INTERVAL) || 1, // in millisecs
-	},
+	poolSize: Number(process.env.CLIENT_POOL_SIZE) || 10,
+	wsServerPingInterval: Number(process.env.WS_SERVER_PING_INTERVAL) || 3 * 1000, // in millisecs
+	pingIntervalBuffer: Number(process.env.WS_SERVER_PING_INTERVAL_BUFFER) || 1000, // in millisecs
 	request: {
 		maxRetries: Number(process.env.ENDPOINT_INVOKE_MAX_RETRIES) || 3,
-		retryDelay: Number(process.env.ENDPOINT_INVOKE_RETRY_DELAY) || 10, // in millisecs
+		retryDelay: Number(process.env.ENDPOINT_INVOKE_RETRY_DELAY) || 50, // in millisecs
 	},
 };
 

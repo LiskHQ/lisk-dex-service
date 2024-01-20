@@ -1,6 +1,6 @@
 {
 	"name": "lisk-service-blockchain-connector",
-	"version": "0.7.2",
+	"version": "0.7.4",
 	"description": "Lisk Service Blockchain Connector",
 	"keywords": [
 		"lisk",
@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"@liskhq/lisk-api-client": "6.0.1",
-		"@liskhq/lisk-codec": "0.4.0",
+		"@liskhq/lisk-codec": "^0.5.0",
 		"@liskhq/lisk-cryptography": "4.0.0",
 		"@liskhq/lisk-transactions": "6.0.0",
 		"@liskhq/lisk-validator": "0.8.0",

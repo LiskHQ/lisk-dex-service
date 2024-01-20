@@ -79,9 +79,11 @@ config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
  */
 config.api.versions = {
 	'/api/v3': ['http-version3', 'http-exports'],
+	/* BEGIN: DEX */
 	'/api/dex/v1': ['http-dex-version1'],
 	'/api/dex-governance/v1': ['http-governance-version1'],
 	'/api/dex-information/v1': ['http-information-version1']
+	/* END: DEX */
 };
 
 /**
@@ -117,7 +119,9 @@ config.rpcCache = {
 	enable: String(process.env.ENABLE_REQUEST_CACHING).toLowerCase() !== 'false',
 };
 
+/* BEGIN: DEX */
 const DEFAULT_DEPENDENCIES = 'indexer,connector,dex';
+/* END: DEX */
 const { GATEWAY_DEPENDENCIES } = process.env;
 
 config.brokerDependencies = DEFAULT_DEPENDENCIES.concat(',', GATEWAY_DEPENDENCIES || '').split(',');

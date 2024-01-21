@@ -1,11 +1,16 @@
 {
 	"name": "lisk-dex-service",
 	"version": "1.0.0-beta.3",
-	"description": "Lisk Dex Service",
+	"description": "Lisk DEX blockchain middleware between Core and UI",
+	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
+	"license": "Apache-2.0",
 	"keywords": [
 		"lisk",
-		"service",
-		"blockchain"
+		"blockchain",
+		"dex",
+		"middleware",
+		"nodejs",
+		"typescript"
 	],
 	"homepage": "https://github.com/LiskHQ/lisk-dex-service",
 	"repository": {
@@ -15,14 +20,12 @@
 	"bugs": {
 		"url": "https://github.com/LiskHQ/lisk-dex-service/issues"
 	},
-	"private": true,
-	"author": "Lisk Foundation <admin@lisk.com>, lightcurve GmbH <admin@lightcurve.io>",
-	"license": "Apache-2.0",
-	"main": "app.js",
 	"engines": {
 		"node": ">=18.16 <=18",
 		"npm": ">=8.5.0"
 	},
+	"main": "app.js",
+	"private": true,
 	"scripts": {
 		"start": "pm2 start ecosystem.config.js",
 		"stop": "pm2 delete ecosystem.config.js",

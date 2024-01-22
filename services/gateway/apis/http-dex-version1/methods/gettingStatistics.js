@@ -32,15 +32,15 @@ module.exports = {
 		const gettingStatisticsSchema = {};
 		gettingStatisticsSchema[this.swaggerApiPath] = { get: {} };
 		gettingStatisticsSchema[this.swaggerApiPath].get.tags = this.tags;
-		gettingStatisticsSchema[this.swaggerApiPath].get.summary = 'Retrieves statistics for transactions.';
+		gettingStatisticsSchema[this.swaggerApiPath].get.summary = 'Returns statistics for transactions.';
 		gettingStatisticsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrieves statistics for transactions.',
+			description: 'Returns statistics for transactions.',
 		});
 		gettingStatisticsSchema[this.swaggerApiPath].get.parameters = transformParams('statistics', this.params);
 		gettingStatisticsSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrieves statistics for transactions.',
+				description: 'Returns statistics for transactions.',
 				schema: {
 					$ref: '#/definitions/GettingStatisticsWithoutEnvelope',
 				},

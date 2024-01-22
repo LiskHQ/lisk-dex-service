@@ -28,15 +28,15 @@ module.exports = {
 		const proposalsSchema = {};
 		proposalsSchema[this.swaggerApiPath] = { get: {} };
 		proposalsSchema[this.swaggerApiPath].get.tags = this.tags;
-		proposalsSchema[this.swaggerApiPath].get.summary = 'Returns all the proposals, or a specific proposal if it was specified.';
+		proposalsSchema[this.swaggerApiPath].get.summary = 'Returns all proposals, or a specific proposal if it was specified.';
 		proposalsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Returns all the proposals, or a specific proposal if it was specified.',
+			description: 'Returns all proposals, or a specific proposal if it was specified.',
 		});
 		proposalsSchema[this.swaggerApiPath].get.parameters = transformParams('proposals', this.params);
 		proposalsSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Returns all the proposals, or a specific proposal if it was specified.',
+				description: 'Returns all proposals, or a specific proposal if it was specified.',
 				schema: {
 					$ref: '#/definitions/ProposalsWithoutEnvelope',
 				},

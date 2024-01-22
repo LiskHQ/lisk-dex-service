@@ -35,15 +35,15 @@ module.exports = {
 		const gettingSlippageBoundsSchema = {};
 		gettingSlippageBoundsSchema[this.swaggerApiPath] = { get: {} };
 		gettingSlippageBoundsSchema[this.swaggerApiPath].get.tags = this.tags;
-		gettingSlippageBoundsSchema[this.swaggerApiPath].get.summary = 'Retrives the slippage Bounds for a given swap.';
+		gettingSlippageBoundsSchema[this.swaggerApiPath].get.summary = 'Returns the slippage bounds for a given swap.';
 		gettingSlippageBoundsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives the slippage Bounds for a given swap.',
+			description: 'Returns the slippage bounds for a given swap.',
 		});
 		gettingSlippageBoundsSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		gettingSlippageBoundsSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives the slippage Bounds for a given swap.',
+				description: 'Returns the slippage bounds for a given swap.',
 				schema: {
 					$ref: '#/definitions/gettingSlippageBoundsWithEnvelope',
 				},

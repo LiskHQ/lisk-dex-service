@@ -31,15 +31,15 @@ module.exports = {
 		const pricesConvertFiatSchema = {};
 		pricesConvertFiatSchema[this.swaggerApiPath] = { get: {} };
 		pricesConvertFiatSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesConvertFiatSchema[this.swaggerApiPath].get.summary = 'Convert token price to the equivalent amount of fiat.';
+		pricesConvertFiatSchema[this.swaggerApiPath].get.summary = 'Converts token price to the equivalent amount of fiat.';
 		pricesConvertFiatSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Convert token price to the equivalent amount of fiat.',
+			description: 'Converts token price to the equivalent amount of fiat.',
 		});
 		pricesConvertFiatSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		pricesConvertFiatSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Convert token price to the equivalent amount of fiat.',
+				description: 'Converts token price to the equivalent amount of fiat.',
 				schema: {
 					$ref: '#/definitions/PricesConvertFiatWithEnvelope',
 				},

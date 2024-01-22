@@ -31,15 +31,15 @@ module.exports = {
 		const availableTokensSchema = {};
 		availableTokensSchema[this.swaggerApiPath] = { get: {} };
 		availableTokensSchema[this.swaggerApiPath].get.tags = this.tags;
-		availableTokensSchema[this.swaggerApiPath].get.summary = 'Retrives list of tokens.';
+		availableTokensSchema[this.swaggerApiPath].get.summary = 'Returns a list of supported tokens.';
 		availableTokensSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives list of tokens.',
+			description: 'Returns a list of supported tokens.',
 		});
 		availableTokensSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		availableTokensSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives list of tokens.',
+				description: 'Returns a list of supported tokens.',
 				schema: {
 					$ref: '#/definitions/TokensAvailableWithEnvelope',
 				},

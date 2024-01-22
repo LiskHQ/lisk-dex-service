@@ -31,15 +31,15 @@ module.exports = {
 		const gettingCurrentsqrtpriceSchema = {};
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath] = { get: {} };
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.tags = this.tags;
-		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.summary = 'Retrives the current sqrt price of a given pool.';
+		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.summary = 'Returns the current sqrt price of a given pool.';
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives the current sqrt price of a given pool.',
+			description: 'Returns the current sqrt price of a given pool.',
 		});
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.parameters = transformParams('tokens', this.params);
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives the current sqrt price of a given pool.',
+				description: 'Returns the current sqrt price of a given pool.',
 				schema: {
 					$ref: '#/definitions/gettingCurrentsqrtpriceWithEnvelope',
 				},

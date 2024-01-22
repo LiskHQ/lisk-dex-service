@@ -30,15 +30,15 @@ module.exports = {
 		const poolsAvailableSchema = {};
 		poolsAvailableSchema[this.swaggerApiPath] = { get: {} };
 		poolsAvailableSchema[this.swaggerApiPath].get.tags = this.tags;
-		poolsAvailableSchema[this.swaggerApiPath].get.summary = 'Retrieves liskt of all available pools.';
+		poolsAvailableSchema[this.swaggerApiPath].get.summary = 'Returns a list of available pools.';
 		poolsAvailableSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrieves liskt of all available pools.',
+			description: 'Returns a list of available pools.',
 		});
 		poolsAvailableSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		poolsAvailableSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrieves liskt of all available pools.',
+				description: 'Returns a list of available pools.',
 				schema: {
 					$ref: '#/definitions/PoolsAvailableWithoutEnvelope',
 				},

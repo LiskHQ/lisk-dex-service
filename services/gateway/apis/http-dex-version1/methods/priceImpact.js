@@ -34,15 +34,15 @@ module.exports = {
 		const pricesImpactSchema = {};
 		pricesImpactSchema[this.swaggerApiPath] = { get: {} };
 		pricesImpactSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesImpactSchema[this.swaggerApiPath].get.summary = 'Return the impact price on a swap trade on the market price of the pool.';
+		pricesImpactSchema[this.swaggerApiPath].get.summary = 'Returns the price impact on a swap trade on the market price of the pool.';
 		pricesImpactSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Return the impact price on a swap trade on the market price of the pool.',
+			description: 'Returns the price impact on a swap trade on the market price of the pool.',
 		});
 		pricesImpactSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		pricesImpactSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Return the impact price on a swap trade on the market price of the pool.',
+				description: 'Returns the price impact on a swap trade on the market price of the pool.',
 				schema: {
 					$ref: '#/definitions/PricesImpactWithoutEnvelope',
 				},

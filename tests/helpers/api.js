@@ -14,7 +14,7 @@
  *
  */
 
-import axios from 'axios';
+const axios = require('axios');
 
 const handleError = (error, expectedStatusCode) => {
 	if (error.response) {

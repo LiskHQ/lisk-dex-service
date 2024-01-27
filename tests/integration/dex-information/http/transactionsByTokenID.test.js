@@ -15,30 +15,29 @@
  */
 
 const config = require('../../../config');
+const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex-information/v1`;
 const endpoint = `${baseUrl}/getTransactionsByTokenID`;
 
-const { api } = require('../../../helpers/api');
-
-describe('Method transactionsByTokenID available in information service', () => {
-	let transactionsByTokenID;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?poolID=0000000000000000&tokenID=0000000000000000&command=swap&account=12345678912345&limit=1&offset=0`);		
-		transactionsByTokenID = response.data;
-	});
-
-	describe('Method transactionsByTokenID available method', () => {
-		it('returns errors becuase of params related to transactionsByTokenID Available', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'poolID' field is required.; The 'tokenID' field is required.; The 'command' field is required.; The 'account' field is required.; The 'limit' field is required.; The 'offset' field is required.");
+describe('GET /api/dex-information/v1/getTransactionsByTokenID', () => {
+	describe('returning a list of transactions by tokenID', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'poolID' field is required.; The 'tokenID' field is required.; The 'command' field is required.; The 'account' field is required.; The 'limit' field is required.; The 'offset' field is required.",
+			);
 		});
-		it('returns list of transactionsByTokenID', async () => {
-			const response = await api.get(`${endpoint}?poolID=0000000000000000&tokenID=0000000000000000&command=swap&account=12345678912345&limit=1&offset=0`);	
+
+		it('should return the expected response when given valid params', async () => {
+			const response = await api.get(
+				`${endpoint}?poolID=0000000000000000&tokenID=0000000000000000&command=swap&account=12345678912345&limit=1&offset=0`,
+			);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data.transactionsByTokenID).not.toBeNull();
+			expect(response.data).toHaveProperty('transactionsByTokenID');
+			expect(response.data.transactionsByTokenID).toBeInstanceOf(Array);
 		});
-	})
-	
+	});
 });

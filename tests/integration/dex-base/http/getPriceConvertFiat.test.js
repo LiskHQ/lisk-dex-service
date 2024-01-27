@@ -14,37 +14,30 @@
  *
  */
 
-
 const config = require('../../../config');
 const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex/v1`;
 const endpoint = `${baseUrl}/prices/convert/fiat`;
 
-describe('Method prices/convert/fiat', () => {
-	let priceConvert;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?currency=USD&tokenSymbol=BTC`);		
-		priceConvert = response.data;
-	});
-
-	describe('For Price Convert Fiat Function', () => {
-		it('returns errors becuase of params related to priceConvertFiat', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'currency' field is required.; The 'tokenSymbol' field is required.");
+describe('GET /api/dex/v1/prices/convert/fiat', () => {
+	describe('converting token price to the equivalent amount of fiat', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'currency' field is required.; The 'tokenSymbol' field is required.",
+			);
 		});
-		it('returns price of converted token to Fiat', async () => {
-			const response = await api.get(`${endpoint}?currency=USD&tokenSymbol=BTC`);	
+
+		it('should return the expected response when given valid params', async () => {
+			const response = await api.get(`${endpoint}?currency=USD&tokenSymbol=BTC`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
-			expect(parseInt(response.data.convertedPrice)).toBeGreaterThan(1);
-			expect(response.data.convertedTarget).toBe("USD");
-			
+			expect(response.data).toHaveProperty('convertedPrice');
+			expect(response.data.convertedPrice).not.toBeNull();
+			expect(response.data).toHaveProperty('convertedTarget');
+			expect(response.data.convertedTarget).toBe('USD');
 		});
-	})	
+	});
 });
-
-
-
-

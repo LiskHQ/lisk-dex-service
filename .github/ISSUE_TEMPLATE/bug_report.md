@@ -4,11 +4,13 @@ about: Create a report to help us improve
 title: ''
 labels: 'type: bug'
 assignees: ''
+projects: 'Lisk Service Version 0.7.0'
+status: 'Backlog'
 ---
 
-### Expected behavior
-
 ### Actual behavior
+
+### Expected behavior
 
 ### Steps to reproduce
 

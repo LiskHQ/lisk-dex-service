@@ -2,7 +2,8 @@
 
 FROM node:18-alpine AS builder
 
-RUN adduser -D builder && \
+RUN apk add --no-cache alpine-sdk=~1 python3=~3 cmake=~3 && \
+    adduser -D builder && \
     mkdir /home/builder/build && \
     chown -R builder:builder /home/builder/
 

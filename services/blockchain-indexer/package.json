@@ -1,7 +1,7 @@
 {
-	"name": "lisk-dex-service-blockchain-indexer",
-	"version": "1.0.0-beta.3",
-	"description": "Lisk Dex Service Blockchain Indexer",
+	"name": "lisk-service-blockchain-indexer",
+	"version": "0.7.4",
+	"description": "Lisk Service Blockchain Indexer",
 	"keywords": [
 		"lisk",
 		"blockchain"
@@ -30,6 +30,7 @@
 		"test:functional": "jest --config=jest.config.functional.js --detectOpenHandles --forceExit"
 	},
 	"dependencies": {
+		"@liskhq/lisk-codec": "^0.5.0",
 		"@liskhq/lisk-cryptography": "4.0.0",
 		"@liskhq/lisk-transactions": "6.0.0",
 		"@liskhq/lisk-utils": "0.4.0",

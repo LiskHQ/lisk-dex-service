@@ -32,9 +32,10 @@ config.host = process.env.HOST || '0.0.0.0';
 /**
  * Inter-service message broker
  */
-config.transporter = process.env.SERVICE_BROKER || 'redis://127.0.0.1:6379/0';
+config.transporter = process.env.SERVICE_BROKER || 'redis://lisk:password@127.0.0.1:6379/0';
 config.brokerTimeout = Number(process.env.SERVICE_BROKER_TIMEOUT) || 10; // in seconds
-config.volatileRedis = process.env.SERVICE_GATEWAY_REDIS_VOLATILE || 'redis://127.0.0.1:6379/5';
+config.volatileRedis =
+	process.env.SERVICE_GATEWAY_REDIS_VOLATILE || 'redis://lisk:password@127.0.0.1:6379/5';
 
 /**
  * Compatibility
@@ -79,9 +80,11 @@ config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
  */
 config.api.versions = {
 	'/api/v3': ['http-version3', 'http-exports'],
+	/* BEGIN: DEX */
 	'/api/dex/v1': ['http-dex-version1'],
 	'/api/dex-governance/v1': ['http-governance-version1'],
 	'/api/dex-information/v1': ['http-information-version1']
+	/* END: DEX */
 };
 
 /**
@@ -117,7 +120,9 @@ config.rpcCache = {
 	enable: String(process.env.ENABLE_REQUEST_CACHING).toLowerCase() !== 'false',
 };
 
+/* BEGIN: DEX */
 const DEFAULT_DEPENDENCIES = 'indexer,connector,dex';
+/* END: DEX */
 const { GATEWAY_DEPENDENCIES } = process.env;
 
 config.brokerDependencies = DEFAULT_DEPENDENCIES.concat(',', GATEWAY_DEPENDENCIES || '').split(',');

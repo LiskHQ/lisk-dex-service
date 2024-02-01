@@ -1,7 +1,7 @@
 {
-	"name": "lisk-dex-service-transaction-statistics",
-	"version": "1.0.0-beta.3",
-	"description": "Lisk Dex Service Transaction Statistics",
+	"name": "lisk-service-transaction-statistics",
+	"version": "0.7.4",
+	"description": "Lisk Service Transaction Statistics",
 	"keywords": [
 		"lisk",
 		"blockchain"

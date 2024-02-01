@@ -185,7 +185,8 @@ tempApp.run().then(async () => {
 			'metadata.change': payload => sendSocketIoEvent('update.metadata', payload),
 			'update.index.status': payload =>
 				sendSocketIoEvent('update.index.status', mapper(payload, indexStatusUpdateDefinition)),
-							'pool.created': (payload) => sendSocketIoEvent('poolCreated', payload),
+			/* BEGIN: DEX */
+			'pool.created': (payload) => sendSocketIoEvent('poolCreated', payload),
 			'pool.creation.failed': (payload) => sendSocketIoEvent('poolCreationFailed', payload),
 			'position.created': (payload) => sendSocketIoEvent('positionCreated', payload),
 			'position.creation.failed': (payload) => sendSocketIoEvent('positionCreationFailed', payload),
@@ -195,6 +196,7 @@ tempApp.run().then(async () => {
 			'remove.lquidity.failed': (payload) => sendSocketIoEvent('removeLquidityFailed', payload),
 			'swapped': (payload) => sendSocketIoEvent('swapped', payload),
 			'swap.failed': (payload) => sendSocketIoEvent('swapFailed', payload),
+			/* END: DEX */
 		},
 		dependencies: config.brokerDependencies,
 	};

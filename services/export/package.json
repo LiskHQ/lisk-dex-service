@@ -1,7 +1,7 @@
 {
-	"name": "lisk-dex-service-export",
-	"version": "1.0.0-beta.3",
-	"description": "Lisk Dex Service Export",
+	"name": "lisk-service-export",
+	"version": "0.7.4",
+	"description": "Lisk Service Export",
 	"keywords": [
 		"lisk",
 		"blockchain"

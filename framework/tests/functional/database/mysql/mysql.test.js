@@ -60,16 +60,24 @@ describe('Test MySQL', () => {
 
 	describe('Generic MySQL validation', () => {
 		it('should validate if primary key is set', async () => {
-			const result = await blocksTable.rawQuery(`SHOW KEYS FROM ${tableName} WHERE Key_name = 'PRIMARY'`);
+			const result = await blocksTable.rawQuery(
+				`SHOW KEYS FROM ${tableName} WHERE Key_name = 'PRIMARY'`,
+			);
 			expect(result.length).toBe(1);
 			expect(result[0].Column_name).toBe(blocksTableSchema.primaryKey);
 		});
 
 		it('should validate if composite primary key is set', async () => {
-			const result = await compositeKeyTable.rawQuery(`SHOW KEYS FROM ${compositeKeyTableName} WHERE Key_name = 'PRIMARY'`);
+			const result = await compositeKeyTable.rawQuery(
+				`SHOW KEYS FROM ${compositeKeyTableName} WHERE Key_name = 'PRIMARY'`,
+			);
 			expect(result.length).toBe(compositeKeySchema.primaryKey.length);
-			result
-				.forEach(res => expect(compositeKeySchema.primaryKey.includes(res.Column_name)).toBe(true));
+
+			// eslint-disable-next-line max-len
+			result.forEach(res =>
+				// eslint-disable-next-line implicit-arrow-linebreak
+				expect(compositeKeySchema.primaryKey.includes(res.Column_name)).toBe(true),
+			);
 		});
 
 		it('should check if table exists', async () => {
@@ -80,7 +88,9 @@ describe('Test MySQL', () => {
 	});
 
 	describe('With IMPLICIT DB transaction (auto-commit mode)', () => {
-		afterAll(() => blocksTable.rawQuery(`TRUNCATE ${tableName}`));
+		afterEach(async () => {
+			await blocksTable.rawQuery(`TRUNCATE ${tableName}`);
+		});
 
 		it('should insert row', async () => {
 			await blocksTable.upsert([emptyBlock]);
@@ -90,6 +100,7 @@ describe('Test MySQL', () => {
 		});
 
 		it('should get rows', async () => {
+			await blocksTable.upsert([emptyBlock]);
 			const result = await blocksTable.find({ id: emptyBlock.id }, ['id']);
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(1);
@@ -111,14 +122,16 @@ describe('Test MySQL', () => {
 		it('should get rows using whereIn', async () => {
 			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.find(params, ['id']);
 			expect(result).toBeInstanceOf(Array);
@@ -131,14 +144,16 @@ describe('Test MySQL', () => {
 		it('should get rows using whereIn with composite table', async () => {
 			await compositeKeyTable.upsert([emptyBlock, nonEmptyBlock]);
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await compositeKeyTable.find(params);
 			expect(result).toBeInstanceOf(Array);
@@ -195,7 +210,24 @@ describe('Test MySQL', () => {
 			expect(result[0].height).toBeGreaterThanOrEqual(result[1].height);
 		});
 
+		it('should order the rows in ascending order based on their height using raw query', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+			const result = await blocksTable.find({ orderByRaw: ['height asc'] });
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(2);
+			expect(result[1].height).toBeGreaterThanOrEqual(result[0].height);
+		});
+
+		it('should order the rows in descending order based on their height using raw query', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+			const result = await blocksTable.find({ orderByRaw: ['height desc'] });
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(2);
+			expect(result[0].height).toBeGreaterThanOrEqual(result[1].height);
+		});
+
 		it('should get row count', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const count = await blocksTable.count();
 			expect(count).toBe(2);
 		});
@@ -203,14 +235,16 @@ describe('Test MySQL', () => {
 		it('should get row count using whereIn', async () => {
 			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.count(params);
 			expect(result).toBe(1);
@@ -234,17 +268,58 @@ describe('Test MySQL', () => {
 			expect(result).toBe(2);
 		});
 
+		it('should get row count using whereNot', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+			const params = {
+				whereNot: {
+					column: 'id',
+					value: emptyBlock.id,
+				},
+			};
+			const result = await blocksTable.count(params);
+			expect(result).toBe(1);
+		});
+
+		it('should get row count using whereNotIn', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+			const params = {
+				whereNotIn: {
+					column: 'id',
+					values: [emptyBlock.id, nonEmptyBlock.id],
+				},
+			};
+			const result = await blocksTable.count(params);
+			expect(result).toBe(0);
+		});
+
+		it('should get row count using whereBetween', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+			const params = {
+				whereBetween: {
+					column: 'id',
+					values: [
+						Math.min(emptyBlock.id, nonEmptyBlock.id),
+						Math.max(emptyBlock.id, nonEmptyBlock.id),
+					],
+				},
+			};
+			const result = await blocksTable.count(params);
+			expect(result).toBe(2);
+		});
+
 		it('should get row count using whereIn and whereNull', async () => {
 			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 				whereNull: ['isFinal'],
 			};
 			const result = await blocksTable.count(params);
@@ -257,6 +332,7 @@ describe('Test MySQL', () => {
 		});
 
 		it('should increment column value', async () => {
+			await blocksTable.upsert([emptyBlock]);
 			const [currentBlock] = await blocksTable.find({ id: emptyBlock.id }, ['timestamp']);
 			const currentTimestamp = currentBlock.timestamp;
 
@@ -271,6 +347,7 @@ describe('Test MySQL', () => {
 		});
 
 		it('should decrement column value', async () => {
+			await blocksTable.upsert([emptyBlock]);
 			const [currentBlock] = await blocksTable.find({ id: emptyBlock.id }, ['timestamp']);
 			const currentTimestamp = currentBlock.timestamp;
 
@@ -285,12 +362,16 @@ describe('Test MySQL', () => {
 		});
 
 		it('should delete row by primary key', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const [existingBlock] = await blocksTable.find();
 			const existingBlockId = existingBlock[`${blocksTableSchema.primaryKey}`];
 			const count = await blocksTable.deleteByPrimaryKey([existingBlockId]);
 			expect(count).toEqual(1);
 
-			const result = await blocksTable.find({ [blocksTableSchema.primaryKey]: existingBlock[blocksTableSchema.primaryKey] }, ['id']);
+			const result = await blocksTable.find(
+				{ [blocksTableSchema.primaryKey]: existingBlock[blocksTableSchema.primaryKey] },
+				['id'],
+			);
 			expect(result.length).toBe(0);
 			expect(result.every(b => b.id !== existingBlock.id)).toBeTruthy();
 		});
@@ -301,7 +382,9 @@ describe('Test MySQL', () => {
 			const existingBlockCount = await blocksTable.count();
 
 			const existingIds = existingBlock.map(block => block.id);
-			const numAffectedRows = await blocksTable.delete({ whereIn: { property: 'id', values: existingIds } });
+			const numAffectedRows = await blocksTable.delete({
+				whereIn: { property: 'id', values: existingIds },
+			});
 			expect(numAffectedRows).toEqual(existingBlockCount);
 
 			const count = await blocksTable.count({});
@@ -314,7 +397,9 @@ describe('Test MySQL', () => {
 			const existingBlockCount = await blocksTable.count();
 
 			const existingId = existingBlock.map(block => block.id);
-			const numAffectedRows = await blocksTable.delete({ whereIn: { property: 'id', values: existingId } });
+			const numAffectedRows = await blocksTable.delete({
+				whereIn: { property: 'id', values: existingId },
+			});
 			expect(numAffectedRows).toEqual(existingBlockCount);
 
 			const count = await blocksTable.count({});
@@ -335,7 +420,15 @@ describe('Test MySQL', () => {
 			expect(result.length).toBeGreaterThan(distinctResult.length);
 		});
 
+		it('should execute group by query', async () => {
+			await blocksTable.upsert([emptyBlock, { ...nonEmptyBlock, id: emptyBlock.id }]);
+			const result = await blocksTable.find();
+			const groupByResult = await blocksTable.find({ groupBy: 'id' }, 'id');
+			expect(result.length).toBeGreaterThan(groupByResult.length);
+		});
+
 		it('should execute update method', async () => {
+			await blocksTable.upsert([emptyBlock]);
 			const [retrievedBlock] = await blocksTable.find({ id: emptyBlock.id }, ['timestamp']);
 			expect(retrievedBlock.timestamp).toBe(emptyBlock.timestamp);
 
@@ -472,7 +565,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the left outer join
-			const result = await blocksTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await blocksTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -500,7 +596,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the right outer join
-			const result = await transactionsTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await transactionsTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -528,7 +627,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the inner join
-			const result = await transactionsTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await transactionsTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -577,7 +679,10 @@ describe('Test MySQL', () => {
 					allowWildCards: true,
 				},
 			};
-			const result = await transactionsTable.find(params, [`${transactionsTableName}.id`, `${transactionsTableName}.moduleCommand`]);
+			const result = await transactionsTable.find(params, [
+				`${transactionsTableName}.id`,
+				`${transactionsTableName}.moduleCommand`,
+			]);
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(1);
 
@@ -595,7 +700,10 @@ describe('Test MySQL', () => {
 					allowWildCards: true,
 				},
 			};
-			const result = await transactionsTable.find(params, [`${transactionsTableName}.id`, `${transactionsTableName}.moduleCommand`]);
+			const result = await transactionsTable.find(params, [
+				`${transactionsTableName}.id`,
+				`${transactionsTableName}.moduleCommand`,
+			]);
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(1);
 
@@ -613,7 +721,10 @@ describe('Test MySQL', () => {
 					allowWildCards: true,
 				},
 			};
-			const result = await transactionsTable.find(params, [`${transactionsTableName}.id`, `${transactionsTableName}.moduleCommand`]);
+			const result = await transactionsTable.find(params, [
+				`${transactionsTableName}.id`,
+				`${transactionsTableName}.moduleCommand`,
+			]);
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(1);
 
@@ -649,10 +760,38 @@ describe('Test MySQL', () => {
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(0);
 		});
+
+		it('should apply HAVING clause with havingRaw', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+
+			const params = {
+				groupBy: 'height',
+				havingRaw: `height < ${Math.max(emptyBlock.height, nonEmptyBlock.height)}`,
+			};
+
+			const result = await blocksTable.find(params, ['id', 'height']);
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(1);
+		});
+
+		it('should apply complex HAVING clause with havingRaw', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
+
+			const params = {
+				groupBy: 'height',
+				havingRaw: `SUM(height) < ${Math.max(emptyBlock.height, nonEmptyBlock.height)}`,
+			};
+
+			const result = await blocksTable.find(params, ['id', 'height']);
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(1);
+		});
 	});
 
 	describe('With EXPLICIT DB transaction (non-auto commit mode)', () => {
-		afterAll(() => blocksTable.rawQuery(`TRUNCATE ${tableName}`));
+		afterEach(async () => {
+			await blocksTable.rawQuery(`TRUNCATE ${tableName}`);
+		});
 
 		it('should insert row', async () => {
 			const connection = await getDBConnection();
@@ -665,6 +804,11 @@ describe('Test MySQL', () => {
 		});
 
 		it('should get rows', async () => {
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([emptyBlock], trx);
+			await commitDBTransaction(trx);
+
 			const result = await blocksTable.find({ id: emptyBlock.id }, ['id']);
 			expect(result).toBeInstanceOf(Array);
 			expect(result.length).toBe(1);
@@ -680,14 +824,16 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.find(params, ['id']);
 			expect(result).toBeInstanceOf(Array);
@@ -720,14 +866,16 @@ describe('Test MySQL', () => {
 		it('should get rows using whereNotNull and whereIn', async () => {
 			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 				whereNotNull: ['generatorPublicKey'],
 			};
 			const result = await blocksTable.find(params, ['id']);
@@ -762,7 +910,7 @@ describe('Test MySQL', () => {
 		it('should sort the rows in ascending order based on their height', async () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
-			await blocksTable.upsert([{ ...emptyBlock, size: 50 }], trx);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
 			await commitDBTransaction(trx);
 
 			const result = await blocksTable.find({ sort: 'height:asc' });
@@ -774,7 +922,7 @@ describe('Test MySQL', () => {
 		it('should sort the rows in descending order based on their height', async () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
-			await blocksTable.upsert([{ ...emptyBlock, size: 50 }], trx);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
 			await commitDBTransaction(trx);
 
 			const result = await blocksTable.find({ sort: 'height:desc' });
@@ -786,7 +934,7 @@ describe('Test MySQL', () => {
 		it('should order the rows in ascending order based on their height', async () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
-			await blocksTable.upsert([{ ...emptyBlock, size: 50 }], trx);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
 			await commitDBTransaction(trx);
 
 			const result = await blocksTable.find({ order: 'height:asc' });
@@ -798,7 +946,7 @@ describe('Test MySQL', () => {
 		it('should order the rows in descending order based on their height', async () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
-			await blocksTable.upsert([{ ...emptyBlock, size: 50 }], trx);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
 			await commitDBTransaction(trx);
 
 			const result = await blocksTable.find({ order: 'height:desc' });
@@ -807,7 +955,36 @@ describe('Test MySQL', () => {
 			expect(result[0].height).toBeGreaterThanOrEqual(result[1].height);
 		});
 
+		it('should order the rows in ascending order based on their height using orderByRaw query', async () => {
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
+			await commitDBTransaction(trx);
+
+			const result = await blocksTable.find({ orderByRaw: ['height asc'] });
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(2);
+			expect(result[1].height).toBeGreaterThanOrEqual(result[0].height);
+		});
+
+		it('should order the rows in descending order based on their height', async () => {
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([{ ...emptyBlock, size: 50 }, nonEmptyBlock], trx);
+			await commitDBTransaction(trx);
+
+			const result = await blocksTable.find({ orderByRaw: ['height desc'] });
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(2);
+			expect(result[0].height).toBeGreaterThanOrEqual(result[1].height);
+		});
+
 		it('should get row count', async () => {
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock], trx);
+			await commitDBTransaction(trx);
+
 			const count = await blocksTable.count();
 			expect(count).toBe(2);
 		});
@@ -819,14 +996,16 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.count(params);
 			expect(result).toBe(1);
@@ -839,14 +1018,16 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.count(params, 'height');
 			expect(result).toBe(1);
@@ -858,12 +1039,16 @@ describe('Test MySQL', () => {
 		});
 
 		it('should increment column value', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
-			await blocksTable.increment({
-				increment: { timestamp: 5 },
-				where: { id: emptyBlock.id },
-			}, trx);
+			await blocksTable.increment(
+				{
+					increment: { timestamp: 5 },
+					where: { id: emptyBlock.id },
+				},
+				trx,
+			);
 			await commitDBTransaction(trx);
 			const [retrievedBlock] = await blocksTable.find({ id: emptyBlock.id }, ['timestamp']);
 			expect(retrievedBlock).toBeTruthy();
@@ -871,6 +1056,7 @@ describe('Test MySQL', () => {
 		});
 
 		it('should decrement row by primary key', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
 			const [existingBlock] = await blocksTable.find();
@@ -879,8 +1065,9 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 			expect(numAffectedRows).toEqual(1);
 
-			const count = await blocksTable
-				.count({ [blocksTableSchema.primaryKey]: existingBlock[blocksTableSchema.primaryKey] });
+			const count = await blocksTable.count({
+				[blocksTableSchema.primaryKey]: existingBlock[blocksTableSchema.primaryKey],
+			});
 			expect(count).toBe(0);
 		});
 
@@ -893,7 +1080,10 @@ describe('Test MySQL', () => {
 			const existingBlockCount = await blocksTable.count();
 
 			const existingIds = existingBlock.map(block => block.id);
-			const numAffectedRows = await blocksTable.delete({ whereIn: { property: 'id', values: existingIds } }, trx);
+			const numAffectedRows = await blocksTable.delete(
+				{ whereIn: { property: 'id', values: existingIds } },
+				trx,
+			);
 			await commitDBTransaction(trx);
 
 			expect(numAffectedRows).toEqual(existingBlockCount);
@@ -911,7 +1101,10 @@ describe('Test MySQL', () => {
 			const existingBlockCount = await blocksTable.count();
 
 			const existingId = existingBlock.map(block => block.id);
-			const numAffectedRows = await blocksTable.delete({ whereIn: { property: 'id', values: existingId } }, trx);
+			const numAffectedRows = await blocksTable.delete(
+				{ whereIn: { property: 'id', values: existingId } },
+				trx,
+			);
 			await commitDBTransaction(trx);
 
 			expect(numAffectedRows).toEqual(existingBlockCount);
@@ -968,7 +1161,18 @@ describe('Test MySQL', () => {
 			expect(result.length).toBeGreaterThan(distinctResult.length);
 		});
 
+		it('should perform group by query', async () => {
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([emptyBlock, { ...nonEmptyBlock, id: emptyBlock.id }], trx);
+			await commitDBTransaction(trx);
+			const result = await blocksTable.find();
+			const groupByResult = await blocksTable.find({ groupBy: 'id' }, 'id');
+			expect(result.length).toBeGreaterThan(groupByResult.length);
+		});
+
 		it('should perform update method', async () => {
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock]);
 			const [retrievedBlock] = await blocksTable.find({ id: emptyBlock.id }, ['timestamp']);
 			expect(retrievedBlock.timestamp).toBe(emptyBlock.timestamp);
 
@@ -994,14 +1198,16 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 
 			const params = {
-				whereIn: [{
-					property: 'height',
-					values: [emptyBlock.height, nonEmptyBlock.height],
-				},
-				{
-					property: 'id',
-					values: [emptyBlock.id],
-				}],
+				whereIn: [
+					{
+						property: 'height',
+						values: [emptyBlock.height, nonEmptyBlock.height],
+					},
+					{
+						property: 'id',
+						values: [emptyBlock.id],
+					},
+				],
 			};
 			const result = await blocksTable.find(params, ['id']);
 			expect(result).toBeInstanceOf(Array);
@@ -1151,7 +1357,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the left join
-			const result = await blocksTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await blocksTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -1182,7 +1391,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the right outer join
-			const result = await transactionsTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await transactionsTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -1213,7 +1425,10 @@ describe('Test MySQL', () => {
 			};
 
 			// Perform the inner join
-			const result = await transactionsTable.find(params, [`${tableName}.height`, `${transactionsTableName}.id`]);
+			const result = await transactionsTable.find(params, [
+				`${tableName}.height`,
+				`${transactionsTableName}.id`,
+			]);
 
 			// Assert the result
 			expect(result).toBeInstanceOf(Array);
@@ -1223,9 +1438,49 @@ describe('Test MySQL', () => {
 			expect(firstRow.height).toBe(nonEmptyBlock.height);
 			expect(firstRow.id).toBe(tokenTransferTransaction.id);
 		});
+
+		it('should apply HAVING clause with havingRaw', async () => {
+			// Insert a test record.
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock], trx);
+			await transactionsTable.upsert([tokenTransferTransaction], trx);
+
+			const params = {
+				groupBy: 'height',
+				havingRaw: `height < ${Math.max(emptyBlock.height, nonEmptyBlock.height)}`,
+			};
+
+			const result = await blocksTable.find(params, ['id', 'height'], trx);
+			await commitDBTransaction(trx);
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(1);
+		});
+
+		it('should apply complex HAVING clause with havingRaw', async () => {
+			// Insert a test record.
+			const connection = await getDBConnection();
+			const trx = await startDBTransaction(connection);
+			await blocksTable.upsert([emptyBlock, nonEmptyBlock], trx);
+			await transactionsTable.upsert([tokenTransferTransaction], trx);
+
+			const params = {
+				groupBy: 'height',
+				havingRaw: `SUM(height) < ${Math.max(emptyBlock.height, nonEmptyBlock.height)}`,
+			};
+
+			const result = await blocksTable.find(params, ['id', 'height'], trx);
+			await commitDBTransaction(trx);
+			expect(result).toBeInstanceOf(Array);
+			expect(result.length).toBe(1);
+		});
 	});
 
 	describe('Transactional atomicity guarantees (non-auto commit mode)', () => {
+		afterEach(async () => {
+			await blocksTable.rawQuery(`TRUNCATE ${tableName}`);
+		});
+
 		it('should perform a successful transaction commit', async () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
@@ -1271,10 +1526,13 @@ describe('Test MySQL', () => {
 			const connection = await getDBConnection();
 			const trx = await startDBTransaction(connection);
 			await blocksTable.upsert([{ ...emptyBlock, id: 'rollback' }], trx);
-			await blocksTable.increment({
-				increment: { size: 100 },
-				where: { id: 'rollback' },
-			}, trx);
+			await blocksTable.increment(
+				{
+					increment: { size: 100 },
+					where: { id: 'rollback' },
+				},
+				trx,
+			);
 
 			// Assume failure occurred, rollback the transaction
 			await rollbackDBTransaction(trx);
@@ -1293,8 +1551,10 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx1);
 
 			// Start a new transaction, perform upsert/delete and rollback
-			await blocksTable
-				.upsert([{ ...emptyBlock, height, timestamp: emptyBlock.timestamp + 100 }], trx2);
+			await blocksTable.upsert(
+				[{ ...emptyBlock, height, timestamp: emptyBlock.timestamp + 100 }],
+				trx2,
+			);
 			const numRowsAffected = await blocksTable.deleteByPrimaryKey([height], trx2);
 			expect(numRowsAffected).toEqual(1);
 
@@ -1316,7 +1576,9 @@ describe('Test MySQL', () => {
 			await commitDBTransaction(trx);
 
 			// Perform upsert using committed transaction
-			expect(blocksTable.upsert([{ ...emptyBlock, id: 'same transaction' }], trx)).rejects.toThrow();
+			expect(
+				blocksTable.upsert([{ ...emptyBlock, id: 'same transaction' }], trx),
+			).rejects.toThrow();
 		});
 
 		it('should throw an error when performing additional operations on a rollback transaction', async () => {
@@ -1329,7 +1591,9 @@ describe('Test MySQL', () => {
 			await rollbackDBTransaction(trx);
 
 			// Perform upsert using rollback transaction
-			expect(blocksTable.upsert([{ ...emptyBlock, id: 'same transaction' }], trx)).rejects.toThrow();
+			expect(
+				blocksTable.upsert([{ ...emptyBlock, id: 'same transaction' }], trx),
+			).rejects.toThrow();
 		});
 
 		it('should have no effect when rolling back a committed transaction', async () => {

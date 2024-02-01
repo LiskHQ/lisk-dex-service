@@ -31,7 +31,6 @@ const getPriceImpact = async params => {
 	};
 };
 
-
 module.exports = {
 	getPriceImpact,
 };

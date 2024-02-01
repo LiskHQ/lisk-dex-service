@@ -15,7 +15,7 @@
  */
 const gettingStatisticsSource = require('../../../sources/dex-version1/gettingStatisticsSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const regex = require('./../../../shared/regex');
+const regex = require("../../../shared/regex");
 const envelope = require('./dataDefinitions/stdEnvelope')
 
 module.exports = {

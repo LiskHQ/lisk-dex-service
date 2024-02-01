@@ -14,32 +14,26 @@
  *
  */
 
-const { requestConnector } = require("../utils/request");
+const { Logger } = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
+const logger = Logger();
 
 const getPoolsAvailable = async () => {
-	
-    let poolsAvailable;
-	
-    try {
-      poolsAvailable = await requestConnector('invokeEndpoint',{endpoint:"dex_getAllPoolIDs"}); 
-		
-          return {
-              data: {
-                poolsAvailable,
-              },
-              meta: {},
-          };
-    } catch (err) {
-      if (err) {
-        logger.warn(`Error returned when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
-        throw err;
-      }
-      
-      
-    }
-};
+	try {
+		const response = await requestConnector('invokeEndpoint', { endpoint: 'dex_getAllPoolIDs' });
 
+		return {
+			data: {
+				poolsAvailable: response,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when invoking 'dex_getAllPoolIDs'.\n${err.stack}`);
+		throw err;
+	}
+};
 
 module.exports = {
 	getPoolsAvailable,

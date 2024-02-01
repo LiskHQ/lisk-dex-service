@@ -14,7 +14,6 @@
  *
  */
 
-
 let app;
 
 const setAppContext = (h) => app = h;

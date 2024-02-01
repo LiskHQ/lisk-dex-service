@@ -14,36 +14,32 @@
  *
  */
 
+const { Logger } = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
-const { requestConnector } = require("../utils/request");
+const logger = Logger();
 
-const getProposal = async (params) => {
+const getProposal = async params => {
+	try {
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dexGovernance_getProposal',
+			params,
+		});
 
-	let proposalsList; 
+		if (response.error !== null) {
+			throw new Error(response.error.message);
+		}
 
-    try {
-        proposalsList = await requestConnector('invokeEndpoint',{endpoint:"dexGovernance_getProposal", params}); 
-        if(proposalsList.error != null){
-            return {
-                data: {},
-                meta: {},
-            };
-
-        }
-        return {
-            data: {
-                creationHeight: proposalsList.creationHeight,
-                votesYes: proposalsList.votesYes,
-                votesNo: proposalsList.votesNo,
-                votesPass: proposalsList.votesPass,
-                type: proposalsList.type,
-                content: proposalsList.content,
-            },
-            meta: {},
-        };
-    } catch (error) {
-        throw error.message;
-    }
+		return {
+			data: {
+				proposal: response,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when invoking 'dexGovernance_getProposal'.\n${err.stack}`);
+		throw err;
+	}
 };
 
 module.exports = {

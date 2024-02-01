@@ -16,7 +16,7 @@
 
 const gettingSlippageBoundsSource = require('../../../sources/dex-version1/gettingSlippageBoundsSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const envelope = require('../methods/dataDefinitions/stdEnvelope')
+const envelope = require("./dataDefinitions/stdEnvelope")
 const regex = require('../../../shared/regex');
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
 		maxAmountIn: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_IN },
         tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
         amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
-        swapRoute: { optional: false, type: 'array' },         
+        swapRoute: { optional: false, type: 'array' },
 	},
 	get schema() {
 		const gettingSlippageBoundsSchema = {};

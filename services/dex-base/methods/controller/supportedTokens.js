@@ -29,7 +29,6 @@ const getSupportedTokens = async (params) => {
 	return blockchainAppsMetadataSupported;
 };
 
-
 module.exports = {
 	getSupportedTokens
 };

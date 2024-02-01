@@ -17,22 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const getTopPoolsFromDatabase = async params => {
-	try {
-		const response = await dataService.getTopPoolsFromDatabase(params);
+	const response = await dataService.getTopPoolsFromDatabase(params);
 
-		return {
-			data: {
-				topPoolsFromDatabase:response.data,
-				meta: response.data.meta
-			},
-			
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			topPoolsFromDatabase: response.data,
+			meta: response.data.meta,
+		},
+	};
 };
-
 
 module.exports = {
 	getTopPoolsFromDatabase,

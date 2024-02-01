@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,21 +14,9 @@
  *
  */
 
+// TODO
+const initDatabase = undefined;
+
 module.exports = {
-    type: 'moleculer',
-    method: 'dex.prices.impact',
-    params: {
-        tokenIdIn: '=,string',
-        amountIn: '=,string',
-        tokenIdOut: '=,string',
-        amountOut: '=,string',
-        swapRoute: '=,array',
-        isZeroToOne: '=,boolean',
-    },
-    definition: {
-        data: {
-            priceImpact: '=',
-        },
-        meta: {}
-    }
+	initDatabase,
 };

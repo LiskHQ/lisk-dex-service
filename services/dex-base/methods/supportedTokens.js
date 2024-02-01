@@ -25,6 +25,6 @@ module.exports = [
 		params: {
 			limit: { optional: true, type: 'number' },
 			offset: { optional: true, type: 'number' },
-		},		
+		},
 	},
 ];

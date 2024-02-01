@@ -17,7 +17,7 @@ const { read } = require('./utils/fsUtils');
 
 const config = require('../config');
 
-const getSupportedTokens = async (params) => {
+const getSupportedTokens = async () => {
 	const { dataDir } = config;
 
 	const blockchainAppsTokenMetadataSupported = {
@@ -34,7 +34,6 @@ const getSupportedTokens = async (params) => {
 					...token,
 				});
 			});
-
 
 	// TODO: Use count method directly once support for custom column-based count added https://github.com/LiskHQ/lisk-service/issues/1188
 	blockchainAppsTokenMetadataSupported.meta = {

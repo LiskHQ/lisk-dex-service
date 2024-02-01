@@ -14,25 +14,22 @@
  *
  */
 
-const { getMarketAppsPrices } = require("./business");
+const { getMarketAppsPrices } = require('./business');
 
-
-
-const getPricesConvertToken = async (params) => {
-	
+const getPricesConvertToken = async params => {
 	const marketPrices = await getMarketAppsPrices();
-	
+
 	const tokenSymbolMap = new Map();
 	const conversionTokenSymbolMap = new Map();
 	let rate;
 	let rateTokenIDs;
 	let rateconversionTokenID;
 
-	// set a global variable and 
-	// a function to call the marketservice and set the value for the global varibale
-	// updating the variable
-	// a fallback method for the market service is down then explicitly invoke the market service
-	
+	// set a global variable and a function to call the marketservice and set
+	// the value for the global varibale updating the variable a fallback
+	// method for the market service is down then explicitly invoke the
+	// market service
+
 	for (let i = 0; i < marketPrices.data.length; i++) {
 		const marketPriceToken = marketPrices.data[i].from;
 		if (marketPriceToken === params.tokenSymbol.toUpperCase()) {
@@ -40,20 +37,18 @@ const getPricesConvertToken = async (params) => {
 		} else if (marketPriceToken === params.conversionTokenSymbol.toUpperCase()) {
 			conversionTokenSymbolMap.set(marketPrices.data[i].to, marketPrices.data[i]);
 		}
-
 	}
 
 	if (tokenSymbolMap.has(params.conversionTokenSymbol.toUpperCase())) {
 		rate = tokenSymbolMap.get(params.conversionTokenSymbol.toUpperCase()).rate;
 	} else {
-		for (const tokenSymbol of tokenSymbolMap.keys()) {
+		Object.keys(tokenSymbolMap).forEach(tokenSymbol => {
 			if (conversionTokenSymbolMap.has(tokenSymbol)) {
 				rateTokenIDs = tokenSymbolMap.get(tokenSymbol).rate;
 				rateconversionTokenID = conversionTokenSymbolMap.get(tokenSymbol).rate;
 				rate = rateTokenIDs / rateconversionTokenID;
-				break;
 			}
-		}
+		});
 	}
 
 	const token1ToToken2 = rate;

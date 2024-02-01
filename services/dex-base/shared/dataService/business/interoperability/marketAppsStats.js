@@ -14,24 +14,24 @@
 *
 */
 
-const { requestMarket } = require("../../../utils/request");
 const logger = require('lisk-service-framework').Logger();
+const { requestMarket } = require('../../../utils/request');
 
 let marketAppsPricesCache;
 
 const getMarketAppsPrices = async () => {
-	
+
 	if(!marketAppsPricesCache){
-		marketAppsPricesCache = await requestMarket('prices');        		
-	}	
+		marketAppsPricesCache = await requestMarket('prices');
+	}
 	return marketAppsPricesCache;
 };
 
 const reloadMarketAppsPrices = async () => {
-	try {		    
+	try {
 		logger.debug('Updating market apps prices cache');
 		if(!marketAppsPricesCache){
-			marketAppsPricesCache = await requestMarket('prices');        		
+			marketAppsPricesCache = await requestMarket('prices');
 		}
         logger.info('Updated market apps statistics cache.');
 	} catch (err) {

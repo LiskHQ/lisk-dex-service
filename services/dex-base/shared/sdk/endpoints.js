@@ -18,9 +18,9 @@ const { Signals } = require('lisk-service-framework');
 const { requestConnector } = require('../utils/request');
 
 const getEventsByHeight = async (height) => {
-	try {		
+	try {
 		const events = await requestConnector('getEventsByHeight', { height });
-		events.forEach(event => {			
+		events.forEach(event => {
 			if(event.module === "dex"){
 				if(event.name === "poolCreated"){
 					Signals.get("poolCreated").dispatch(event.data)
@@ -52,7 +52,6 @@ const getEventsByHeight = async (height) => {
 				if(event.name === "swapFailed"){
 					Signals.get("swapFailed").dispatch(event.data)
 				}
-				return event;
 			}
 		})
 	} catch (err) {

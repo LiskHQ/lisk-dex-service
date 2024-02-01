@@ -14,24 +14,28 @@
  *
  */
 
+const { Logger } = require('lisk-service-framework');
 const { requestStatistics } = require('../utils/request');
 
+const logger = Logger();
+
 const gettingStatistics = async (params = {}) => {
+	try {
+		const response = await requestStatistics('transactions.statistics', params);
 
-    try {
-        const statistics = await requestStatistics('transactions.statistics', params);
-        return {
-            data: {
-                transactionCount: statistics.data.timeline, volume: statistics.data.distributionByAmount
-            },
-            meta: {},
-        };
-    } catch (error) {
-        throw new Error(error)
-    }
-
+		return {
+			data: {
+				transactionCount: response.data.timeline,
+				volume: response.data.distributionByAmount,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when getting statistics.\n${err.stack}`);
+		throw err;
+	}
 };
 
 module.exports = {
-    gettingStatistics,
+	gettingStatistics,
 };

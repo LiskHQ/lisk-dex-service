@@ -31,8 +31,6 @@ config.endpoints = {
 	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6381/0',
 };
 
-
-
 const packageJson = require('./package.json');
 
 // Moleculer broker config
@@ -77,7 +75,7 @@ config.log.file = process.env.SERVICE_LOG_FILE || 'false';
 // Set docker host if running inside the container
 config.log.docker_host = process.env.DOCKER_HOST || 'local';
 
-//config.dataDir = '/home/irfan/lisk-dex-service-d/lisk-dex-service/services/blockchain-app-registry/data';
+// config.dataDir = '/home/irfan/lisk-dex-service-d/lisk-dex-service/services/blockchain-app-registry/data';
 
 config.dataDir = `${__dirname}/data`;
 

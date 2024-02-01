@@ -17,8 +17,8 @@ const BluebirdPromise = require('bluebird');
 
 const {
 	Logger,
-	MySQL: {		
-		getTableInstance,		
+	MySQL: {
+		getTableInstance,
 	},
 } = require('lisk-service-framework');
 
@@ -62,7 +62,7 @@ const truncateAllTables = async () => {
 };
 
 const initDatabase = async () => {
-	await truncateAllTables();	
+	await truncateAllTables();
 	await initializeSearchIndex();
 };
 

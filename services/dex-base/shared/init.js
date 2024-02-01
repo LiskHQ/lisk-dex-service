@@ -15,8 +15,7 @@
  */
 const logger = require('lisk-service-framework').Logger();
 
-const { initDatabase } = require('./database/index');
-
+const { initDatabase } = require('./database/init');
 
 const init = async () => {
 	try {

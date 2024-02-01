@@ -19,7 +19,7 @@ const gettingStatistics = async params => {
 	const response = await dataService.gettingStatistics(params);
 
 	return {
-		data: { transactionCount: response.transactionCount, volume: response.volume },
+		data: { transactionCount: response.data.transactionCount, volume: response.data.volume },
 		meta: {},
 	};
 };

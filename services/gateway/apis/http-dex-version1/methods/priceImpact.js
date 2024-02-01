@@ -28,7 +28,7 @@ module.exports = {
         tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
         amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
         swapRoute: { optional: false, type: 'array' },
-        isZeroToOne: { optional: false, type: 'boolean' },         
+        isZeroToOne: { optional: false, type: 'boolean' },
 	},
 	get schema() {
 		const pricesImpactSchema = {};

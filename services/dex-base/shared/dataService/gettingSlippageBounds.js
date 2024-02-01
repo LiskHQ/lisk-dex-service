@@ -14,33 +14,34 @@
  *
  */
 
-const { requestConnector } = require("../utils/request");
+const { Logger } = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
-const gettingSlippageBounds = async (params) => {
-      
+const logger = Logger();
+
+const gettingSlippageBounds = async params => {
 	try {
-		const swapResponse = await requestConnector('invokeEndpoint',{endpoint:"dex_dryRunSwapExactOut", params}); 
-        if(swapResponse.error!=null){
-           return{
-			data:{
-				minimum:swapResponse.error.message,
-				maximum:swapResponse.error.message,
-				unit: "percentage",
-				symbol: "%",
-			}
-		   }
-        }
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dex_dryRunSwapExactOut',
+			params,
+		});
+
+		if (response.error !== null) {
+			throw new Error(response.error.message);
+		}
+
 		return {
 			data: {
-				minimum:swapResponse[2],
-                maximum:swapResponse[3],
-				unit: "percentage",
-				symbol: "%",
+				minimum: response[2],
+				maximum: response[3],
+				unit: 'percentage',
+				symbol: '%',
 			},
 			meta: {},
 		};
 	} catch (err) {
-        throw new Error (`error in calling dex_dryRunSwapExactIn.\n${err}`);
+		logger.warn(`Error thrown when invoking dex_dryRunSwapExactIn.\n${err.stack}`);
+		throw err;
 	}
 };
 

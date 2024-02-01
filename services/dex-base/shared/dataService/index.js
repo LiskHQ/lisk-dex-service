@@ -22,7 +22,6 @@ const {
 	gettingStatistics
 } = require('./gettingStatistics')
 
-
 const {
 	getPriceImpactExactIn,
 	getPriceImpactExactOut
@@ -39,7 +38,6 @@ const {
 const {
 	getPricesConvertToken,
 } = require('./priceConvertToken');
-
 
 const {
 	gettingSlippageBounds
@@ -61,11 +59,11 @@ module.exports = {
 	getPriceImpactExactOut,
 	gettingCurrentsqrtprice,
 	gettingSlippageBounds,
-	//pools
+	// pools
 	getPoolsAvailable,
-	//statistcs
+	// statistcs
 	gettingStatistics,
-	//Interoperability
+	// Interoperability
 	reloadMarketAppsPrices,
 	getPopularPairings,
 };

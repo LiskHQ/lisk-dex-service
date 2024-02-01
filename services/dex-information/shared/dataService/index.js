@@ -14,20 +14,14 @@
  *
  */
 
-const {
-    getTransactionsByTokenID
-} = require ('./getTransactionsByTokenID')
+const { getTransactionsByTokenID } = require('./getTransactionsByTokenID');
 
-const {
-    getTopPoolsFromDatabase
-} = require ('./getTopPoolsFromDatabase')
+const { getTopPoolsFromDatabase } = require('./getTopPoolsFromDatabase');
 
-const {
-    getTopTokensFromDatabase
-} = require ('./getTopTokensFromDatabase')
+const { getTopTokensFromDatabase } = require('./getTopTokensFromDatabase');
 
 module.exports = {
-    getTransactionsByTokenID,
-    getTopPoolsFromDatabase,
-    getTopTokensFromDatabase
-}
+	getTransactionsByTokenID,
+	getTopPoolsFromDatabase,
+	getTopTokensFromDatabase,
+};

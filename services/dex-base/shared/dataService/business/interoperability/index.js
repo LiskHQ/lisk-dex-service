@@ -14,9 +14,9 @@
  *
  */
 
-const { getMarketAppsPrices,reloadMarketAppsPrices } = require('./marketAppsStats');
+const { getMarketAppsPrices, reloadMarketAppsPrices } = require('./marketAppsStats');
 
 module.exports = {
-    getMarketAppsPrices,
-	reloadMarketAppsPrices
+	getMarketAppsPrices,
+	reloadMarketAppsPrices,
 };

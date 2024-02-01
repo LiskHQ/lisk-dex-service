@@ -17,7 +17,6 @@
 const dataService = require('../../shared/dataService');
 
 const gettingCurrentsqrtprice = async params => {
-
 	const response = await dataService.gettingCurrentsqrtprice(params);
 
 	return {
@@ -28,7 +27,7 @@ const gettingCurrentsqrtprice = async params => {
 			unit: response.data.unit,
 			symbol: response.data.symbol,
 		},
-		meta: {}
+		meta: {},
 	};
 };
 

@@ -27,7 +27,7 @@ module.exports = {
 	},
 	definition: {
 		data: {
-			transactionsByTokenID:'='
+			transactionsByTokenID: '=',
 		},
 		meta: {},
 	},

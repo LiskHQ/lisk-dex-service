@@ -25,16 +25,17 @@ module.exports = {
 	params: {
 		tokenIdIn: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
 		amountIn: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_IN },
-        tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
-        amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
-        swapRoute: { optional: false, type: 'array' },
-        isZeroToOne: { optional: false, type: 'boolean' },
+		tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
+		amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
+		swapRoute: { optional: false, type: 'array' },
+		isZeroToOne: { optional: false, type: 'boolean' },
 	},
 	get schema() {
 		const pricesImpactSchema = {};
 		pricesImpactSchema[this.swaggerApiPath] = { get: {} };
 		pricesImpactSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesImpactSchema[this.swaggerApiPath].get.summary = 'Returns the price impact on a swap trade on the market price of the pool.';
+		pricesImpactSchema[this.swaggerApiPath].get.summary =
+			'Returns the price impact on a swap trade on the market price of the pool.';
 		pricesImpactSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Returns the price impact on a swap trade on the market price of the pool.',

@@ -22,8 +22,8 @@ module.exports = {
 	},
 	definition: {
 		data: {
-			topTokensFromDatabase:'=',
-			meta: '='
+			topTokensFromDatabase: '=',
+			meta: '=',
 		},
 		meta: {},
 	},

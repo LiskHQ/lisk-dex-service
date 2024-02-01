@@ -27,18 +27,18 @@ const getSupportedTokens = async () => {
 	};
 
 	const appPathInClonedRepo = `${dataDir}/Lisk`;
-			const tokenMetaString = await read(`${appPathInClonedRepo}/${config.FILENAME.NATIVETOKENS_JSON}`);
-			const parsedTokenMeta = JSON.parse(tokenMetaString);
+	const tokenMetaString = await read(`${appPathInClonedRepo}/${config.FILENAME.NATIVETOKENS_JSON}`);
+	const parsedTokenMeta = JSON.parse(tokenMetaString);
 
-			parsedTokenMeta.tokens.forEach(token => {
-				blockchainAppsTokenMetadataSupported.data.push({
-					...token,
-				});
-			});
+	parsedTokenMeta.tokens.forEach(token => {
+		blockchainAppsTokenMetadataSupported.data.push({
+			...token,
+		});
+	});
 
 	// TODO: Use count method directly once support for custom column-based count added https://github.com/LiskHQ/lisk-service/issues/1188
 	blockchainAppsTokenMetadataSupported.meta = {
-		count: blockchainAppsTokenMetadataSupported.data.length
+		count: blockchainAppsTokenMetadataSupported.data.length,
 	};
 
 	return blockchainAppsTokenMetadataSupported;

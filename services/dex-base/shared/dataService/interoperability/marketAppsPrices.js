@@ -14,7 +14,7 @@
  *
  */
 
-const dataService = require('../business/index')
+const dataService = require('../business/index');
 
 const getMarketAppsPrices = async params => {
 	const response = await dataService.getMarketAppsPrices(params);
@@ -24,6 +24,6 @@ const getMarketAppsPrices = async params => {
 const reloadMarketAppsPrices = async () => dataService.reloadMarketAppsPrices();
 
 module.exports = {
-    getMarketAppsPrices,
-    reloadMarketAppsPrices,
-}
+	getMarketAppsPrices,
+	reloadMarketAppsPrices,
+};

@@ -1,4 +1,4 @@
-	/*
+/*
  * LiskHQ/lisk-service
  * Copyright © 2023 Lisk Foundation
  *
@@ -26,9 +26,7 @@ module.exports = {
 			convertedPrice: '=,string',
 			convertedTarget: '=,string',
 		},
-		meta: {
-
-		},
+		meta: {},
 		links: {},
 	},
 };

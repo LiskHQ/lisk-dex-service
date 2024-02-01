@@ -26,14 +26,14 @@ const MYSQL_ENDPOINT = config.endpoints.mysql;
 
 const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
 
-const getTopTokensPoolsMetadataIndex = () => getTableInstance(
-	topTokensMetadataIndexSchema.tableName,
-	topTokensMetadataIndexSchema,
-	MYSQL_ENDPOINT,
-);
+const getTopTokensPoolsMetadataIndex = () =>
+	getTableInstance(
+		topTokensMetadataIndexSchema.tableName,
+		topTokensMetadataIndexSchema,
+		MYSQL_ENDPOINT,
+	);
 
 const getTopTokensFromDatabase = async params => {
-
 	const topTokensTokenTable = await getTopTokensPoolsMetadataIndex();
 
 	const topTokensFromDatabase = {
@@ -41,51 +41,55 @@ const getTopTokensFromDatabase = async params => {
 		meta: {},
 	};
 
-	let topTokensData = await topTokensTokenTable.rawQuery(` SELECT * FROM ${topTokensMetadataIndexSchema.tableName}`);
+	let topTokensData = await topTokensTokenTable.rawQuery(
+		` SELECT * FROM ${topTokensMetadataIndexSchema.tableName}`,
+	);
 
-	if(topTokensData.length === 0){
-		topTokensData=[{
-			name:"Lisk",
-            price:"1.23",
-			priceChange:"+3.24",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		},
-		{
-			name:"Bazar",
-            price:"1732.25",
-			priceChange:"-4.54",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		},
-		{
-			name:"doEDU",
-            price:"1.23",
-			priceChange:"+3.24",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		},
-		{
-			name:"Enevti",
-            price:"1732.25",
-			priceChange:"-4.54",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		},
-		{
-			name:"RGB",
-            price:"1.23",
-			priceChange:"+3.24",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		},
-		{
-			name:"Feat",
-            price:"1732.25",
-			priceChange:"-4.54",
-			volume24H:"1.23",
-			liquidity:"7.2",
-		}]
+	if (topTokensData.length === 0) {
+		topTokensData = [
+			{
+				name: 'Lisk',
+				price: '1.23',
+				priceChange: '+3.24',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+			{
+				name: 'Bazar',
+				price: '1732.25',
+				priceChange: '-4.54',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+			{
+				name: 'doEDU',
+				price: '1.23',
+				priceChange: '+3.24',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+			{
+				name: 'Enevti',
+				price: '1732.25',
+				priceChange: '-4.54',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+			{
+				name: 'RGB',
+				price: '1.23',
+				priceChange: '+3.24',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+			{
+				name: 'Feat',
+				price: '1732.25',
+				priceChange: '-4.54',
+				volume24H: '1.23',
+				liquidity: '7.2',
+			},
+		];
 	}
 
 	topTokensData.forEach(topTokens => {

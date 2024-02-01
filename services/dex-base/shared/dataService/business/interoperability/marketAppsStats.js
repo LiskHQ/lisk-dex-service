@@ -20,8 +20,7 @@ const { requestMarket } = require('../../../utils/request');
 let marketAppsPricesCache;
 
 const getMarketAppsPrices = async () => {
-
-	if(!marketAppsPricesCache){
+	if (!marketAppsPricesCache) {
 		marketAppsPricesCache = await requestMarket('prices');
 	}
 	return marketAppsPricesCache;
@@ -30,10 +29,10 @@ const getMarketAppsPrices = async () => {
 const reloadMarketAppsPrices = async () => {
 	try {
 		logger.debug('Updating market apps prices cache');
-		if(!marketAppsPricesCache){
+		if (!marketAppsPricesCache) {
 			marketAppsPricesCache = await requestMarket('prices');
 		}
-        logger.info('Updated market apps statistics cache.');
+		logger.info('Updated market apps statistics cache.');
 	} catch (err) {
 		logger.warn(`Failed to update blockchain apps statistics cache due to: ${err.message}`);
 	}

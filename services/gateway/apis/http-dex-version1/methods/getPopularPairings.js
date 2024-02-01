@@ -22,18 +22,22 @@ module.exports = {
 	rpcMethod: 'get.tokens.popularPairings',
 	tags: ['Tokens'],
 	params: {
-		senderAddress: { optional: false, type: 'string'},
+		senderAddress: { optional: false, type: 'string' },
 	},
 	get schema() {
 		const getPopularPairingsSchema = {};
 		getPopularPairingsSchema[this.swaggerApiPath] = { get: {} };
 		getPopularPairingsSchema[this.swaggerApiPath].get.tags = this.tags;
-		getPopularPairingsSchema[this.swaggerApiPath].get.summary = 'Returns a list of the top 6 frequently swapped token pairs.';
+		getPopularPairingsSchema[this.swaggerApiPath].get.summary =
+			'Returns a list of the top 6 frequently swapped token pairs.';
 		getPopularPairingsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Returns a list of the top 6 frequently swapped token pairs.',
 		});
-		getPopularPairingsSchema[this.swaggerApiPath].get.parameters = transformParams('tokens', this.params);
+		getPopularPairingsSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'tokens',
+			this.params,
+		);
 		getPopularPairingsSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Returns a list of the top 6 frequently swapped token pairs.',

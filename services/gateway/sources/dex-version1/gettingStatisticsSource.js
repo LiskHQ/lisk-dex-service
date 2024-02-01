@@ -20,12 +20,12 @@ module.exports = {
 	params: {
 		interval: '=,string',
 		limit: '=,number',
-        offset: '=,number'
+		offset: '=,number',
 	},
 	definition: {
 		data: {
 			transactionCount: '=,string',
-            volume: '=,string',
+			volume: '=,string',
 		},
 		meta: {},
 		links: {},

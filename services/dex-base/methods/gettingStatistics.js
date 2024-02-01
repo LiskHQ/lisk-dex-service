@@ -14,10 +14,8 @@
  *
  */
 
-const {
-	gettingStatistics,
-} = require('./controller/gettingStatistics');
-const regex = require('../shared/regex')
+const { gettingStatistics } = require('./controller/gettingStatistics');
+const regex = require('../shared/regex');
 
 module.exports = [
 	{

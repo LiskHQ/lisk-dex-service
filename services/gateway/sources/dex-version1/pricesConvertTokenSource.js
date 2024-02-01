@@ -24,7 +24,7 @@ module.exports = {
 	definition: {
 		data: {
 			credibleDirectPriceToken2ToToken1: '=,string',
-			credibleDirectPriceToken1ToToken2: '=,string'
+			credibleDirectPriceToken1ToToken2: '=,string',
 		},
 		meta: {},
 	},

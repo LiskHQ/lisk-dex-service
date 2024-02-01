@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getPopularPairings,
-} = require('./controller/getPopularPairings');
+const { getPopularPairings } = require('./controller/getPopularPairings');
 
 module.exports = [
 	{
 		name: 'tokens.popularPairings',
 		controller: getPopularPairings,
 		params: {
-			senderAddress: { optional: false, type: 'string'}
+			senderAddress: { optional: false, type: 'string' },
 		},
 	},
 ];

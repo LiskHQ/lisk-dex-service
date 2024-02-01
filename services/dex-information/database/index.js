@@ -17,9 +17,7 @@ const BluebirdPromise = require('bluebird');
 
 const {
 	Logger,
-	MySQL: {
-		getTableInstance,
-	},
+	MySQL: { getTableInstance },
 } = require('lisk-service-framework');
 
 const logger = Logger();
@@ -28,7 +26,7 @@ const config = require('../../dex-base/config');
 
 const indexSchemas = {
 	token_metadata: require('./schema/dex_info_top_tokens'),
-	pool_metadata: require('./schema/dex_info_top_pools')
+	pool_metadata: require('./schema/dex_info_top_pools'),
 };
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;

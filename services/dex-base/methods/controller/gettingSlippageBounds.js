@@ -17,8 +17,7 @@
 const dataService = require('../../shared/dataService');
 
 const gettingSlippageBounds = async params => {
-
-    const slippageBounds = await dataService.gettingSlippageBounds(params);
+	const slippageBounds = await dataService.gettingSlippageBounds(params);
 
 	return {
 		data: slippageBounds.data,

@@ -16,9 +16,7 @@
 
 const logger = require('lisk-service-framework').Logger();
 
-const {
-	reloadMarketAppsPrices,
-} = require('../shared/dataService');
+const { reloadMarketAppsPrices } = require('../shared/dataService');
 
 module.exports = [
 	{
@@ -30,7 +28,6 @@ module.exports = [
 			try {
 				await reloadMarketAppsPrices();
 				logger.info('Successfully initialized market app prices cache.');
-
 			} catch (err) {
 				logger.warn(`Initializing market apps prices cache failed due to: ${err.message}`);
 			}

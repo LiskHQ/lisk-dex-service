@@ -14,13 +14,10 @@
  *
  */
 
-const {
-    getMarketAppsPrices,
-    reloadMarketAppsPrices,
-} = require('./interoperability');
+const { getMarketAppsPrices, reloadMarketAppsPrices } = require('./interoperability');
 
-module.exports={
-    // Interoperability
-    getMarketAppsPrices,
-    reloadMarketAppsPrices,
-}
+module.exports = {
+	// Interoperability
+	getMarketAppsPrices,
+	reloadMarketAppsPrices,
+};

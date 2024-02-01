@@ -21,9 +21,7 @@ const init = async () => {
 	try {
 		await initDatabase();
 	} catch (error) {
-		const errorMsg = Array.isArray(error)
-			? error.map(e => e.message).join('\n')
-			: error.message;
+		const errorMsg = Array.isArray(error) ? error.map(e => e.message).join('\n') : error.message;
 		logger.error(`Unable to initialize metadata information due to: ${errorMsg}`);
 	}
 };

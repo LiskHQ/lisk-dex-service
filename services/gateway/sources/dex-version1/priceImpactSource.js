@@ -15,20 +15,20 @@
  */
 
 module.exports = {
-    type: 'moleculer',
-    method: 'dex.prices.impact',
-    params: {
-        tokenIdIn: '=,string',
-        amountIn: '=,string',
-        tokenIdOut: '=,string',
-        amountOut: '=,string',
-        swapRoute: '=,array',
-        isZeroToOne: '=,boolean',
-    },
-    definition: {
-        data: {
-            priceImpact: '=',
-        },
-        meta: {}
-    }
+	type: 'moleculer',
+	method: 'dex.prices.impact',
+	params: {
+		tokenIdIn: '=,string',
+		amountIn: '=,string',
+		tokenIdOut: '=,string',
+		amountOut: '=,string',
+		swapRoute: '=,array',
+		isZeroToOne: '=,boolean',
+	},
+	definition: {
+		data: {
+			priceImpact: '=',
+		},
+		meta: {},
+	},
 };

@@ -24,8 +24,8 @@ const DEX_INTERVAL = /^\b(?:day|month|,)+\b$/;
 
 module.exports = {
 	TOKEN_ID,
-    AMOUNT_IN,
-    AMOUNT_OUT,
+	AMOUNT_IN,
+	AMOUNT_OUT,
 	CURRENCY,
 	TOKEN_SYMBOL,
 	NONCE,

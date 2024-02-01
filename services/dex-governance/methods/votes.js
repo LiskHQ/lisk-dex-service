@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getVotes,
-} = require('./controller/votes');
+const { getVotes } = require('./controller/votes');
 
 module.exports = [
 	{
 		name: 'votes',
 		controller: getVotes,
 		params: {
-			voterAddress: { optional: false, type: 'string', },
+			voterAddress: { optional: false, type: 'string' },
 		},
 	},
 ];

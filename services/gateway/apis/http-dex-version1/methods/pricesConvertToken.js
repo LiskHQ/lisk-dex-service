@@ -31,12 +31,16 @@ module.exports = {
 		const pricesConvertTokenSchema = {};
 		pricesConvertTokenSchema[this.swaggerApiPath] = { get: {} };
 		pricesConvertTokenSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesConvertTokenSchema[this.swaggerApiPath].get.summary = 'Converts token price to the equivalent amount of another token price.';
+		pricesConvertTokenSchema[this.swaggerApiPath].get.summary =
+			'Converts token price to the equivalent amount of another token price.';
 		pricesConvertTokenSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Converts token price to the equivalent amount of another token price.',
 		});
-		pricesConvertTokenSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
+		pricesConvertTokenSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'prices',
+			this.params,
+		);
 		pricesConvertTokenSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Converts token price to the equivalent amount of another token price.',

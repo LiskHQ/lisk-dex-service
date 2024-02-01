@@ -16,7 +16,7 @@
 
 let app;
 
-const setAppContext = (h) => app = h;
+const setAppContext = h => (app = h);
 
 const getAppContext = () => app;
 
@@ -31,6 +31,5 @@ module.exports = {
 	setAppContext,
 	requestConnector,
 	requestRpc,
-	getAppContext
-}
-
+	getAppContext,
+};

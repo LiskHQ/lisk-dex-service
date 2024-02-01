@@ -13,15 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-    getProposal
-} = require ('./proposal')
+const { getProposal } = require('./proposal');
 
-const {
-    getVotes
-} = require ('./votes')
+const { getVotes } = require('./votes');
 
 module.exports = {
-    getProposal,
-    getVotes
-}
+	getProposal,
+	getVotes,
+};

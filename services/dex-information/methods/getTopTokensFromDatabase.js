@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getTopTokensFromDatabase,
-} = require('./controller/getTopTokensFromDatabase');
+const { getTopTokensFromDatabase } = require('./controller/getTopTokensFromDatabase');
 
 const regex = require('../shared/regex');
 

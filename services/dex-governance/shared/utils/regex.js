@@ -16,10 +16,10 @@
 
 const CURRENCY = /^\b[a-fA-F0-9]{3,20}\b$/;
 const TOKEN_ID = /^\b[a-fA-F0-9]{16}\b$/;
-const ADDRESS = /^\b[A-Za-z]\b/
+const ADDRESS = /^\b[A-Za-z]\b/;
 
 module.exports = {
 	CURRENCY,
 	TOKEN_ID,
-    ADDRESS
+	ADDRESS,
 };

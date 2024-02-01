@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getProposal,
-} = require('./controller/proposal');
+const { getProposal } = require('./controller/proposal');
 
 module.exports = [
 	{
 		name: 'proposal',
 		controller: getProposal,
 		params: {
-			proposal: { optional: false, type: 'number'},
+			proposal: { optional: false, type: 'number' },
 		},
 	},
 ];

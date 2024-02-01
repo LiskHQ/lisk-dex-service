@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getTransactionsByTokenID,
-} = require('./controller/getTransactionsByTokenID');
+const { getTransactionsByTokenID } = require('./controller/getTransactionsByTokenID');
 
 const regex = require('../shared/regex');
 

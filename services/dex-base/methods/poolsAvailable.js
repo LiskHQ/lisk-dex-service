@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getPoolsAvailable,
-} = require('./controller/poolsAvailable');
+const { getPoolsAvailable } = require('./controller/poolsAvailable');
 
 const regex = require('../shared/regex');
 

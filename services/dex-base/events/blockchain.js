@@ -22,7 +22,7 @@ module.exports = [
 		name: 'pool.created',
 		description: 'Pool Created',
 		controller: callback => {
-			const poolCreatedListener = async (payload) => {
+			const poolCreatedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -36,7 +36,7 @@ module.exports = [
 		name: 'pool.creation.failed',
 		description: 'Pool Creation Failed',
 		controller: callback => {
-			const poolCreationFailedListener = async (payload) => {
+			const poolCreationFailedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -44,13 +44,13 @@ module.exports = [
 				}
 			};
 			Signals.get('poolCreationFailed').add(poolCreationFailedListener);
-		}
+		},
 	},
 	{
 		name: 'position.created',
 		description: 'Position Created',
 		controller: callback => {
-			const positionCreatedListener = async (payload) => {
+			const positionCreatedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -58,27 +58,29 @@ module.exports = [
 				}
 			};
 			Signals.get('positionCreated').add(positionCreatedListener);
-		}
+		},
 	},
 	{
 		name: 'position.creation.failed',
 		description: 'Position Creation Failed',
 		controller: callback => {
-			const positionCreationFailedListener = async (payload) => {
+			const positionCreationFailedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
-					logger.error(`Error occured when processing 'position.creation.failed' event:\n${err.stack}`);
+					logger.error(
+						`Error occured when processing 'position.creation.failed' event:\n${err.stack}`,
+					);
 				}
 			};
 			Signals.get('positionCreationFailed').add(positionCreationFailedListener);
-		}
+		},
 	},
 	{
 		name: 'position.updated',
 		description: 'Position Updated',
 		controller: callback => {
-			const positionUpdatedListener = async (payload) => {
+			const positionUpdatedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -86,13 +88,13 @@ module.exports = [
 				}
 			};
 			Signals.get('positionUpdated').add(positionUpdatedListener);
-		}
+		},
 	},
 	{
 		name: 'position.update.failed',
 		description: 'Pool Update Failed',
 		controller: callback => {
-			const positionUpdateFailedListener = async (payload) => {
+			const positionUpdateFailedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -100,13 +102,13 @@ module.exports = [
 				}
 			};
 			Signals.get('positionUpdateFailed').add(positionUpdateFailedListener);
-		}
+		},
 	},
 	{
 		name: 'remove.liquidity',
 		description: 'Remove Liquidity',
 		controller: callback => {
-			const removeLiquidityListener = async (payload) => {
+			const removeLiquidityListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -114,27 +116,29 @@ module.exports = [
 				}
 			};
 			Signals.get('removeLiquidity').add(removeLiquidityListener);
-		}
+		},
 	},
 	{
 		name: 'removeLquidityFailed',
 		description: 'Remove Liquidity Failed',
 		controller: callback => {
-			const removeLquidityFailedListener = async (payload) => {
+			const removeLquidityFailedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
-					logger.error(`Error occured when processing 'remove.liquidity.failed' event:\n${err.stack}`);
+					logger.error(
+						`Error occured when processing 'remove.liquidity.failed' event:\n${err.stack}`,
+					);
 				}
 			};
 			Signals.get('removeLquidityFailed').add(removeLquidityFailedListener);
-		}
+		},
 	},
 	{
 		name: 'swapped',
 		description: 'swapped',
 		controller: callback => {
-			const swappedListener = async (payload) => {
+			const swappedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -142,13 +146,13 @@ module.exports = [
 				}
 			};
 			Signals.get('swapped').add(swappedListener);
-		}
+		},
 	},
 	{
 		name: 'swap.failed',
 		description: 'swapFailed',
 		controller: callback => {
-			const swapFailedListener = async (payload) => {
+			const swapFailedListener = async payload => {
 				try {
 					callback(payload);
 				} catch (err) {
@@ -156,7 +160,6 @@ module.exports = [
 				}
 			};
 			Signals.get('swapFailed').add(swapFailedListener);
-		}
+		},
 	},
-
 ];

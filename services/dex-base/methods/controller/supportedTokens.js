@@ -16,7 +16,7 @@
 
 const service = require('../../shared/metadata');
 
-const getSupportedTokens = async (params) => {
+const getSupportedTokens = async params => {
 	const blockchainAppsMetadataSupported = {
 		data: [],
 		meta: {},
@@ -30,5 +30,5 @@ const getSupportedTokens = async (params) => {
 };
 
 module.exports = {
-	getSupportedTokens
+	getSupportedTokens,
 };

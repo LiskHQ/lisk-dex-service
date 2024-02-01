@@ -13,7 +13,9 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const { MySQL: { getTableInstance } } = require('lisk-service-framework');
+const {
+	MySQL: { getTableInstance },
+} = require('lisk-service-framework');
 
 const config = require('../../dex-base/config');
 
@@ -23,15 +25,12 @@ const ALLOWED_VALUE_TYPES = ['boolean', 'number', 'bigint', 'string', 'undefined
 
 const MYSQL_ENDPOINT = config.endpoints.mysql;
 
-const getKeyValueTable = () => getTableInstance(
-	keyValueStoreSchema.tableName,
-	keyValueStoreSchema,
-	MYSQL_ENDPOINT,
-);
+const getKeyValueTable = () =>
+	getTableInstance(keyValueStoreSchema.tableName, keyValueStoreSchema, MYSQL_ENDPOINT);
 
 const set = async (key, value, dbTrx) => {
 	const keyValueTable = await getKeyValueTable();
-	const type = typeof (value);
+	const type = typeof value;
 
 	if (!ALLOWED_VALUE_TYPES.includes(type)) {
 		throw new Error(`Allowed 'value' types are: ${ALLOWED_VALUE_TYPES.join()}`);
@@ -53,24 +52,22 @@ const formatValue = (value, type) => {
 	return value;
 };
 
-const get = async (key) => {
+const get = async key => {
 	const keyValueTable = await getKeyValueTable();
 
-	const [{ value, type } = {}] = await keyValueTable.find(
-		{ key, limit: 1 },
-		['value', 'type'],
-	);
+	const [{ value, type } = {}] = await keyValueTable.find({ key, limit: 1 }, ['value', 'type']);
 
 	return formatValue(value, type);
 };
 
-const getByPattern = async (pattern) => {
+const getByPattern = async pattern => {
 	const keyValueTable = await getKeyValueTable();
 
-	const result = await keyValueTable.find(
-		{ search: { property: 'key', pattern } },
-		['key', 'value', 'type'],
-	);
+	const result = await keyValueTable.find({ search: { property: 'key', pattern } }, [
+		'key',
+		'value',
+		'type',
+	]);
 
 	const formattedResult = result.map(row => ({
 		key: row.key,

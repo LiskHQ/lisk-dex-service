@@ -15,23 +15,22 @@
  */
 
 module.exports = {
-    type: 'moleculer',
-    method: 'dex.prices.gettingSlippageBounds',
-    params: {
-        tokenIdIn: '=,string',
-        maxAmountIn: '=,string',
-        tokenIdOut: '=,string',
-        amountOut: '=,string',
-        swapRoute: '=,array',
-    },
-    definition: {
-        data: {
-            minimum: '=,string',
-            maximum: '=,string',
-            unit: "=",
-            symbol: "=",
-
-        },
-        meta: {}
-    }
+	type: 'moleculer',
+	method: 'dex.prices.gettingSlippageBounds',
+	params: {
+		tokenIdIn: '=,string',
+		maxAmountIn: '=,string',
+		tokenIdOut: '=,string',
+		amountOut: '=,string',
+		swapRoute: '=,array',
+	},
+	definition: {
+		data: {
+			minimum: '=,string',
+			maximum: '=,string',
+			unit: '=',
+			symbol: '=',
+		},
+		meta: {},
+	},
 };

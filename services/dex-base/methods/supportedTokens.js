@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getSupportedTokens,
-} = require('./controller/supportedTokens');
+const { getSupportedTokens } = require('./controller/supportedTokens');
 
 module.exports = [
 	{

@@ -13,9 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	gettingCurrentsqrtprice,
-} = require('./controller/gettingCurrentsqrtprice');
+const { gettingCurrentsqrtprice } = require('./controller/gettingCurrentsqrtprice');
 
 module.exports = [
 	{
@@ -23,7 +21,7 @@ module.exports = [
 		controller: gettingCurrentsqrtprice,
 		params: {
 			poolID: { optional: false, type: 'string' },
-			priceDirection: { optional: false, type: 'boolean'},
+			priceDirection: { optional: false, type: 'boolean' },
 		},
 	},
 ];

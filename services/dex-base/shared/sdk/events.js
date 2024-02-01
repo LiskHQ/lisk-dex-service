@@ -16,7 +16,6 @@
 
 const {getEventsByHeight } = require('./endpoints');
 
-
 const getEventsByHeightFormatted = async (height) => {
 	const events = await getEventsByHeight(height);
 	return events;

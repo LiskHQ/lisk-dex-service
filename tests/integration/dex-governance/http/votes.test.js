@@ -15,30 +15,25 @@
  */
 
 const config = require('../../../config');
+const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex-governance/v1`;
 const endpoint = `${baseUrl}/votes`;
 
-const { api } = require('../../../helpers/api');
-
-describe('Method votes', () => {
-	let votes;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?voterAddress=0000000000`);		
-		votes = response.data;
-	});
-
-	describe('Retrieve Votes', () => {
-		it('returns errors becuase of invalid params related', async () => {
-			const response = await api.get(`${endpoint}`,422);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Server error: Parameters validation error!");
+describe('GET /api/dex-governance/v1/votes', () => {
+	describe('returning details about the votes for a given account', () => {
+		it('returns an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 500);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe('Server error: Parameters validation error!');
 		});
-		it('returns list of votes', async () => {
-			const response = await api.get(`${endpoint}?voterAddress=0000000000`);	
+
+		it('should return the expected response when given valid params', async () => {
+			const response = await api.get(`${endpoint}?voterAddress=0000000000`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
+			expect(response.data).toHaveProperty('voteInfos');
+			expect(response.data.voteInfos).toBeInstanceOf(Object);
 		});
-	})
-	
+	});
 });

@@ -14,7 +14,6 @@
  *
  */
 
-
 const logger = require('lisk-service-framework').Logger();
 
 const {
@@ -27,12 +26,11 @@ module.exports = [
 		description: 'Keep the market apps prices up-to-date',
 		schedule: '*/1 * * * *', // Every 1 min
 		init: async () => {
-			console.log('Successfully initialized market app prices cache.');
 			logger.debug('Initializing market apps prices cache...');
 			try {
 				await reloadMarketAppsPrices();
 				logger.info('Successfully initialized market app prices cache.');
-				
+
 			} catch (err) {
 				logger.warn(`Initializing market apps prices cache failed due to: ${err.message}`);
 			}

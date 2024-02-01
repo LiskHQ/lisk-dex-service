@@ -14,41 +14,41 @@
  *
  */
 
+const { Logger } = require('lisk-service-framework');
 const { requestIndexer } = require('../utils/request');
 
-const getTransactionsByTokenID = async (params) => {
+const logger = Logger();
 
-    let transactionsByTokenID = [];
-    
-    try {
-        const transactions = await requestIndexer('transactions');
+const getTransactionsByTokenID = async params => {
+	const transactionsByTokenID = [];
 
-        if (transactions.data != null) {
-            if (transactions.data.length != 0) {
-                for (let i = 0; i < transactions.data.length; i++) {
-                    if (transactions.data[i].tokenID == params.tokenID) {
-                        transactionsByTokenID.push(transactions.data[i]);
-                    }
-                }
-            }
-        } else {
-            throw new Error(`Error no transactions with the specified tokenID`);
-        }
+	try {
+		const response = await requestIndexer('transactions');
 
-    } catch (error) {
-        if (error) {
-            throw error;
-        }
-    }
+		if (response.data === null) {
+			throw new Error(`Error no transactions with the specified tokenID.`);
+		}
 
-    return {
-        data: {
-            transactionsByTokenID
-        },
-        meta: {},
-    };
+		if (response.data.length !== 0) {
+			for (let i = 0; i < response.data.length; i++) {
+				if (response.data[i].tokenID === params.tokenID) {
+					transactionsByTokenID.push(response.data[i]);
+				}
+			}
+		}
+
+		return {
+			data: {
+				transactionsByTokenID,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when getting transactions by tokenID.\n${err.stack}`);
+		throw err;
+	}
 };
 
 module.exports = {
-    getTransactionsByTokenID,
+	getTransactionsByTokenID,
 };

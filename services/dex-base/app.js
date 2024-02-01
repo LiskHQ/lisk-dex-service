@@ -15,7 +15,6 @@
  */
 const path = require('path');
 
-
 const {
 	Microservice,
 	LoggerConfig,
@@ -27,15 +26,12 @@ const config = require('./config');
 const packageJson = require('./package.json');
 const { setAppContext } = require('./shared/utils/request');
 
-
 // Configure logger
 const loggerConf = {
 	...config.log,
 	name: packageJson.name,
 	version: packageJson.version,
 };
-
-
 
 LoggerConfig(loggerConf);
 
@@ -104,11 +100,9 @@ app.addMethods(path.join(__dirname, 'methods'));
 app.addEvents(path.join(__dirname, 'events'));
 app.addJobs(path.join(__dirname, 'jobs'));
 
-
-
 // Run the application
 app.run().then(async() => {
-	logger.info(`Service started ${packageJson.name}`);	
+	logger.info(`Service started ${packageJson.name}`);
 }).catch(err => {
 	logger.fatal(`Could not start the service ${packageJson.name} + ${err.message}`);
 	logger.fatal(err.stack);

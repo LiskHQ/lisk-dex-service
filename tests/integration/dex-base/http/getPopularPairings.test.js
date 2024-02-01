@@ -13,30 +13,29 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
 const config = require('../../../config');
 const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex/v1`;
 const endpoint = `${baseUrl}/tokens/popularPairings`;
 
-describe('Method getPopularPairings', () => {
-	let priceConvert;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?senderAddress=000000`);		
-		priceConvert = response.data;
-	});
+describe('GET /api/dex/v1/tokens/popularPairings', () => {
+	describe('returning popular token pairings', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'senderAddress' field is required.",
+			);
+		});
 
-	describe('For getPopularPairings Function', () => {
-		it('returns with errors becuase of params related to getPopularPairings', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'senderAddress' field is required.");
-		});
-		it('returns a list of pouplar pairings', async () => {
-			const response = await api.get(`${endpoint}?senderAddress=000000`);	
+		it('should return the expected response when given valid params', async () => {
+			const response = await api.get(`${endpoint}?senderAddress=000000`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
-			expect(parseInt(response.data.popularPairings)).not.toBeNull();		
+			expect(response.data).toHaveProperty('popularPairings');
+			expect(response.data.popularPairings).toBeInstanceOf(Array);
 		});
-	})	
+	});
 });

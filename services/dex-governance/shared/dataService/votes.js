@@ -14,31 +14,28 @@
  *
  */
 
-const { requestConnector } = require("../utils/request");
+const { Logger } = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
-const getVotes = async (params) => {
+const logger = Logger();
 
-	let voteInfos;
+const getVotes = async params => {
+	try {
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dexGovernance_getUserVotes',
+			params,
+		});
 
-    try {
-        voteInfos = await requestConnector('invokeEndpoint',{endpoint:"dexGovernance_getUserVotes", params}); 
-         return {
-            data: {
-                voteInfos,
-            },
-            meta: {},
-        };
-    } catch (error) {
-        if (error) {
-            logger.warn(`Error returned when invoking 'dexGovernance_getUserVotes'.\n${error.stack}`);
-            throw error;
-        }
-    }
-
-	return {
-		data: votesList,
-		meta: {},
-	};
+		return {
+			data: {
+				voteInfos: response,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when invoking 'dexGovernance_getUserVotes'.\n${err.stack}`);
+		throw err;
+	}
 };
 
 module.exports = {

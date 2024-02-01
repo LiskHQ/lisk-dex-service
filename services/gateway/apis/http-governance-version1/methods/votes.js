@@ -30,15 +30,15 @@ module.exports = {
 		const votesSchema = {};
 		votesSchema[this.swaggerApiPath] = { get: {} };
 		votesSchema[this.swaggerApiPath].get.tags = this.tags;
-		votesSchema[this.swaggerApiPath].get.summary = 'Returns details about the votes for a specific account.';
+		votesSchema[this.swaggerApiPath].get.summary = 'Returns details about the votes for a given account.';
 		votesSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Returns details about the votes for a specific account.',
+			description: 'Returns details about the votes for a given account.',
 		});
 		votesSchema[this.swaggerApiPath].get.parameters = transformParams('votes', this.params);
 		votesSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Returns details about the votes for a specific account.',
+				description: 'Returns details about the votes for a given account.',
 				schema: {
 					$ref: '#/definitions/VotessWithoutEnvelope',
 				},

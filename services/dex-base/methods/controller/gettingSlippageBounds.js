@@ -17,16 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const gettingSlippageBounds = async params => {
-    
+
     const slippageBounds = await dataService.gettingSlippageBounds(params);
-    
+
 	return {
 		data: slippageBounds.data,
 		meta: slippageBounds.meta,
 		links: {},
 	};
 };
-
 
 module.exports = {
 	gettingSlippageBounds,

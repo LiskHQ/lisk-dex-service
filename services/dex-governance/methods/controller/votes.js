@@ -17,21 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const getVotes = async params => {
-	try {
-		const response = await dataService.getVotes(params);
+	const response = await dataService.getVotes(params);
 
-		return {
-			data: {
-				voteInfos:response.data.voteInfos,
-			},
-			meta: {}
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			voteInfos: response.data.voteInfos,
+		},
+		meta: {},
+	};
 };
-
 
 module.exports = {
 	getVotes,

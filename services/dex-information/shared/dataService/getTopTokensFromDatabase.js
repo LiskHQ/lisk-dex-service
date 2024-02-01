@@ -14,11 +14,17 @@
  *
  */
 
+const {
+	DB: {
+		MySQL: { getTableInstance },
+	},
+} = require('lisk-service-framework');
 
 const config = require('../../config');
-const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
+
 const MYSQL_ENDPOINT = config.endpoints.mysql;
-const { DB: { MySQL: { getTableInstance } } } = require('lisk-service-framework');
+
+const topTokensMetadataIndexSchema = require('../../database/schema/dex_info_top_tokens');
 
 const getTopTokensPoolsMetadataIndex = () => getTableInstance(
 	topTokensMetadataIndexSchema.tableName,
@@ -27,7 +33,7 @@ const getTopTokensPoolsMetadataIndex = () => getTableInstance(
 );
 
 const getTopTokensFromDatabase = async params => {
-	
+
 	const topTokensTokenTable = await getTopTokensPoolsMetadataIndex();
 
 	const topTokensFromDatabase = {
@@ -36,49 +42,49 @@ const getTopTokensFromDatabase = async params => {
 	};
 
 	let topTokensData = await topTokensTokenTable.rawQuery(` SELECT * FROM ${topTokensMetadataIndexSchema.tableName}`);
-	
-	if(topTokensData.length == 0){
+
+	if(topTokensData.length === 0){
 		topTokensData=[{
 			name:"Lisk",
             price:"1.23",
 			priceChange:"+3.24",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		},
 		{
 			name:"Bazar",
             price:"1732.25",
 			priceChange:"-4.54",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		},
 		{
 			name:"doEDU",
             price:"1.23",
 			priceChange:"+3.24",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		},
 		{
 			name:"Enevti",
             price:"1732.25",
 			priceChange:"-4.54",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		},
 		{
 			name:"RGB",
             price:"1.23",
 			priceChange:"+3.24",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		},
 		{
 			name:"Feat",
             price:"1732.25",
 			priceChange:"-4.54",
 			volume24H:"1.23",
-			liquidity:"7.2",			
+			liquidity:"7.2",
 		}]
 	}
 
@@ -88,7 +94,6 @@ const getTopTokensFromDatabase = async params => {
 		});
 	});
 
-	
 	topTokensFromDatabase.meta = {
 		count: topTokensFromDatabase.data.length,
 		offset: params.offset,
@@ -96,7 +101,6 @@ const getTopTokensFromDatabase = async params => {
 
 	return topTokensFromDatabase;
 };
-
 
 module.exports = {
 	getTopTokensFromDatabase,

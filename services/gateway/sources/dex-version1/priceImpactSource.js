@@ -23,7 +23,7 @@ module.exports = {
         tokenIdOut: '=,string',
         amountOut: '=,string',
         swapRoute: '=,array',
-        isZeroToOne: '=,boolean',       
+        isZeroToOne: '=,boolean',
     },
     definition: {
         data: {

@@ -21,5 +21,5 @@ const LIMIT = /^[0-9]+$/;
 module.exports = {
 	POOL_ID,
 	TOKEN_ID,
-    LIMIT,	
+    LIMIT,
 };

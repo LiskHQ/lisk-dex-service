@@ -16,7 +16,7 @@
 
 const gettingCurrentsqrtpriceSource = require('../../../sources/dex-version1/gettingCurrentsqrtpriceSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const envelope = require('../methods/dataDefinitions/stdEnvelope')
+const envelope = require("./dataDefinitions/stdEnvelope")
 
 module.exports = {
 	version: '2.0',
@@ -31,15 +31,15 @@ module.exports = {
 		const gettingCurrentsqrtpriceSchema = {};
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath] = { get: {} };
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.tags = this.tags;
-		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.summary = 'Retrives the current sqrt price of a given pool.';
+		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.summary = 'Returns the current sqrt price of a given pool.';
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives the current sqrt price of a given pool.',
+			description: 'Returns the current sqrt price of a given pool.',
 		});
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.parameters = transformParams('tokens', this.params);
 		gettingCurrentsqrtpriceSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives the current sqrt price of a given pool.',
+				description: 'Returns the current sqrt price of a given pool.',
 				schema: {
 					$ref: '#/definitions/gettingCurrentsqrtpriceWithEnvelope',
 				},

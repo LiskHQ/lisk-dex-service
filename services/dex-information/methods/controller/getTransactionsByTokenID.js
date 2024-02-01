@@ -17,21 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const getTransactionsByTokenID = async params => {
-	try {
-		const response = await dataService.getTransactionsByTokenID(params);
+	const response = await dataService.getTransactionsByTokenID(params);
 
-		return {
-			data: {
-				transactionsByTokenID:response.data.transactionsByTokenID,
-			},
-			meta: {}
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			transactionsByTokenID: response.data.transactionsByTokenID,
+		},
+		meta: {},
+	};
 };
-
 
 module.exports = {
 	getTransactionsByTokenID,

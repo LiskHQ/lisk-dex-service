@@ -15,30 +15,28 @@
  */
 
 const config = require('../../../config');
+const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex/v1`;
 const endpoint = `${baseUrl}/pools/available`;
 
-const { api } = require('../../../helpers/api');
-
-describe('Method get.dex.pools.available', () => {
-	let poolAvailable;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?limit=0&offset=0`);		
-		poolAvailable = response.data;
-	});
-
-	describe('Retrieve Pools Available lists', () => {
-		it('returns errors becuase of params related to pools Available', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'limit' field is required.; The 'offset' field is required.");
+describe('GET /api/dex/v1/pools/available', () => {
+	describe('returning available pools', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'limit' field is required.; The 'offset' field is required.",
+			);
 		});
-		it('returns list of poolsAvaiable', async () => {
-			const response = await api.get(`${endpoint}?limit=0&offset=0`);	
+
+		it('should return the expected response when given valid params', async () => {
+			const response = await api.get(`${endpoint}?limit=0&offset=0`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
+			expect(response.data).toHaveProperty('poolsAvailable');
+			expect(response.data.poolsAvailable).toHaveProperty('poolsAvailable');
+			expect(response.data.poolsAvailable.poolsAvailable).toBeInstanceOf(Array);
 		});
-	})
-	
+	});
 });

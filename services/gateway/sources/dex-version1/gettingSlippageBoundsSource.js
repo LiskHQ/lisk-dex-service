@@ -22,7 +22,7 @@ module.exports = {
         maxAmountIn: '=,string',
         tokenIdOut: '=,string',
         amountOut: '=,string',
-        swapRoute: '=,array',      
+        swapRoute: '=,array',
     },
     definition: {
         data: {
@@ -30,7 +30,7 @@ module.exports = {
             maximum: '=,string',
             unit: "=",
             symbol: "=",
-				
+
         },
         meta: {}
     }

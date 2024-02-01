@@ -17,21 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const getTopTokensFromDatabase = async params => {
-	try {
-		const response = await dataService.getTopTokensFromDatabase(params);
+	const response = await dataService.getTopTokensFromDatabase(params);
 
-		return {
-			data: {
-				topTokensFromDatabase:response.data,
-				meta: response.data.meta
-			},
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			topTokensFromDatabase: response.data,
+			meta: response.data.meta,
+		},
+	};
 };
-
 
 module.exports = {
 	getTopTokensFromDatabase,

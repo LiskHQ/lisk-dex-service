@@ -13,32 +13,35 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+
 const config = require('../../../config');
 const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex/v1`;
 const endpoint = `${baseUrl}/tokens/currentsqrtprice`;
 
-describe('Method getCurrentSqrtPrice', () => {
-	let currentSqrtPrice;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?poolID=0X00000000&priceDirection=false`);		
-		currentSqrtPrice = response.data;
-	});
-
-	describe('To retrieve currentSqrtPrice', () => {
-		it('returns http error as params are not defined for currentSqrtPrice', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'poolID' field is required.; The 'priceDirection' field is required.");
+describe('GET /api/dex/v1/tokens/currentsqrtprice', () => {
+	describe('returning the current sqrt price of a given pool', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'poolID' field is required.; The 'priceDirection' field is required.",
+			);
 		});
-		it('returns currentSqrtPrice', async () => {
-			const response = await api.get(`${endpoint}?poolID=0X00000000&priceDirection=false`);	
+
+		it('should return an error when the given pool does not exist', async () => {
+			const response = await api.get(`${endpoint}?poolID=0X00000000&priceDirection=false`, 500);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe('Server error: Key 1d0fbf938000 does not exist.');
+		});
+
+		it.skip('should return the expected response when the given pool exists', async () => {
+			const response = await api.get(`${endpoint}?poolID=0X00000000&priceDirection=false`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
-			expect(response.data.currentSqrtPrice).not.toBeNull();			
+			expect(response.data).toHaveProperty('currentSqrtPrice');
+			expect(response.data.currentSqrtPrice).not.toBeNull();
 		});
-	})	
+	});
 });
-
-

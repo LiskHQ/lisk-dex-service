@@ -28,15 +28,15 @@ module.exports = {
 		const getPopularPairingsSchema = {};
 		getPopularPairingsSchema[this.swaggerApiPath] = { get: {} };
 		getPopularPairingsSchema[this.swaggerApiPath].get.tags = this.tags;
-		getPopularPairingsSchema[this.swaggerApiPath].get.summary = 'Retrives a list of top 6 frequently used token pairs for swap.';
+		getPopularPairingsSchema[this.swaggerApiPath].get.summary = 'Returns a list of the top 6 frequently swapped token pairs.';
 		getPopularPairingsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives a list of top 6 frequently used token pairs for swap.',
+			description: 'Returns a list of the top 6 frequently swapped token pairs.',
 		});
 		getPopularPairingsSchema[this.swaggerApiPath].get.parameters = transformParams('tokens', this.params);
 		getPopularPairingsSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives a list of top 6 frequently used token pairs for swap.',
+				description: 'Returns a list of the top 6 frequently swapped token pairs.',
 				schema: {
 					$ref: '#/definitions/getPopularPairingsWithoutEnvelope',
 				},

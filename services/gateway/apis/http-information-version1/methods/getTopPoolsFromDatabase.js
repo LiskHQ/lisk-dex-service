@@ -31,15 +31,15 @@ module.exports = {
 		const getTopPoolsFromDatabaseSchema = {};
 		getTopPoolsFromDatabaseSchema[this.swaggerApiPath] = { get: {} };
 		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.tags = this.tags;
-		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.summary = 'Returns list of top pools in the information database.';
+		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.summary = 'Returns a list of top pools from the database.';
 		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Returns list of top pools in the information database.',
+			description: 'Returns a list of top pools from the database.',
 		});
 		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.parameters = transformParams('getTopPoolsFromDatabase', this.params);
 		getTopPoolsFromDatabaseSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Returns list of top pools in the information database.',
+				description: 'Returns a list of top pools from the database.',
 				schema: {
 					$ref: '#/definitions/getTopPoolsFromDatabase',
 				},

@@ -14,11 +14,17 @@
  *
  */
 
+const {
+	DB: {
+		MySQL: { getTableInstance },
+	},
+} = require('lisk-service-framework');
+
+const config = require('../../config');
+
+const MYSQL_ENDPOINT = config.endpoints.mysql;
 
 const topPoolsMetadataIndexSchema = require('../../database/schema/dex_info_top_pools');
-const config = require('../../config');
-const MYSQL_ENDPOINT = config.endpoints.mysql;
-const { DB: { MySQL: { getTableInstance } } } = require('lisk-service-framework');
 
 const getTopPoolsMetadataIndex = () => getTableInstance(
 	topPoolsMetadataIndexSchema.tableName,
@@ -36,7 +42,7 @@ const getTopPoolsFromDatabase = async params => {
 
 	let topPoolsData = await topPoolsTokenTable.rawQuery(` SELECT * FROM ${topPoolsMetadataIndexSchema.tableName}`);
 
-	if(topPoolsData.length == 0){
+	if(topPoolsData.length === 0){
 		topPoolsData=[{
 			poolName:"DEX-BTC",
 			poolTVL:"118413665423",
@@ -87,16 +93,13 @@ const getTopPoolsFromDatabase = async params => {
 		});
 	});
 
-
 	topPoolsFromDatabase.meta = {
 		count: topPoolsFromDatabase.data.length,
 		offset: params.offset,
 	};
 
-	
 	return topPoolsFromDatabase;
 };
-
 
 module.exports = {
 	getTopPoolsFromDatabase,

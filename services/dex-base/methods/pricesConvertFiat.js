@@ -18,7 +18,7 @@ const {
 	getPricesConvertFiat,
 } = require('./controller/pricesConvertFiat');
 
-const regex = require('../shared/regex.js');
+const regex = require('../shared/regex');
 
 module.exports = [
 	{

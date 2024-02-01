@@ -31,15 +31,15 @@ module.exports = {
 		const getTopTokensFromDatabaseSchema = {};
 		getTopTokensFromDatabaseSchema[this.swaggerApiPath] = { get: {} };
 		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.tags = this.tags;
-		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.summary = 'Returns topTokens from the database.';
+		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.summary = 'Returns a list of top tokens from the database.';
 		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Returns topTokens from the database.',
+			description: 'Returns a list of top tokens from the database.',
 		});
 		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.parameters = transformParams('getTopTokensFromDatabase', this.params);
 		getTopTokensFromDatabaseSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Returns topTokens from the database.',
+				description: 'Returns a list of top tokens from the database.',
 				schema: {
 					$ref: '#/definitions/getTopTokensFromDatabase',
 				},

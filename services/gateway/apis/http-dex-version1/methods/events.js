@@ -29,15 +29,15 @@ module.exports = {
 		const eventsSchema = {};
 		eventsSchema[this.swaggerApiPath] = { get: {} };
 		eventsSchema[this.swaggerApiPath].get.tags = this.tags;
-		eventsSchema[this.swaggerApiPath].get.summary = 'Retrives list of Events.';
+		eventsSchema[this.swaggerApiPath].get.summary = 'Retrieves list of events.';
 		eventsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Retrives list of Events.',
+			description: 'Returns a list of events.',
 		});
 		eventsSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		eventsSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Retrives list of Events.',
+				description: 'Returns a list of events.',
 				schema: {
 					$ref: '#/definitions/EventsWithEnvelope',
 				},

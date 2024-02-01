@@ -14,40 +14,34 @@
  *
  */
 
-const { requestConnector } = require("../utils/request");
+const { Logger } = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
-const gettingCurrentsqrtprice = async (params) => {
+const logger = Logger();
 
-  let currentsqrtprice;
+const gettingCurrentsqrtprice = async params => {
+	try {
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dex_getCurrentSqrtPrice',
+			params,
+		});
 
-  const methodContext = {
-    poolID : params.poolID,
-    priceDirection : params.priceDirection,
-  }
-  
-  try {
-    currentsqrtprice = await requestConnector('invokeEndpoint',{endpoint:"dex_getCurrentSqrtPrice", methodContext});         
-    if (currentsqrtprice.error != null) {
-      return {
-        data: {
-          currentsqrtprice: currentsqrtprice.error.message,
-        },
-        meta: {},
-      };
-    }
-    return {
-      data: {
-        currentsqrtprice,
-      },
-      meta: {},
-    };
-  } catch (err) {
-    if (err) {
-      throw err;
-    }
-  }
+		if (response.error !== null) {
+			throw new Error(response.error.message);
+		}
+
+		return {
+			data: {
+				currentsqrtprice: response,
+			},
+			meta: {},
+		};
+	} catch (err) {
+		logger.warn(`Error thrown when invoking dex_getCurrentSqrtPrice.\n${err}`);
+		throw err;
+	}
 };
 
 module.exports = {
-  gettingCurrentsqrtprice,
+	gettingCurrentsqrtprice,
 };

@@ -17,21 +17,15 @@
 const dataService = require('../../shared/dataService');
 
 const getProposal = async params => {
-	try {
-		const response = await dataService.getProposal(params);
+	const response = await dataService.getProposal(params);
 
-		return {
-			data: {
-				proposal:response.data
-			},
-			meta: {}
-		};
-	} catch (err) {
-		// TODO: throwing caught error
-		throw err;
-	}
+	return {
+		data: {
+			proposal: response.data.proposal,
+		},
+		meta: {},
+	};
 };
-
 
 module.exports = {
 	getProposal,

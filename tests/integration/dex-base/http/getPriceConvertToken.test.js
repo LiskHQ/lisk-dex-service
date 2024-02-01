@@ -16,30 +16,32 @@
 
 const config = require('../../../config');
 const { api } = require('../../../helpers/api');
+
 const baseAddress = config.SERVICE_ENDPOINT;
 const baseUrl = `${baseAddress}/api/dex/v1`;
 const endpoint = `${baseUrl}/prices/convert/token`;
 
-describe('Method prices/convert/token', () => {
-	let priceConvert;
-	beforeAll(async () => {
-		const response = await api.get(`${endpoint}?tokenSymbol=LSK&conversionTokenSymbol=BTC`);		
-		priceConvert = response.data;
-	});
-
-	describe('For Price Convert Token Function', () => {
-		it('returns errors becuase of params related to pricesConvertToken', async () => {
-			const response = await api.get(`${endpoint}`,400);
-			expect(response.error).toBeTrue();
-			expect(response.message).toBe("Invalid input: The 'tokenSymbol' field is required.; The 'conversionTokenSymbol' field is required.");
+describe('GET /api/dex/v1/prices/convert/token', () => {
+	describe('converting token price to the equivalent amount of another token price', () => {
+		it('should return an error when given invalid params', async () => {
+			const response = await api.get(`${endpoint}`, 400);
+			expect(response.error).toBeTruthy();
+			expect(response.message).toBe(
+				"Server error: Invalid input: The 'tokenSymbol' field is required.; The 'conversionTokenSymbol' field is required.",
+			);
 		});
-		it('returns price of one token to another token', async () => {
-			const response = await api.get(`${endpoint}?tokenSymbol=LSK&conversionTokenSymbol=BTC`);	
+
+		it('should return the price of one token compared to another token when given valid params', async () => {
+			const response = await api.get(`${endpoint}?tokenSymbol=LSK&conversionTokenSymbol=BTC`);
 			expect(response.data).toBeInstanceOf(Object);
-			expect(response.data).not.toBeNull();
-			expect(parseInt(response.data.credibleDirectPriceToken2ToToken1*100000)).toBeGreaterThan(0);
-			expect(parseInt(response.data.credibleDirectPriceToken1ToToken2*100000)).toBeGreaterThan(0);
+			expect(response.data).toHaveProperty('credibleDirectPriceToken2ToToken1');
+			expect(
+				parseInt(response.data.credibleDirectPriceToken2ToToken1 * 100000, 10),
+			).toBeGreaterThan(0);
+			expect(response.data).toHaveProperty('credibleDirectPriceToken1ToToken2');
+			expect(
+				parseInt(response.data.credibleDirectPriceToken1ToToken2 * 100000, 10),
+			).toBeGreaterThan(0);
 		});
-	})	
+	});
 });
-

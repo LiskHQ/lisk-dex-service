@@ -28,21 +28,21 @@ module.exports = {
         tokenIdOut: { optional: false, type: 'string', min: 16, max: 16, pattern: regex.TOKEN_ID },
         amountOut: { optional: false, type: 'string', min: 1, max: 64, pattern: regex.AMOUNT_OUT },
         swapRoute: { optional: false, type: 'array' },
-        isZeroToOne: { optional: false, type: 'boolean' },         
+        isZeroToOne: { optional: false, type: 'boolean' },
 	},
 	get schema() {
 		const pricesImpactSchema = {};
 		pricesImpactSchema[this.swaggerApiPath] = { get: {} };
 		pricesImpactSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesImpactSchema[this.swaggerApiPath].get.summary = 'Return the impact price on a swap trade on the market price of the pool.';
+		pricesImpactSchema[this.swaggerApiPath].get.summary = 'Returns the price impact on a swap trade on the market price of the pool.';
 		pricesImpactSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
-			description: 'Return the impact price on a swap trade on the market price of the pool.',
+			description: 'Returns the price impact on a swap trade on the market price of the pool.',
 		});
 		pricesImpactSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
 		pricesImpactSchema[this.swaggerApiPath].get.responses = {
 			200: {
-				description: 'Return the impact price on a swap trade on the market price of the pool.',
+				description: 'Returns the price impact on a swap trade on the market price of the pool.',
 				schema: {
 					$ref: '#/definitions/PricesImpactWithoutEnvelope',
 				},

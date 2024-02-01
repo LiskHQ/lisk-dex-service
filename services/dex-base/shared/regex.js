@@ -29,5 +29,5 @@ module.exports = {
 	CURRENCY,
 	TOKEN_SYMBOL,
 	NONCE,
-	DEX_INTERVAL,	
+	DEX_INTERVAL,
 };

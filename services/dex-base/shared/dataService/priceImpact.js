@@ -14,59 +14,86 @@
  *
  */
 
-const { requestConnector } = require("../utils/request");
+const {
+	Logger,
+	Exceptions: { TimeoutException },
+} = require('lisk-service-framework');
+const { requestConnector } = require('../utils/request');
 
-const getPriceImpactExactIn = async (params) => {
-	const moduleEndpointContext = {
-		tokenIdIn: params.tokenIdIn,
-		amountIn: params.amountIn,
-		tokenIdOut: params.tokenIdOut,
-		minAmountOut: params.amountOut,
-		swapRoute: params.swapRoute,
-	}
+const logger = Logger();
+const timeoutMessage = 'Response not received in';
+
+const getPriceImpactExactIn = async params => {
+	let priceImpact;
+
+	params.minAmountOut = params.amountOut;
+
 	try {
-		const priceImpact = await requestConnector('invokeEndpoint',{endpoint:"dex_dryRunSwapExactIn", moduleEndpointContext}); 
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dex_dryRunSwapExactIn',
+			params,
+		});
+
+		if (response.error !== null) {
+			throw new Error(response.error.message);
+		} else {
+			priceImpact = response;
+		}
+
 		return {
 			data: {
 				priceImpact,
-				unit: "percentage",
-				symbol: "%",
+				unit: 'percentage',
+				symbol: '%',
 			},
 			meta: {},
 		};
 	} catch (err) {
 		if (err.message.includes(timeoutMessage)) {
-			logger.warn(`Error returned when invoking 'dex_dryRunSwapExactIn'.\n${err.stack}`);
-			throw new TimeoutException('Request timed out when calling \'dryRunSwapExactIn\'.');
+			logger.warn(`Error thrown when invoking 'dex_dryRunSwapExactIn'.\n${err.stack}`);
+			throw new TimeoutException("Request timed out when calling 'dryRunSwapExactIn'.");
+		} else {
+			throw err;
 		}
 	}
 };
 
-const getPriceImpactExactOut = async (params) => {
-	const moduleEndpointContext = {
-		tokenIdIn: params.tokenIdIn,
-		maxAmountIn: params.amountIn,
-		tokenIdOut: params.tokenIdOut,
-		amountOut: params.amountOut,
-		swapRoute: params.swapRoute,
-	}
+const getPriceImpactExactOut = async params => {
+	let priceImpact;
+
+	params.maxAmountIn = params.amountIn;
+
 	try {
-		const priceImpact = await invokeEndpoint('dex_dryRunSwapExactOut', moduleEndpointContext);
+		const response = await requestConnector('invokeEndpoint', {
+			endpoint: 'dex_dryRunSwapExactOut',
+			params,
+		});
+
+		if (response.error !== null) {
+			throw new Error(response.error.message);
+		} else {
+			priceImpact = response;
+		}
+
 		return {
 			data: {
 				priceImpact,
-				unit: "percentage",
-				symbol: "%",
+				unit: 'percentage',
+				symbol: '%',
 			},
 			meta: {},
 		};
 	} catch (err) {
-		logger.warn(`Error returned when invoking 'dex_dryRunSwapExactOut'.\n${err.stack}`);
-		throw new TimeoutException('Request timed out when calling \'dryRunSwapExactOut\'.');
+		if (err.message.includes(timeoutMessage)) {
+			logger.warn(`Error thrown when invoking 'dex_dryRunSwapExactOut'.\n${err.stack}`);
+			throw new TimeoutException("Request timed out when calling 'dryRunSwapExactOut'.");
+		} else {
+			throw err;
+		}
 	}
 };
 
 module.exports = {
 	getPriceImpactExactIn,
-	getPriceImpactExactOut
+	getPriceImpactExactOut,
 };

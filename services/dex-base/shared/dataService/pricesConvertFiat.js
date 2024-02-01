@@ -14,13 +14,20 @@
  *
  */
 
+const { Logger } = require('lisk-service-framework');
 const { requestMarket } = require('../utils/request');
-const currency = require('../../shared/constants');
+const currency = require('../constants');
+
+const logger = Logger();
 
 const getPricesConvertFiat = async (params = {}) => {
-	let convertedFiatPrice;
+	let convertedFiatPrice = '';
 
-	if ((params.currency.toUpperCase() !== currency.currency.EUR) && (params.currency.toUpperCase() !== currency.currency.USD)) {
+	// check parameters
+	if (
+		params.currency.toUpperCase() !== currency.currency.EUR &&
+		params.currency.toUpperCase() !== currency.currency.USD
+	) {
 		convertedFiatPrice = 'Please provide EUR or USD as an input currency.';
 		return {
 			data: convertedFiatPrice,
@@ -29,17 +36,27 @@ const getPricesConvertFiat = async (params = {}) => {
 	}
 
 	// get the market price for a specific token and return it
+	try {
+		const marketPrices = await requestMarket('prices', params);
 
-	const marketPrices = await requestMarket('prices', params);
-	let inputTokenMarketPrice;
-	for (let i = 0; i < marketPrices.data.length; i++) {
-		const marketPriceToken = marketPrices.data[i].from;
-		if (marketPriceToken === params.tokenSymbol.toUpperCase() && marketPrices.data[i].to === params.currency.toUpperCase()) {
-			inputTokenMarketPrice = marketPrices.data[i].rate;
+		let inputTokenMarketPrice;
+		for (let i = 0; i < marketPrices.data.length; i++) {
+			const marketPriceToken = marketPrices.data[i].from;
+			if (
+				marketPriceToken === params.tokenSymbol.toUpperCase() &&
+				marketPrices.data[i].to === params.currency.toUpperCase()
+			) {
+				inputTokenMarketPrice = marketPrices.data[i].rate;
+			}
 		}
-	}
 
-	convertedFiatPrice = inputTokenMarketPrice;
+		if (inputTokenMarketPrice !== undefined) {
+			convertedFiatPrice = inputTokenMarketPrice;
+		}
+	} catch (err) {
+		logger.warn(`Error thrown when convering price to fiat.\n${err.stack}`);
+		throw err;
+	}
 
 	return {
 		data: convertedFiatPrice,

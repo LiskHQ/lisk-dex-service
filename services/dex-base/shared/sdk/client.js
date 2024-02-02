@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
  * Unless otherwise agreed in a custom licensing agreement with the Lisk Foundation,
@@ -10,11 +10,12 @@
  * Removal or modification of this copyright notice is prohibited.
  */
 
-const { Logger, Exceptions: { TimeoutException }, Signals } = require('lisk-service-framework');
 const {
-	createWSClient,
-	createIPCClient,
-} = require('@liskhq/lisk-api-client');
+	Logger,
+	Exceptions: { TimeoutException },
+	Signals,
+} = require('lisk-service-framework');
+const { createWSClient, createIPCClient } = require('@liskhq/lisk-api-client');
 
 const config = require('../../config');
 const delay = require('../utils/delay');
@@ -40,10 +41,17 @@ let isInstantiating = false;
 const checkIsClientAlive = async () => {
 	if (config.isUseLiskIPCClient) {
 		if (Date.now() - lastApiClientLivelinessCheck > LIVENESS_CHECK_THRESHOLD_IN_MS) {
-			await clientCache._channel.invoke('system_getNodeInfo')
-				.then(() => { isClientAlive = true; })
-				.catch(() => { isClientAlive = false; })
-				.finally(() => { if (isClientAlive) lastApiClientLivelinessCheck = Date.now(); });
+			await clientCache._channel
+				.invoke('system_getNodeInfo')
+				.then(() => {
+					isClientAlive = true;
+				})
+				.catch(() => {
+					isClientAlive = false;
+				})
+				.finally(() => {
+					if (isClientAlive) lastApiClientLivelinessCheck = Date.now();
+				});
 		}
 	} else {
 		isClientAlive = clientCache._channel.isAlive;
@@ -76,14 +84,15 @@ const instantiateClient = async () => {
 			return clientCache;
 		}
 
-		if ((Date.now() - instantiationBeginTime) > MAX_INSTANTIATION_WAIT_TIME) {
+		if (Date.now() - instantiationBeginTime > MAX_INSTANTIATION_WAIT_TIME) {
 			// Waited too long, reset the flag to re-attempt client instantiation
 			isInstantiating = false;
 		}
 	} catch (err) {
 		logger.error(`Error instantiating WS client to ${liskAddress}`);
 		logger.error(err.message);
-		if (err.code === 'ECONNREFUSED') throw new Error('ECONNREFUSED: Unable to reach a network node');
+		if (err.code === 'ECONNREFUSED')
+			throw new Error('ECONNREFUSED: Unable to reach a network node');
 
 		return {
 			data: { error: 'Action not supported' },
@@ -94,9 +103,7 @@ const instantiateClient = async () => {
 
 const getApiClient = async () => {
 	const apiClient = await waitForIt(instantiateClient, RETRY_INTERVAL);
-	return (apiClient && await checkIsClientAlive())
-		? apiClient
-		: getApiClient();
+	return apiClient && (await checkIsClientAlive()) ? apiClient : getApiClient();
 };
 
 // eslint-disable-next-line consistent-return

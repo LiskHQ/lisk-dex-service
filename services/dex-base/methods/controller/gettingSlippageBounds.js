@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -17,8 +17,7 @@
 const dataService = require('../../shared/dataService');
 
 const gettingSlippageBounds = async params => {
-
-    const slippageBounds = await dataService.gettingSlippageBounds(params);
+	const slippageBounds = await dataService.gettingSlippageBounds(params);
 
 	return {
 		data: slippageBounds.data,

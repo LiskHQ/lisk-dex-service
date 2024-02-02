@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,8 +14,8 @@
  *
  */
 const config = {
-    endpoints: {
-		mysql:process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk',
+	endpoints: {
+		mysql: process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk',
 	},
 };
 
@@ -24,9 +24,11 @@ config.dataDir = `${__dirname}/data`;
 /**
  * External endpoints
  */
-config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
-config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
-config.endpoints.mysql = process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
+config.endpoints.liskHttp = `${process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887'}/api`;
+config.endpoints.liskWs =
+	process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
+config.endpoints.mysql =
+	process.env.SERVICE_APP_REGISTRY_MYSQL || 'mysql://lisk:password@localhost:3306/lisk';
 config.endpoints = {
 	redis: process.env.SERVICE_DEXBASE_REDIS || 'redis://localhost:6381/0',
 };
@@ -53,7 +55,9 @@ config.gitHub = {
 	accessToken: process.env.GITHUB_ACCESS_TOKEN,
 	appRegistryRepo: process.env.GITHUB_APP_REGISTRY_REPO || 'https://github.com/LiskHQ/app-registry',
 	branch: process.env.GITHUB_APP_REGISTRY_REPO_BRANCH || 'main',
-	get appRegistryRepoName() { return this.appRegistryRepo.split('/').pop(); },
+	get appRegistryRepoName() {
+		return this.appRegistryRepo.split('/').pop();
+	},
 };
 
 /*
@@ -97,7 +101,9 @@ config.CHAIN_ID_PREFIX_NETWORK_MAP = Object.freeze({
 /**
  * API Client related settings
  */
-config.isUseLiskIPCClient = Boolean(String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true');
+config.isUseLiskIPCClient = Boolean(
+	String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true',
+);
 config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
 
 module.exports = config;

@@ -15,7 +15,7 @@
  */
 const eventsSource = require('../../../sources/dex-version1/eventsSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const envelope = require('./dataDefinitions/stdEnvelope')
+const envelope = require('./dataDefinitions/stdEnvelope');
 
 module.exports = {
 	version: '2.0',
@@ -23,7 +23,7 @@ module.exports = {
 	rpcMethod: 'getEventsByHeight',
 	tags: ['Events'],
 	params: {
-		height: { optional: false, type: 'number' }
+		height: { optional: false, type: 'number' },
 	},
 	get schema() {
 		const eventsSchema = {};
@@ -47,5 +47,5 @@ module.exports = {
 		return eventsSchema;
 	},
 	source: eventsSource,
-	envelope
+	envelope,
 };

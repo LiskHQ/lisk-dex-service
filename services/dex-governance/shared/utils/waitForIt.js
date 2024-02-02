@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -17,18 +17,19 @@ const { Logger } = require('lisk-service-framework');
 
 const logger = Logger();
 
-const waitForIt = (fn, intervalMs = 1000) => new Promise((resolve) => {
-	const checkIfReady = async (that) => {
-		try {
-			const result = await fn();
-			clearInterval(that);
-			if (result !== undefined) resolve(result);
-		} catch (err) {
-			logger.debug(`Waiting for ${intervalMs}ms ...`);
-		}
-	};
-	const hInterval = setInterval(checkIfReady, intervalMs, this);
-	checkIfReady(hInterval);
-});
+const waitForIt = (fn, intervalMs = 1000) =>
+	new Promise(resolve => {
+		const checkIfReady = async that => {
+			try {
+				const result = await fn();
+				clearInterval(that);
+				if (result !== undefined) resolve(result);
+			} catch (err) {
+				logger.debug(`Waiting for ${intervalMs}ms ...`);
+			}
+		};
+		const hInterval = setInterval(checkIfReady, intervalMs, this);
+		checkIfReady(hInterval);
+	});
 
 module.exports = waitForIt;

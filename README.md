@@ -1,180 +1,161 @@
-![Logo](./docs/assets/banner_service.png)
+![Lisk DEX: Service](docs/assets/banner_service.png 'Lisk DEX: Service')
 
-# Lisk Service
+# Lisk DEX: Service
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/liskHQ/lisk-service)
-![GitHub repo size](https://img.shields.io/github/repo-size/liskhq/lisk-service)
-[![DeepScan grade](https://deepscan.io/api/teams/6759/projects/8870/branches/113510/badge/grade.svg)](https://deepscan.io/dashboard/#view=project&tid=6759&pid=14719&bid=279961)
-![GitHub issues](https://img.shields.io/github/issues-raw/liskhq/lisk-service)
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/liskhq/lisk-service)
-[![Code coverage](https://codecov.io/gh/LiskHQ/lisk-service/branch/development/graph/badge.svg?token=987H7T2C3K)](https://codecov.io/gh/LiskHQ/lisk-service)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/liskhq/lisk-dex-service)
+![GitHub repo size](https://img.shields.io/github/repo-size/liskhq/lisk-dex-service)
+[![DeepScan grade](https://deepscan.io/api/teams/19600/projects/23053/branches/712229/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee)](https://deepscan.io/dashboard#view=project&tid=19600&pid=23053&bid=712229)
+![GitHub issues](https://img.shields.io/github/issues-raw/liskhq/lisk-dex-service)
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/liskhq/lisk-dex-service)
 
-Lisk Service is a web application middleware that allows interaction with various blockchain networks based on the Lisk protocol.
+Lisk DEX: Service is a web application middleware that allows the [Lisk DEX: UI](https://github.com/LiskHQ/lisk-dex-ui?tab=readme-ov-file#index) to interact with the [Lisk DEX: Core](https://github.com/LiskHQ/lisk-dex-core?tab=readme-ov-file#index) blockchain application. The project is based on upon [Lisk Service](https://github.com/LiskHQ/lisk-service) which is a Microservices-based implementation.
 
-The main focus of Lisk Service is to provide data to the UI clients such as Lisk Desktop and Lisk Mobile. It allows accessing the live blockchain data similarly to the regular Lisk SDK API, albeit with more comprehensive features. Furthermore, Lisk Service also provides users with much more detailed information and endpoints, such as geolocation, network usage statistics, and more.
+## Project Index
 
-The project is a Microservices-based implementation. The technical stack design helps deliver several micro-services, whereby each one is responsible for a particular functionality. The data is served in JSON format and exposed by a public RESTful or a WebSocket-based RPC API.
+Below is an index of the repositories which relate to this repository for easy navigation:
 
-## Available Services
+|     | Repository                                                                               | Description                                             |
+| --- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+|     | [Lisk DEX: Specs](https://github.com/LiskHQ/lisk-dex-specs?tab=readme-ov-file#index)     | The Lisk DEX blockchain specifications.                 |
+|     | [Lisk DEX: Core](https://github.com/LiskHQ/lisk-dex-core?tab=readme-ov-file#index)       | The Lisk DEX blockchain application.                    |
+| X   | [Lisk DEX: Service](https://github.com/LiskHQ/lisk-dex-service?tab=readme-ov-file#index) | The Lisk DEX blockchain middleware between Core and UI. |
+|     | [Lisk DEX: UI](https://github.com/LiskHQ/lisk-dex-ui?tab=readme-ov-file#index)           | The Lisk DEX blockchain user-interface.                 |
 
-Lisk Service comprises of multiple microservices that can operate independently of each other. The Gateway is required to expose the APIs provided by the specific services.
+### Additional Services
 
-Every microservice is independently managed and placed in a separate directory under the [`services`](services) directory. They contain their own `package.json` and `Dockerfile` that are beneficial when running the applications.
+Lisk DEX: Service adds the following microservices to the base set inherited from [Lisk Service](https://github.com/LiskHQ/lisk-service):
 
-| Service                                                   | Description                                                                                                                                                                                                                                                                                                                                                                    |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Gateway](services/gateway)                               | The Gateway exposes the API for Lisk Service users to access and use over HTTP and WS protocols. Its main purpose is to proxy API requests from users to the concerned Lisk Service microservices. It provides the users with a central point of data access that ensures existing application compatibility.                                                                  |
-| [Connector](services/blockchain-connector)                | The Blockchain Connector connects with the node running a Lisk protocol-compliant blockchain application. It is primarily responsible for data transformation and caching, thus reducing the number of calls made to the node.                                                                                                                                                 |
-| [Coordinator](services/blockchain-coordinator)            | The Blockchain Coordinator service is primarily responsible for ensuring the completeness of the index. It performs periodic checks for any gaps in the index and schedules tasks to update it, along with the latest block updates.                                                                                                                                           |
-| [Indexer](services/blockchain-indexer)                    | The Blockchain Indexer service, in the indexing mode, is primarily responsible to update the index, based on the scheduled jobs by the Blockchain Coordinator. In the data service mode, it serves user request queries made via the RESTful API or WebSocket-based RPC calls. It can run both the indexer and data service modes simultaneously, which is enabled by default. |
-| [App Registry](services/blockchain-app-registry)          | The Blockchain Application Registry service is primarily responsible for regularly synchronizing and providing off-chain metadata information for known blockchain applications in the Lisk ecosystem. The metadata is maintained in the Lisk [Application Registry](https://github.com/LiskHQ/app-registry) repository.                                                       |
-| [Fee Estimator](services/fee-estimator)                   | The Fee Estimator service implements the [dynamic fee system](https://github.com/LiskHQ/lips/blob/main/proposals/lip-0013.md) algorithm to offer users transaction fee recommendations based on the network traffic.                                                                                                                                                           |
-| [Transaction Statistics](services/transaction-statistics) | The Transaction Statistics service, as the name suggests, is primarily responsible to compute various transaction statistics to offer users various real-time network insights.                                                                                                                                                                                                |
-| [Market](services/market)                                 | The Market service allows price data retrieval. It supports multiple sources to keep the current Lisk token price up-to-date and available to the clients in real time.                                                                                                                                                                                                        |
-| [Export](services/export)                                 | The Export service enables users to download the transaction history as a CSV file for any given account on the blockchain.                                                                                                                                                                                                                                                    |
-| [Template](services/template)                             | The Template service is an abstract microservice from which all Lisk Service services are inherited. It allows all services to share a similar interface and design pattern. Its purpose is to reduce code duplication and increase consistency between each service, hence, simplifying code maintenance and testing.                                                         |
+| Service                                     | Description                                                                                                                    |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [DEX Base](services/dex-base)               | The DEX Base service provides data related to liquidity provision and swaps, such as current pools, tokens, and prices.        |
+| [DEX Goverance](services/dex-governance)    | The DEX Governance service provides data on proposals and votes which have been submitted to the DEX blockchain.               |
+| [DEX Information](services/dex-information) | The DEX Information service provides statistical data about the DEX blockchain, such as top pools, top tokens, and past swaps. |
 
-**Remarks**
+### Extended Gateway
 
-- Lisk Service by default attempts to connect to a local node via WebSocket on port `7887` or IPC on `~/.lisk/lisk-core` by default.
-- The default installation method is based on Docker.
-- Some token conversion rates in the Market service require their API keys.
-- For the events information to be always available in the API, please set `system.keepEventsForHeights: -1` in the Lisk application node config.
-- It is highly recommended to _NOT_ enable any plugins on the Lisk application node when running Lisk Service against it. Enabling them can cause performance issues in Lisk Service.
+Lisk DEX: Service extends the [Gateway](services/gateway) microservice with additional API endpoints that are specific to the Lisk DEX: Core blockchain application.
 
-## Architecture Diagram
+Below is a summary of the additional API endpoints:
 
-Inter-microservice communications are enabled with a message broker, typically an instance of Redis or NATS.
+#### DEX Base Endpoints
 
-![Lisk Service Architecture](./docs/assets/architecture.png)
+- `GET /api/dex/v1/getEventsByHeight`
+  - Returns a list of events by height.
+- `GET /api/dex/v1/tokens/popularPairings`
+  - Returns a list of the top 6 frequently swapped token pairs.
+- `GET /api/dex/v1/tokens/currentsqrtprice`
+  - Returns the current sqrt price of a given pool.
+- `GET /api/dex/v1/prices/gettingSlippageBounds`
+  - Returns the slippage bounds for a given swap.
+- `GET /api/dex/v1/gettingStatistics`
+  - Returns statistics for transactions.
+- `GET /api/dex/v1/pools/available`
+  - Returns a list of available pools.
+- `GET /api/dex/v1/prices/convert/token`
+  - Converts a token price to the equivalent amount of another token price.
+- `GET /api/dex/v1/prices/impact`
+  - Returns the price impact on a swap trade on the market price of the pool.
+- `GET /api/dex/v1/prices/convert/fiat`
+  - Converts a token price to the equivalent amount of fiat.
+- `GET /api/dex/v1/tokens/supported`
+  - Returns a list of supported tokens.
 
-## API documentation
+#### DEX Governance Endpoints
 
-The Gateway service provides the following APIs, which all users of Lisk Service can access and use.
+- `GET /api/dex-governance/v1/proposals`
+  - Returns all proposals, or a specific proposal if it was specified.
+- `GET /api/dex-governance/v1/votes`
+  - Returns details about the votes for a given account.
 
-| API                                                  | Description                                                                                                                                                                                                                                         |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [HTTP API](docs/api/version3.md)                     | HTTP API is the public RESTful API that provides blockchain data in standardized JSON format.                                                                                                                                                       |
-| [WebSocket JSON-RPC API](docs/api/version3.md)       | The WebSocket-based JSON-RPC API provides blockchain data in standardized JSON format. The API uses the Socket.IO library and is compatible with JSON-RPC 2.0 standards.                                                                            |
-| [Subscribe API](docs/api/websocket_subscribe_api.md) | The Subscribe API is an event-driven API. It uses a two-way streaming connection, which can notify the client about new data instantly as it arrives. It is responsible for updating users regarding changes in the blockchain network and markets. |
+#### DEX Information Endpoints
+
+- `GET /api/dex-information/v1/getTopPoolsFromDatabase`
+  - Returns a list of top pools from the database.
+- `GET /api/dex-information/v1/getTopTokensFromDatabase`
+  - Returns a list of top tokens from the database.
+- `GET /api/dex-information/v1/getTransactionsByTokenID`
+  - Returns a list of transactions by tokenID.
 
 ## Installation
 
-The default port for REST API requests and Socket.IO-based communication is `9901`. The API is accessible through the URL `http://127.0.0.1:9901` when running locally. The REST API is accessible via HTTP clients such as [Postman](https://www.postman.com/), [cURL](https://curl.haxx.se/) and [HTTPie](https://httpie.org/).
+The default installation method for Lisk DEX: Service is using [Docker](https://www.docker.com/).
 
-WebSocket-based APIs can be used through the [Socket.IO](https://socket.io/) library available for many modern programming languages and frameworks.
+### Dependencies
 
-To continue the installation ensure that you have the following dependencies installed:
+The following dependencies need to be installed in order to run this application:
 
 - [NodeJS Active LTS - ^v18.16](https://nodejs.org/en/about/releases/)
 - [MySQL - ^v8.0.29](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/)
 - [Docker](https://www.docker.com/) with [Docker compose](https://docs.docker.com/compose/install/)
 - [GNU Make](https://www.gnu.org/software/make/) and [GNU Tar](https://www.gnu.org/software/tar/)
 
-Follow the instructions listed below, to acquire detailed information regarding the installation of required dependencies for various operating systems.
+For information on how to install these dependencies on various operating systems, refer to the following documents:
 
 - [Ubuntu 18.04 LTS Bionic Beaver](./docs/prerequisites_docker_ubuntu.md)
 - [Ubuntu 20.04 LTS Focal Fossa](./docs/prerequisites_docker_ubuntu.md)
 - [Debian 10 Buster](./docs/prerequisites_docker_debian.md)
 - [MacOS 10.15 Catalina](./docs/prerequisites_docker_macos.md)
 
-Retrieve the latest release from the [official repository](https://github.com/LiskHQ/lisk-service/releases).
+### Docker Images
 
-Unpack the source code archive by executing the following commands listed below:
-
-```bash
-tar -xf lisk-service-x.y.z.tar.gz
-cd lisk-service
-```
-
-> Although the above commands retrieve the entire source code, this instruction does not cover building a custom version of Lisk Service. For more information refer to this document: [Building Lisk Service from source](./docs/build_from_source.md)
-
-### Docker image build (Optional)
-
-If you wish to build the local version of Lisk Service execute the following command below:
+To build the docker images, execute the following command:
 
 ```bash
 make build-images
 ```
 
-> This step is only necessary if you wish to build a custom or pre-release version of Lisk Service that does not have a pre-built Docker image published on the Docker Hub. The installation script chooses the last available stable version on Docker Hub, **unless** there is no local image. If you are unsure about any local builds, use the `make clean` command to remove all locally built docker images.
-
-### System requirements
-
-The following system requirements are recommended to start Lisk Service:
-
-#### Memory
-
-- Machines with a minimum of 16 GB RAM for the Mainnet.
-- Machines with a minimum of 16 GB RAM for the Testnet.
-
-#### Storage
-
-- Machines with a minimum of 40 GB HDD.
-
 ## Configuration
 
-The default configuration is sufficient to run Lisk Service against the local node.
+The default configuration is sufficient to run Lisk DEX: Service against a local node.
 
-Before running the application copy the default docker-compose environment file:
+Before running the application, copy the default docker-compose environment file:
 
 ```bash
 cp docker/example.env .env
 ```
 
-In the next step, set the required environment variables.
+As required, set the required environment variables.
 
 ```bash
 $EDITOR .env
 ```
 
-The example below assumes that the Lisk Core (or any Lisk protocol-compliant blockchain application) node is running on the host machine, and not inside of a Docker container.
+The various configuration options are described [in this document](./docs/config_options.md).
 
-```bash
-## Required
-# The local Lisk Core node WebSocket API port
-export LISK_APP_WS="ws://host.docker.internal:7887"
-```
-
-When running a node inside of a Docker container, the variable needs to refer to the container: `LISK_APP_WS="ws://<your_docker_container>:7887"`.
-
-Configuration options are described [in this document](./docs/config_options.md).
-
-> Optional: Check your configuration with the command `make print-config`
+The current configuration can be reviewed with the command: `make print-config`.
 
 ## Management
 
-To run the application execute the following command:
+To run the application container, execute the following command:
 
 ```bash
 make up
 ```
 
-To stop the application execute the following command:
+Once the application container is started, Lisk DEX: Service (Gateway) is exposed accordingly:
+
+```bash
+http://localhost:9901 # HTTP API
+ws://localhost:9901   # WebSocket RPC
+```
+
+To stop the application container, execute the following command:
 
 ```bash
 make down
 ```
 
-> Optional: It is possible to use regular docker-compose commands such as `docker-compose up -d`. Please check the `Makefile` for more examples.
-
-## Benchmark
-
-Assuming lisk-service is running on the `127.0.0.1:9901`, and you are in the root of this repo, you can run the following:
-
-```bash
-cd tests
-LISK_SERVICE_URL=http://127.0.0.1:9901 yarn run benchmark
-```
-
-## Further development
-
-The possibility to customize and build Lisk Service from a local source is described in the following document [Building Lisk Service from source](./docs/build_from_source.md). It may also be useful for PM2-based installations.
-
 ## Contributors
 
-https://github.com/LiskHQ/lisk-service/graphs/contributors
+https://github.com/LiskHQ/lisk-dex-service/graphs/contributors
+
+## Disclaimer
+
+> [!WARNING]
+> The source code of Lisk DEX: Service is considered to be a pre-release beta version that is subject to missing or incomplete features, bugs, and potential security flaws, and is therefore not suitable for usage in a production environment such as the Lisk Mainnet.
+>
+> By using the source code of Lisk DEX: Service, you acknowledge and agree that you have an adequate understanding of the risks associated with the use of the source code of Lisk DEX: Service and that it is provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. To the fullest extent permitted by law, in no event shall the Lisk Foundation or other parties involved in the development of Lisk DEX: Service have any liability whatsoever to any person for any direct or indirect loss, liability, cost, claim, expense or damage of any kind, whether in contract or in tort, including negligence, or otherwise, arising out of or related to the use of all or part of the source code of Lisk DEX: Service.
 
 ## License
 

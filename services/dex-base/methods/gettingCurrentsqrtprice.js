@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,9 +13,7 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-	gettingCurrentsqrtprice,
-} = require('./controller/gettingCurrentsqrtprice');
+const { gettingCurrentsqrtprice } = require('./controller/gettingCurrentsqrtprice');
 
 module.exports = [
 	{
@@ -23,7 +21,7 @@ module.exports = [
 		controller: gettingCurrentsqrtprice,
 		params: {
 			poolID: { optional: false, type: 'string' },
-			priceDirection: { optional: false, type: 'boolean'},
+			priceDirection: { optional: false, type: 'boolean' },
 		},
 	},
 ];

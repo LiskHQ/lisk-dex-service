@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -17,7 +17,6 @@
 const dataService = require('../../shared/dataService');
 
 const gettingCurrentsqrtprice = async params => {
-
 	const response = await dataService.gettingCurrentsqrtprice(params);
 
 	return {
@@ -28,7 +27,7 @@ const gettingCurrentsqrtprice = async params => {
 			unit: response.data.unit,
 			symbol: response.data.symbol,
 		},
-		meta: {}
+		meta: {},
 	};
 };
 

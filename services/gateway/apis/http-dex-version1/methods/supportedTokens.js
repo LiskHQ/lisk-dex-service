@@ -16,7 +16,7 @@
 const tokensAvailableSource = require('../../../sources/dex-version1/supportedTokensSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
 const regex = require('../../../shared/regex');
-const envelope = require('./dataDefinitions/stdEnvelope')
+const envelope = require('./dataDefinitions/stdEnvelope');
 
 module.exports = {
 	version: '2.0',
@@ -36,7 +36,10 @@ module.exports = {
 			rpcMethod: this.rpcMethod,
 			description: 'Returns a list of supported tokens.',
 		});
-		availableTokensSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
+		availableTokensSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'prices',
+			this.params,
+		);
 		availableTokensSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Returns a list of supported tokens.',
@@ -49,5 +52,5 @@ module.exports = {
 		return availableTokensSchema;
 	},
 	source: tokensAvailableSource,
-	envelope
+	envelope,
 };

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getPopularPairings,
-} = require('./controller/getPopularPairings');
+const { getPopularPairings } = require('./controller/getPopularPairings');
 
 module.exports = [
 	{
 		name: 'tokens.popularPairings',
 		controller: getPopularPairings,
 		params: {
-			senderAddress: { optional: false, type: 'string'}
+			senderAddress: { optional: false, type: 'string' },
 		},
 	},
 ];

@@ -22,13 +22,14 @@ module.exports = {
 	rpcMethod: 'get.proposals',
 	tags: ['Proposals'],
 	params: {
-		proposal: { optional: false, type: 'number'},
+		proposal: { optional: false, type: 'number' },
 	},
 	get schema() {
 		const proposalsSchema = {};
 		proposalsSchema[this.swaggerApiPath] = { get: {} };
 		proposalsSchema[this.swaggerApiPath].get.tags = this.tags;
-		proposalsSchema[this.swaggerApiPath].get.summary = 'Returns all proposals, or a specific proposal if it was specified.';
+		proposalsSchema[this.swaggerApiPath].get.summary =
+			'Returns all proposals, or a specific proposal if it was specified.';
 		proposalsSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Returns all proposals, or a specific proposal if it was specified.',

@@ -10,7 +10,7 @@ RUN apk add --no-cache alpine-sdk=~1 python3=~3 cmake=~3 && \
 USER builder
 WORKDIR /home/builder/build
 
-COPY ./yarn.lock ./package.json ./
+COPY ./yarn.lock ./package.json ./.npmrc ./
 RUN yarn install --frozen-lockfile
 
 

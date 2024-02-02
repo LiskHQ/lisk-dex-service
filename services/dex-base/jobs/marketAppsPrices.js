@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -16,9 +16,7 @@
 
 const logger = require('lisk-service-framework').Logger();
 
-const {
-	reloadMarketAppsPrices,
-} = require('../shared/dataService');
+const { reloadMarketAppsPrices } = require('../shared/dataService');
 
 module.exports = [
 	{
@@ -30,7 +28,6 @@ module.exports = [
 			try {
 				await reloadMarketAppsPrices();
 				logger.info('Successfully initialized market app prices cache.');
-
 			} catch (err) {
 				logger.warn(`Initializing market apps prices cache failed due to: ${err.message}`);
 			}

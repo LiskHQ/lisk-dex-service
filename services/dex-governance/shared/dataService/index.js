@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -13,15 +13,11 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
-const {
-    getProposal
-} = require ('./proposal')
+const { getProposal } = require('./proposal');
 
-const {
-    getVotes
-} = require ('./votes')
+const { getVotes } = require('./votes');
 
 module.exports = {
-    getProposal,
-    getVotes
-}
+	getProposal,
+	getVotes,
+};

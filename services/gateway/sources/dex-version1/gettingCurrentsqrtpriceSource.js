@@ -1,4 +1,4 @@
-	/*
+/*
  * LiskHQ/lisk-service
  * Copyright © 2023 Lisk Foundation
  *
@@ -23,10 +23,10 @@ module.exports = {
 	},
 	definition: {
 		data: {
-            currentSqrtPrice: '=',
-            tokenID0: '=',
-            tokenID1: '=',
-            unit: '=',
+			currentSqrtPrice: '=',
+			tokenID0: '=',
+			tokenID1: '=',
+			unit: '=',
 			symbol: '=',
 		},
 		meta: {},

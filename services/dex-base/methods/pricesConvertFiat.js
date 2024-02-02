@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getPricesConvertFiat,
-} = require('./controller/pricesConvertFiat');
+const { getPricesConvertFiat } = require('./controller/pricesConvertFiat');
 
 const regex = require('../shared/regex');
 
@@ -25,8 +23,8 @@ module.exports = [
 		name: 'prices.convert.fiat',
 		controller: getPricesConvertFiat,
 		params: {
-			currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
-			tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
+			currency: { optional: false, type: 'string', pattern: regex.CURRENCY, min: 3 },
+			tokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
 		},
 	},
 ];

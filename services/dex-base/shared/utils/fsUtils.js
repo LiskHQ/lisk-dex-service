@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -19,15 +19,16 @@ const { Logger } = require('lisk-service-framework');
 
 const logger = Logger();
 
-const read = (filePath) => new Promise((resolve, reject) => {
-	fs.readFile(filePath, 'utf8', (err, data) => {
-		if (err) {
-			logger.error(err);
-			return reject(err);
-		}
-		return resolve(data);
+const read = filePath =>
+	new Promise((resolve, reject) => {
+		fs.readFile(filePath, 'utf8', (err, data) => {
+			if (err) {
+				logger.error(err);
+				return reject(err);
+			}
+			return resolve(data);
+		});
 	});
-});
 
 module.exports = {
 	read,

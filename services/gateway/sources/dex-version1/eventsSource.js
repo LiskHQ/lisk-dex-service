@@ -20,7 +20,5 @@ module.exports = {
 	params: {
 		height: '=,number',
 	},
-	data:{
-
-	}
+	data: {},
 };

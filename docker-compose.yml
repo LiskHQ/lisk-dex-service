@@ -501,7 +501,7 @@ services:
     volumes:
       - export-data:/home/lisk/lisk-service/dex-information/data
     restart: always
-    
+
   dex-base:
     image: lisk/service_dex_base
     depends_on:
@@ -542,7 +542,6 @@ services:
     volumes:
       - export-data:/home/lisk/lisk-service/dex-base/data
     restart: always
-
 
   dex-governance:
     image: lisk/service_dex_governance

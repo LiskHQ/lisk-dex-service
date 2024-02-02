@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getTopTokensFromDatabase,
-} = require('./controller/getTopTokensFromDatabase');
+const { getTopTokensFromDatabase } = require('./controller/getTopTokensFromDatabase');
 
 const regex = require('../shared/regex');
 

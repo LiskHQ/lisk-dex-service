@@ -35,7 +35,10 @@ module.exports = {
 			rpcMethod: this.rpcMethod,
 			description: 'Returns a list of available pools.',
 		});
-		poolsAvailableSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
+		poolsAvailableSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'prices',
+			this.params,
+		);
 		poolsAvailableSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Returns a list of available pools.',

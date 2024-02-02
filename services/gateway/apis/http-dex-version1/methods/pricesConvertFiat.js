@@ -15,7 +15,7 @@
  */
 const pricesConvertFiatSource = require('../../../sources/dex-version1/pricesConvertFiatSource');
 const { transformParams, response, getSwaggerDescription } = require('../../../shared/utils');
-const regex = require('../../../shared/regex')
+const regex = require('../../../shared/regex');
 const envelope = require('../../../sources/dex-version1/mappings/stdEnvelope');
 
 module.exports = {
@@ -24,19 +24,23 @@ module.exports = {
 	rpcMethod: 'get.prices.convert.fiat',
 	tags: ['Prices'],
 	params: {
-		currency: { optional: false, type: 'string', pattern:regex.CURRENCY, min: 3 },
-		tokenSymbol: { optional: false, type: 'string', pattern:regex.TOKEN_SYMBOL, min: 3 },
+		currency: { optional: false, type: 'string', pattern: regex.CURRENCY, min: 3 },
+		tokenSymbol: { optional: false, type: 'string', pattern: regex.TOKEN_SYMBOL, min: 3 },
 	},
 	get schema() {
 		const pricesConvertFiatSchema = {};
 		pricesConvertFiatSchema[this.swaggerApiPath] = { get: {} };
 		pricesConvertFiatSchema[this.swaggerApiPath].get.tags = this.tags;
-		pricesConvertFiatSchema[this.swaggerApiPath].get.summary = 'Converts token price to the equivalent amount of fiat.';
+		pricesConvertFiatSchema[this.swaggerApiPath].get.summary =
+			'Converts token price to the equivalent amount of fiat.';
 		pricesConvertFiatSchema[this.swaggerApiPath].get.description = getSwaggerDescription({
 			rpcMethod: this.rpcMethod,
 			description: 'Converts token price to the equivalent amount of fiat.',
 		});
-		pricesConvertFiatSchema[this.swaggerApiPath].get.parameters = transformParams('prices', this.params);
+		pricesConvertFiatSchema[this.swaggerApiPath].get.parameters = transformParams(
+			'prices',
+			this.params,
+		);
 		pricesConvertFiatSchema[this.swaggerApiPath].get.responses = {
 			200: {
 				description: 'Converts token price to the equivalent amount of fiat.',
@@ -49,5 +53,5 @@ module.exports = {
 		return pricesConvertFiatSchema;
 	},
 	source: pricesConvertFiatSource,
-	envelope
+	envelope,
 };

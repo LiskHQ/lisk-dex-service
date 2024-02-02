@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,7 +14,7 @@
  *
  */
 
-const dataService = require('../business/index')
+const dataService = require('../business/index');
 
 const getMarketAppsPrices = async params => {
 	const response = await dataService.getMarketAppsPrices(params);
@@ -24,6 +24,6 @@ const getMarketAppsPrices = async params => {
 const reloadMarketAppsPrices = async () => dataService.reloadMarketAppsPrices();
 
 module.exports = {
-    getMarketAppsPrices,
-    reloadMarketAppsPrices,
-}
+	getMarketAppsPrices,
+	reloadMarketAppsPrices,
+};

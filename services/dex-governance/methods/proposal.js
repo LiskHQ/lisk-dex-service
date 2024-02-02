@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getProposal,
-} = require('./controller/proposal');
+const { getProposal } = require('./controller/proposal');
 
 module.exports = [
 	{
 		name: 'proposal',
 		controller: getProposal,
 		params: {
-			proposal: { optional: false, type: 'number'},
+			proposal: { optional: false, type: 'number' },
 		},
 	},
 ];

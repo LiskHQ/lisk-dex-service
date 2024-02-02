@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,16 +14,14 @@
  *
  */
 
-const {
-	getVotes,
-} = require('./controller/votes');
+const { getVotes } = require('./controller/votes');
 
 module.exports = [
 	{
 		name: 'votes',
 		controller: getVotes,
 		params: {
-			voterAddress: { optional: false, type: 'string', },
+			voterAddress: { optional: false, type: 'string' },
 		},
 	},
 ];

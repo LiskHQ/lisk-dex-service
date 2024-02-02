@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2019 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -57,14 +57,17 @@ config.log.docker_host = process.env.DOCKER_HOST || 'local';
 /**
  * External endpoints
  */
-config.endpoints.liskHttp = `${(process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887')}/api`;
-config.endpoints.liskWs = process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
+config.endpoints.liskHttp = `${process.env.LISK_APP_HTTP || 'http://127.0.0.1:7887'}/api`;
+config.endpoints.liskWs =
+	process.env.LISK_APP_WS || config.endpoints.liskHttp.replace('http', 'ws').replace('/api', '');
 config.endpoints.geoip = process.env.GEOIP_JSON || 'https://geoip.lisk.com/json';
 
 /**
  * API Client related settings
  */
-config.isUseLiskIPCClient = Boolean(String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true');
+config.isUseLiskIPCClient = Boolean(
+	String(process.env.USE_LISK_IPC_CLIENT).toLowerCase() === 'true',
+);
 config.liskAppDataPath = process.env.LISK_APP_DATA_PATH || '~/.lisk/lisk-dex-core';
 
 module.exports = config;

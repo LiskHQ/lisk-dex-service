@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,20 +14,14 @@
  *
  */
 
-const {
-    getTransactionsByTokenID
-} = require ('./getTransactionsByTokenID')
+const { getTransactionsByTokenID } = require('./getTransactionsByTokenID');
 
-const {
-    getTopPoolsFromDatabase
-} = require ('./getTopPoolsFromDatabase')
+const { getTopPoolsFromDatabase } = require('./getTopPoolsFromDatabase');
 
-const {
-    getTopTokensFromDatabase
-} = require ('./getTopTokensFromDatabase')
+const { getTopTokensFromDatabase } = require('./getTopTokensFromDatabase');
 
 module.exports = {
-    getTransactionsByTokenID,
-    getTopPoolsFromDatabase,
-    getTopTokensFromDatabase
-}
+	getTransactionsByTokenID,
+	getTopPoolsFromDatabase,
+	getTopTokensFromDatabase,
+};

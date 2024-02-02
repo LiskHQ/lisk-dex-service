@@ -72,7 +72,9 @@ config.debug = process.env.SERVICE_LOG_LEVEL === 'debug';
 /**
  * API enablement
  */
-config.api.http = process.env.ENABLE_HTTP_API || 'http-status,http-version3,http-exports,http-dex-version1,http-governance-version1,http-information-version1';
+config.api.http =
+	process.env.ENABLE_HTTP_API ||
+	'http-status,http-version3,http-exports,http-dex-version1,http-governance-version1,http-information-version1';
 config.api.ws = process.env.ENABLE_WS_API || 'blockchain,rpc-v3';
 
 /**
@@ -83,7 +85,7 @@ config.api.versions = {
 	/* BEGIN: DEX */
 	'/api/dex/v1': ['http-dex-version1'],
 	'/api/dex-governance/v1': ['http-governance-version1'],
-	'/api/dex-information/v1': ['http-information-version1']
+	'/api/dex-information/v1': ['http-information-version1'],
 	/* END: DEX */
 };
 

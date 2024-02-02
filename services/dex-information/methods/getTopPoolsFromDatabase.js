@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -14,9 +14,7 @@
  *
  */
 
-const {
-	getTopPoolsFromDatabase,
-} = require('./controller/getTopPoolsFromDatabase');
+const { getTopPoolsFromDatabase } = require('./controller/getTopPoolsFromDatabase');
 
 const regex = require('../shared/regex');
 
@@ -25,7 +23,7 @@ module.exports = [
 		name: 'getTopPoolsFromDatabase',
 		controller: getTopPoolsFromDatabase,
 		params: {
-            limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
-        },
+			limit: { optional: true, type: 'number', min: 1, max: 100, pattern: regex.LIMIT },
+		},
 	},
 ];

@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -16,7 +16,7 @@
 
 let app;
 
-const setAppContext = (h) => app = h;
+const setAppContext = h => (app = h);
 
 const getAppContext = () => app;
 
@@ -31,6 +31,5 @@ module.exports = {
 	setAppContext,
 	requestConnector,
 	requestRpc,
-	getAppContext
-}
-
+	getAppContext,
+};

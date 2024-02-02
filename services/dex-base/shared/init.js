@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2022 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -21,9 +21,7 @@ const init = async () => {
 	try {
 		await initDatabase();
 	} catch (error) {
-		const errorMsg = Array.isArray(error)
-			? error.map(e => e.message).join('\n')
-			: error.message;
+		const errorMsg = Array.isArray(error) ? error.map(e => e.message).join('\n') : error.message;
 		logger.error(`Unable to initialize metadata information due to: ${errorMsg}`);
 	}
 };

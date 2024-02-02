@@ -1,6 +1,6 @@
 /*
  * LiskHQ/lisk-service
- * Copyright © 2023 Lisk Foundation
+ * Copyright © 2024 Lisk Foundation
  *
  * See the LICENSE file at the top-level directory of this distribution
  * for licensing information.
@@ -15,12 +15,7 @@
  */
 const path = require('path');
 
-const {
-	Microservice,
-	LoggerConfig,
-	Logger,
-	Signals,
-} = require('lisk-service-framework');
+const { Microservice, LoggerConfig, Logger, Signals } = require('lisk-service-framework');
 
 const config = require('./config');
 const packageJson = require('./package.json');
@@ -44,53 +39,49 @@ const app = Microservice({
 	timeout: config.brokerTimeout,
 	packageJson,
 	logger: loggerConf,
-	dependencies: [
-		'statistics',
-		'connector',
-		'market',
-	],
-	events:{
-		poolCreated:async (payload) => {
-			logger.debug('Received a \'poolCreated\' event from connecter.');
+	dependencies: ['statistics', 'connector', 'market'],
+	events: {
+		poolCreated: async payload => {
+			logger.debug("Received a 'poolCreated' event from connecter.");
 			Signals.get('poolCreated').dispatch(payload);
 		},
-		poolCreationFailed:async (payload) => {
-			logger.debug('Received a \'poolCreationFailed\' event from connecter.');
+		poolCreationFailed: async payload => {
+			logger.debug("Received a 'poolCreationFailed' event from connecter.");
 			Signals.get('poolCreationFailed').dispatch(payload);
 		},
-		positionCreated:async (payload) => {
-			logger.debug('Received a \'positionCreated\' event from connecter.');
+		positionCreated: async payload => {
+			logger.debug("Received a 'positionCreated' event from connecter.");
 			Signals.get('positionCreated').dispatch(payload);
 		},
-		positionCreationFailed:async (payload) => {
-			logger.debug('Received a \'positionCreationFailed\' event from connecter.');
+		positionCreationFailed: async payload => {
+			logger.debug("Received a 'positionCreationFailed' event from connecter.");
 			Signals.get('positionCreationFailed').dispatch(payload);
 		},
-		positionUpdated:async (payload) => {
-			logger.debug('Received a \'positionUpdated\' event from connecter.');
+		positionUpdated: async payload => {
+			logger.debug("Received a 'positionUpdated' event from connecter.");
 			Signals.get('positionUpdated').dispatch(payload);
 		},
-		positionUpdateFailed:async (payload) => {
-			logger.debug('Received a \'positionUpdateFailed\' event from connecter.');
+		positionUpdateFailed: async payload => {
+			logger.debug("Received a 'positionUpdateFailed' event from connecter.");
 			Signals.get('positionUpdateFailed').dispatch(payload);
 		},
-		removeLiquidity:async (payload) => {
-			logger.debug('Received a \'removeLiquidity\' event from connecter.');
+		removeLiquidity: async payload => {
+			logger.debug("Received a 'removeLiquidity' event from connecter.");
 			Signals.get('removeLiquidity').dispatch(payload);
 		},
-		removeLiquidityFailed:async (payload) => {
-			logger.debug('Received a \'removeLiquidityFailed\' event from connecter.');
+		removeLiquidityFailed: async payload => {
+			logger.debug("Received a 'removeLiquidityFailed' event from connecter.");
 			Signals.get('removeLiquidityFailed').dispatch(payload);
 		},
-		swapped:async (payload) => {
-			logger.debug('Received a \'swapped\' event from connecter.');
+		swapped: async payload => {
+			logger.debug("Received a 'swapped' event from connecter.");
 			Signals.get('swapped').dispatch(payload);
 		},
-		swapFailed:async (payload) => {
-			logger.debug('Received a \'swapFailed\' event from connecter.');
+		swapFailed: async payload => {
+			logger.debug("Received a 'swapFailed' event from connecter.");
 			Signals.get('swapFailed').dispatch(payload);
 		},
-	}
+	},
 });
 
 setAppContext(app);
@@ -101,10 +92,13 @@ app.addEvents(path.join(__dirname, 'events'));
 app.addJobs(path.join(__dirname, 'jobs'));
 
 // Run the application
-app.run().then(async() => {
-	logger.info(`Service started ${packageJson.name}`);
-}).catch(err => {
-	logger.fatal(`Could not start the service ${packageJson.name} + ${err.message}`);
-	logger.fatal(err.stack);
-	process.exit(1);
-});
+app
+	.run()
+	.then(async () => {
+		logger.info(`Service started ${packageJson.name}`);
+	})
+	.catch(err => {
+		logger.fatal(`Could not start the service ${packageJson.name} + ${err.message}`);
+		logger.fatal(err.stack);
+		process.exit(1);
+	});

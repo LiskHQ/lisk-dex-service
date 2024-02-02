@@ -3,7 +3,7 @@
 # Lisk DEX: Service
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/liskHQ/lisk-dex-service)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/liskhq/lisk-dex-service)
 ![GitHub repo size](https://img.shields.io/github/repo-size/liskhq/lisk-dex-service)
 [![DeepScan grade](https://deepscan.io/api/teams/19600/projects/23053/branches/712229/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee)](https://deepscan.io/dashboard#view=project&tid=19600&pid=23053&bid=712229)
 ![GitHub issues](https://img.shields.io/github/issues-raw/liskhq/lisk-dex-service)
